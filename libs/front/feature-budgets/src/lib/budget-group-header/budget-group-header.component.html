@@ -1,0 +1,30 @@
+<div class="flex items-center space-x-4">
+  <mat-form-field appearance="standard">
+    <mat-label>Group</mat-label>
+    <mat-select [formControl]="groupId">
+      <mat-option *ngFor="let group of groupsList" [value]="group.id">
+        {{ group.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="groupId.invalid">
+      {{ 'Select group' }}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="text-green-600">{{ total | amount }}</div>
+</div>
+
+<div class="space-x-2">
+  <button mat-icon-button color="primary" (click)="removeGroup.emit()">
+    <mat-icon>remove</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLast"
+    mat-icon-button
+    color="primary"
+    (click)="addGroup.emit()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

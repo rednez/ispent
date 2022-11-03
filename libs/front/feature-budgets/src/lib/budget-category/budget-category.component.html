@@ -1,0 +1,39 @@
+<form [formGroup]="form" class="flex items-center space-x-4">
+  <mat-form-field appearance="standard">
+    <mat-label>Category</mat-label>
+    <mat-select formControlName="id">
+      <mat-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+      >
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.controls['id'].invalid">
+      {{ 'Select category' }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Plan amount</mat-label>
+    <input matInput formControlName="amount" mask="separator.2" />
+    <mat-error *ngIf="form.controls['amount'].invalid">{{
+      'Enter amount'
+    }}</mat-error>
+  </mat-form-field>
+
+  <ispent-budget-category-previous-data
+    [planned]="form.value.planned!"
+    [spent]="form.value.spent!"
+  ></ispent-budget-category-previous-data>
+</form>
+
+<div class="space-x-2">
+  <button mat-icon-button color="primary" (click)="remove.emit(form.value.id!)">
+    <mat-icon>remove</mat-icon>
+  </button>
+
+  <button *ngIf="isLast" mat-icon-button color="primary" (click)="add.emit()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

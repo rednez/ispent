@@ -17,7 +17,8 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/front/src/favicon.ico", "apps/front/src/assets"],
         "styles": ["apps/front/src/styles.scss"],
-        "scripts": []
+        "scripts": [],
+        "allowedCommonJsDependencies": ["lodash", "numeral"]
       },
       "configurations": {
         "production": {

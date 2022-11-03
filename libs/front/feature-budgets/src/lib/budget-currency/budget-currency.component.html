@@ -1,0 +1,31 @@
+<ng-container [formGroup]="form">
+  <ispent-budget-currency-header
+    formControlName="id"
+    [currenciesList]="(currencies$ | async)!"
+    [total]="(totalAmount$ | async)!"
+    [isLast]="isLast"
+    (addCurrency)="addCurrency.emit()"
+    (removeCurrency)="removeCurrency.emit(form.value.id!)"
+  ></ispent-budget-currency-header>
+
+  <ng-container *ngIf="groups.controls.length; else emptyState">
+    <ng-container formArrayName="groups">
+      <ispent-budget-group
+        *ngFor="let group of groups.controls; index as i; last as last"
+        [formControlName]="i"
+        [categoriesList]="categoriesList"
+        [isLast]="last"
+        (remove)="onRemoveGroup(i, $event)"
+        (add)="onAddGroup()"
+      ></ispent-budget-group>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <ispent-empty-state
+      [msgText]="'There is no groups yet. To add a group click on '"
+      [actionText]="'Add Group'"
+      (actionClick)="onAddGroup()"
+    ></ispent-empty-state>
+  </ng-template>
+</ng-container>

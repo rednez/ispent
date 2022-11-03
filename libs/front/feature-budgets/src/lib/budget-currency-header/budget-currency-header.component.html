@@ -1,0 +1,30 @@
+<div class="flex items-center space-x-4">
+  <mat-form-field appearance="standard">
+    <mat-label>Currency</mat-label>
+    <mat-select [formControl]="currencyId">
+      <mat-option *ngFor="let currency of currenciesList" [value]="currency.id">
+        {{ currency.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="currencyId.invalid">
+      {{ 'Select currency' }}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="text-green-600">{{ total | amount }}</div>
+</div>
+
+<div class="space-x-2">
+  <button mat-icon-button color="primary" (click)="removeCurrency.emit()">
+    <mat-icon>remove</mat-icon>
+  </button>
+
+  <button
+    *ngIf="isLast"
+    mat-icon-button
+    color="primary"
+    (click)="addCurrency.emit()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
