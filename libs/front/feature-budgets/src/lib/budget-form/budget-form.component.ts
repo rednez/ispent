@@ -88,8 +88,4 @@ export class BudgetFormComponent implements OnInit {
     this.currencies.removeAt(index);
     this.parentBudgetEntities.removeSelectedId(currencyId);
   }
-
-  test() {
-    console.log(this.form);
-  }
 }

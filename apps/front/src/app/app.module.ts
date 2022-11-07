@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FrontFeatureBudgetsModule } from '@ispent/front/feature-budgets';
+import { FrontUiModule } from '@ispent/front/ui';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { AppComponent } from './app.component';
+import { RoutingModule } from './routing.module';
 
 const maskConfig: Partial<IConfig> = {
   decimalMarker: '.',
@@ -14,7 +15,8 @@ const maskConfig: Partial<IConfig> = {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FrontFeatureBudgetsModule,
+    RoutingModule,
+    FrontUiModule,
     NgxMaskModule.forRoot(maskConfig),
   ],
   providers: [],
