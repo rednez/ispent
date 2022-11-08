@@ -1,7 +1,12 @@
 {
   "name": "ispent",
-  "version": "0.0.0",
+  "description": "iSpent Web application for costs accounting",
+  "version": "0.0.1",
   "license": "MIT",
+  "author": {
+    "name": "Vasyl Yefimenko",
+    "email": "rednez@gmail.com"
+  },
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js",
