@@ -1,0 +1,9 @@
+type Category {
+  id: Int!
+  name: String!
+  color: String!
+}
+
+extend type Query {
+  categories: [Category!]!
+}
