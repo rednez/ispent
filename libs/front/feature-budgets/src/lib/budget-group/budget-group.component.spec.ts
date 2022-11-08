@@ -1,22 +1,20 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormBuilder } from '@angular/forms';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
+import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 import { BudgetGroupComponent } from './budget-group.component';
 
 describe('BudgetGroupComponent', () => {
-  let component: BudgetGroupComponent;
-  let fixture: ComponentFixture<BudgetGroupComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BudgetGroupComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(BudgetGroupComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(BudgetGroupComponent, FrontFeatureBudgetsModule)
+      .keep(FormBuilder, { export: true })
+      .mock(ParentBudgetEntitiesService)
+      .mock(ChildBudgetEntitiesService)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(BudgetGroupComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

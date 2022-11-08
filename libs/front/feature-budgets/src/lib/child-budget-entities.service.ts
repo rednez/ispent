@@ -1,4 +1,4 @@
-import { Host, Injectable, SkipSelf } from '@angular/core';
+import { Injectable, Optional, SkipSelf } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { BudgetEntity } from './data';
 import {
@@ -11,7 +11,9 @@ export class ChildBudgetEntitiesService {
   private currentId?: number | null;
 
   constructor(
-    @SkipSelf() private parentBudgetEntities: ParentBudgetEntitiesService
+    @SkipSelf()
+    @Optional()
+    private parentBudgetEntities: ParentBudgetEntitiesService
   ) {}
 
   get availableEntities(): Observable<BudgetEntity[]> {

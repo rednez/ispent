@@ -1,22 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
 
 import { BudgetCategoryPreviousDataComponent } from './budget-category-previous-data.component';
 
 describe('BudgetCategoryPreviousDataComponent', () => {
-  let component: BudgetCategoryPreviousDataComponent;
-  let fixture: ComponentFixture<BudgetCategoryPreviousDataComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BudgetCategoryPreviousDataComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(BudgetCategoryPreviousDataComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(BudgetCategoryPreviousDataComponent, FrontFeatureBudgetsModule)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender();
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

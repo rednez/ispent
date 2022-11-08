@@ -1,22 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 import { AppBarComponent } from './app-bar.component';
 
 describe('AppBarComponent', () => {
-  let component: AppBarComponent;
-  let fixture: ComponentFixture<AppBarComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [AppBarComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AppBarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() => MockBuilder(AppBarComponent, FrontUiModule));
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(AppBarComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

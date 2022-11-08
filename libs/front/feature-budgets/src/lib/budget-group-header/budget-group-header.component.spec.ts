@@ -1,22 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 import { BudgetGroupHeaderComponent } from './budget-group-header.component';
 
 describe('BudgetGroupHeaderComponent', () => {
-  let component: BudgetGroupHeaderComponent;
-  let fixture: ComponentFixture<BudgetGroupHeaderComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BudgetGroupHeaderComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(BudgetGroupHeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(BudgetGroupHeaderComponent, FrontFeatureBudgetsModule)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(BudgetGroupHeaderComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });
