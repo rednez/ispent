@@ -27,6 +27,9 @@
       "@ispent/front/feature-budgets": [
         "libs/front/feature-budgets/src/index.ts"
       ],
+      "@ispent/front/feature-overview": [
+        "libs/front/feature-overview/src/index.ts"
+      ],
       "@ispent/front/ui": ["libs/front/ui/src/index.ts"],
       "@ispent/shared/data-access": ["libs/shared/data-access/src/index.ts"]
     }

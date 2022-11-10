@@ -5,9 +5,10 @@
     <div *ngFor="let link of links" class="flex items-center cursor-pointer">
       <a
         matRipple
+        [matRippleColor]="'rgba(178,215,245,0.3)'"
         [routerLink]="link.to"
         class="px-3 py-1 rounded-full text-blue-500"
-        routerLinkActive="bg-blue-500 text-slate-100"
+        routerLinkActive="bg-blue-500 text-white"
       >
         <span class="text">{{ link.name }}</span>
       </a>
@@ -16,7 +17,7 @@
 
   <div>
     <div
-      class="bg-blue-400 rounded-full w-10 h-10 flex items-center justify-center"
+      class="bg-green-400 rounded-full w-10 h-10 flex items-center justify-center"
     >
       <div class="text-white uppercase">ve</div>
     </div>

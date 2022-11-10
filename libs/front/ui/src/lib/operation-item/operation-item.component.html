@@ -1,0 +1,23 @@
+<div
+  class="flex items-center justify-between px-2 py-2 cursor-pointer"
+  mat-ripple
+>
+  <div>
+    {{ amount | amount | currency: currency }}
+  </div>
+  <div class="text-right space-y-1">
+    <div class="flex space-x-2">
+      <ispent-chip
+        [title]="groupName"
+        [color]="groupColor"
+      ></ispent-chip>
+      <ispent-chip
+        [title]="categoryName"
+        [color]="categoryColor"
+      ></ispent-chip>
+    </div>
+    <div class="text-slate-500 text-sm">
+      {{ date | date: 'dd.MM.yyyy' }}
+    </div>
+  </div>
+</div>

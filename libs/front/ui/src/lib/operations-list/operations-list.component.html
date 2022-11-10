@@ -1,0 +1,13 @@
+<h3 class="border-b px-4 py-4">{{ title }}</h3>
+<div class="px-2 sm:px-4 divide-y">
+  <ispent-operation-item
+    *ngFor="let item of operations"
+    [amount]="item.amount"
+    [currency]="item.currency"
+    [groupName]="item.group.name"
+    [groupColor]="item.group.color"
+    [categoryName]="item.category.name"
+    [categoryColor]="item.category.color"
+    [date]="item.dateTime"
+  ></ispent-operation-item>
+</div>

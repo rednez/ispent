@@ -15,7 +15,8 @@
     "build": "nx build",
     "build:api": "nx build api",
     "test": "nx test",
-    "run-many": "nx run-many --target=serve --projects=front,api --parallel"
+    "run-many:serve": "nx run-many --target=serve --projects=front,api --parallel",
+    "run-many:test": "nx run-many --target=test --parallel"
   },
   "prisma": {
     "seed": "ts-node libs/api/db/prisma/seed.ts"
@@ -29,6 +30,7 @@
     "@angular/core": "~14.2.0",
     "@angular/forms": "~14.2.0",
     "@angular/material": "^14.2.5",
+    "@angular/material-date-fns-adapter": "^14.2.6",
     "@angular/platform-browser": "~14.2.0",
     "@angular/platform-browser-dynamic": "~14.2.0",
     "@angular/router": "~14.2.0",
@@ -47,7 +49,7 @@
     "ngx-mask": "^14.2.3",
     "numeral": "^2.0.6",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.0.0",
+    "rxjs": "~7.5.0",
     "ts-morph": "^16.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

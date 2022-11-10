@@ -1,0 +1,22 @@
+<ispent-header></ispent-header>
+
+<section
+  class="flex flex-col sm:flex-row sm:justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+>
+  <ispent-budget-summary-widget
+    title="UAH"
+    [planed]="1600"
+    [spent]="160"
+  ></ispent-budget-summary-widget>
+
+  <ispent-budget-summary-widget
+    title="CZK"
+    [planed]="20900"
+    [spent]="150"
+  ></ispent-budget-summary-widget>
+</section>
+
+<ispent-operations-list
+  title="Recent operations"
+  [operations]="operations"
+></ispent-operations-list>
