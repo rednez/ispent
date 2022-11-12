@@ -1,5 +1,8 @@
-<h3 class="border-b px-4 py-4">{{ title }}</h3>
-<div class="px-2 sm:px-4 divide-y">
+<h3 *ngIf="title" class="border-b px-4 py-4">{{ title }}</h3>
+<div
+  *ngIf="operations.length; else emptyState"
+  class="py-2 px-2 sm:px-4 divide-y"
+>
   <ispent-operation-item
     *ngFor="let item of operations"
     [amount]="item.amount"
@@ -11,3 +14,9 @@
     [date]="item.dateTime"
   ></ispent-operation-item>
 </div>
+
+<ng-template #emptyState>
+<div class="p-4">
+  <ispent-empty-state [msgText]="'There is no operations'"></ispent-empty-state>
+</div>
+</ng-template>

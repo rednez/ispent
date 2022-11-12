@@ -4,7 +4,7 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
   selector: 'ispent-budget-chip',
   template: `
     <div
-      class="flex divide-x p-2"
+      class="flex divide-x p-2 rounded-md"
       mat-ripple
       [matRippleDisabled]="!isClickable"
       [ngClass]="setContainerClass()"

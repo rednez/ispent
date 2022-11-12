@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styles: [
     `
       :host {
-        @apply block mt-6 sm:mt-8 mx-auto max-w-6xl px-4 sm:px-6;
+        @apply block mt-6 sm:mt-8 mx-auto max-w-6xl px-4 sm:px-6 pb-6;
       }
     `,
   ],

@@ -1,5 +1,5 @@
 import { MockBuilder, MockRender } from 'ng-mocks';
-import { FrontFeatureOverviewModule } from '../front-feature-overview.module';
+import { FrontFeatureOverviewModule } from '../../front-feature-overview.module';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {

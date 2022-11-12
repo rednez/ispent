@@ -8,7 +8,6 @@ import { BudgetCurrencyComponent } from './budget-currency/budget-currency.compo
 import { BudgetFormComponent } from './budget-form/budget-form.component';
 import { BudgetGroupHeaderComponent } from './budget-group-header/budget-group-header.component';
 import { BudgetGroupComponent } from './budget-group/budget-group.component';
-import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { RoutingModule } from './routing.module';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { RoutingModule } from './routing.module';
     BudgetCurrencyHeaderComponent,
     BudgetCurrencyComponent,
     BudgetCategoryPreviousDataComponent,
-    EmptyStateComponent,
   ],
   exports: [BudgetFormComponent],
 })

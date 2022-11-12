@@ -1,11 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OverviewComponent } from './overview/overview.component';
+import { OperationsPageComponent } from './operations-page/operations-page.component';
+import { OverviewPageComponent } from './overview-page/overview-page.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: OverviewComponent,
+    component: OverviewPageComponent,
+  },
+  {
+    path: ':currency',
+    component: OperationsPageComponent,
+  },
+  {
+    path: ':currency/:group',
+    component: OperationsPageComponent,
+  },
+  {
+    path: ':currency/:group/:category',
+    component: OperationsPageComponent,
   },
 ];
 

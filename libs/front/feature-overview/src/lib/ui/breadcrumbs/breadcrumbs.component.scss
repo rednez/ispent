@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+}
+
+div {
+  &:not(:last-child) {
+    @apply text-gray-500;
+    :hover {
+      cursor: pointer;
+    }
+  }
+
+  &:not(:last-child):after {
+    content: '/';
+    margin: 0 6px;
+  }
+}

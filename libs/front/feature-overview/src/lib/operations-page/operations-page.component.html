@@ -1,0 +1,31 @@
+<ispent-breadcrumbs
+  [items]="(breadcrumbs$ | async)!"
+  (clickLink)="gotoBack($event)"
+></ispent-breadcrumbs>
+
+<div
+  *ngIf="oneBudgetSummary$ | async as budgetSummary"
+  class="sm:w-1/2 lg:w-2/5 mx-auto"
+>
+  <ispent-budget-summary-widget
+    [title]="budgetSummary.title"
+    [planed]="budgetSummary.planned"
+    [spent]="budgetSummary.spent"
+    [isClickable]="false"
+  ></ispent-budget-summary-widget>
+</div>
+
+<div class="flex flex-wrap gap-2">
+  <ispent-budget-chip
+    *ngFor="let chip of budgetSummaryChips$ | async"
+    [title]="chip.title"
+    [plan]="chip.planned"
+    [spent]="chip.spent"
+    [color]="chip.color!"
+  ></ispent-budget-chip>
+</div>
+
+<ispent-operations-list
+  *ngIf="operations$"
+  [operations]="(operations$ | async)!"
+></ispent-operations-list>

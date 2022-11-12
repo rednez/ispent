@@ -1,13 +1,34 @@
 import { Component } from '@angular/core';
-import { Operation } from '@ispent/shared/data-access';
+import { Router } from '@angular/router';
+import {
+  BudgetSummary,
+  BudgetSummaryType,
+  Operation,
+} from '@ispent/shared/data-access';
+import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'ispent-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss'],
+  templateUrl: './overview-page.component.html',
 })
-export class OverviewComponent {
-  operations: Operation[] = [
+export class OverviewPageComponent {
+  currenciesBudgets$: Observable<BudgetSummary[]> = of([
+    {
+      parentId: 1,
+      type: BudgetSummaryType.CURRENCY,
+      title: 'UAH',
+      planned: 12000,
+      spent: 8700.7,
+    },
+    {
+      parentId: 2,
+      type: BudgetSummaryType.CURRENCY,
+      title: 'CZK',
+      planned: 58000,
+      spent: 22300,
+    },
+  ]);
+
+  recentOperations$: Observable<Operation[]> = of([
     {
       id: 1,
       amount: 1200,
@@ -56,5 +77,11 @@ export class OverviewComponent {
       },
       dateTime: '2022-11-03',
     },
-  ];
+  ]);
+
+  constructor(private router: Router) {}
+
+  gotoOperationsPage(currencyId: number) {
+    this.router.navigate(['overview', currencyId]);
+  }
 }

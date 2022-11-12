@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <p class="text-slate-700 text-center">
       <span>{{ msgText }}</span>
       <span
+        *ngIf="actionText"
         class="underline decoration-dotted text-blue-500 cursor-pointer"
         (click)="actionClick.emit()"
       >
