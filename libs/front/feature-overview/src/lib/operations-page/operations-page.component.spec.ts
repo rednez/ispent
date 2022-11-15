@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MockBuilder, MockRender } from 'ng-mocks';
 import { EMPTY } from 'rxjs';
 import { FrontFeatureOverviewModule } from '../front-feature-overview.module';
@@ -9,7 +9,7 @@ describe('OperationsPageComponent', () => {
   beforeEach(() =>
     MockBuilder(OperationsPageComponent, FrontFeatureOverviewModule).mock(
       ActivatedRoute,
-      { params: EMPTY },
+      { params: EMPTY, data: EMPTY, snapshot: { data: {}, params: {} } as any },
       { export: true }
     )
   );

@@ -16,8 +16,8 @@
     "build": "nx build",
     "build:api": "nx build api",
     "test": "nx test",
-    "run-many:serve": "nx run-many --target=serve --projects=front,api --parallel",
-    "run-many:test": "nx run-many --target=test --parallel",
+    "many:serve": "nx run-many --target=serve --projects=front,api --parallel",
+    "many:test": "nx run-many --target=test --parallel",
     "generate:prisma": "prisma generate --schema=./libs/api/db/prisma/schema.prisma",
     "generate:front-graphql": "graphql-codegen && npm run pretty:front-graphql",
     "pretty:front-graphql": " prettier libs/front/data-access/src/lib/graphql/generated.ts --write"

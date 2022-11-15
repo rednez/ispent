@@ -1,4 +1,9 @@
 import { TestBed } from '@angular/core/testing';
+import {
+  BudgetsSummariesGQL,
+  CurrenciesGroupsCategoriesGQL,
+  OperationsGQL,
+} from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
 import { of } from 'rxjs';
 import { CurrentMonthService } from '../current-month.service';
@@ -10,7 +15,56 @@ describe('OperationsPageService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MockProvider(CurrentMonthService, { dateString: '10.2022' })],
+      providers: [
+        MockProvider(CurrentMonthService, { dateString: '10.2022' }),
+        MockProvider(CurrenciesGroupsCategoriesGQL, {
+          watch: () =>
+            <any>{
+              valueChanges: of({
+                data: {
+                  currencies: [
+                    { id: 1, name: 'UAH' },
+                    { id: 2, name: 'CZK' },
+                  ],
+                  groups: [
+                    {
+                      id: 1,
+                      name: 'Life',
+                    },
+                    {
+                      id: 2,
+                      name: 'Sport',
+                    },
+                    {
+                      id: 3,
+                      name: 'Car',
+                    },
+                  ],
+                  categories: [
+                    {
+                      id: 1,
+                      name: 'Foods',
+                    },
+                    {
+                      id: 2,
+                      name: 'Benzin',
+                    },
+                    {
+                      id: 3,
+                      name: 'Beer',
+                    },
+                    {
+                      id: 4,
+                      name: 'Games',
+                    },
+                  ],
+                },
+              }),
+            },
+        }),
+        MockProvider(BudgetsSummariesGQL),
+        MockProvider(OperationsGQL),
+      ],
     });
     service = TestBed.inject(OperationsPageService);
   });
@@ -20,47 +74,6 @@ describe('OperationsPageService', () => {
   });
 
   describe('getBreadcrumbs', () => {
-    beforeEach(() => {
-      (<any>service)._allCurrencies$ = of([
-        { id: 1, name: 'UAH' },
-        { id: 2, name: 'CZK' },
-      ]);
-
-      (<any>service)._allGroups$ = of([
-        {
-          id: 1,
-          name: 'Life',
-        },
-        {
-          id: 2,
-          name: 'Sport',
-        },
-        {
-          id: 3,
-          name: 'Car',
-        },
-      ]);
-
-      (<any>service)._allCategories$ = of([
-        {
-          id: 1,
-          name: 'Foods',
-        },
-        {
-          id: 2,
-          name: 'Benzin',
-        },
-        {
-          id: 3,
-          name: 'Beer',
-        },
-        {
-          id: 4,
-          name: 'Games',
-        },
-      ]);
-    });
-
     it('should return 1 item array', (done) => {
       service.getBreadcrumbs().subscribe((value) => {
         expect(value).toEqual([

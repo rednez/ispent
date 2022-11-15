@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 
 import { OperationsListComponent } from './operations-list.component';
 
 describe('OperationsListComponent', () => {
-  let component: OperationsListComponent;
-  let fixture: ComponentFixture<OperationsListComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [OperationsListComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(OperationsListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() => MockBuilder(OperationsListComponent, FrontUiModule));
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(OperationsListComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });
