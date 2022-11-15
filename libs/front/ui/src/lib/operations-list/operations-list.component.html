@@ -1,22 +1,19 @@
 <h3 *ngIf="title" class="border-b px-4 py-4">{{ title }}</h3>
-<div
-  *ngIf="operations.length; else emptyState"
-  class="py-2 px-2 sm:px-4 divide-y"
+<ispent-fetching-block
+  [isLoading]="isLoading"
+  [isEmpty]="isEmpty"
+  [emptyText]="'There is no operations'"
 >
-  <ispent-operation-item
-    *ngFor="let item of operations"
-    [amount]="item.amount"
-    [currency]="item.currency"
-    [groupName]="item.group.name"
-    [groupColor]="item.group.color"
-    [categoryName]="item.category.name"
-    [categoryColor]="item.category.color"
-    [date]="item.dateTime"
-  ></ispent-operation-item>
-</div>
-
-<ng-template #emptyState>
-<div class="p-4">
-  <ispent-empty-state [msgText]="'There is no operations'"></ispent-empty-state>
-</div>
-</ng-template>
+  <div class="py-2 px-2 sm:px-4 divide-y">
+    <ispent-operation-item
+      *ngFor="let item of operations"
+      [amount]="item.amount"
+      [currency]="item.currency"
+      [groupName]="item.group.name"
+      [groupColor]="item.group.color"
+      [categoryName]="item.category.name"
+      [categoryColor]="item.category.color"
+      [date]="item.dateTime"
+    ></ispent-operation-item>
+  </div>
+</ispent-fetching-block>

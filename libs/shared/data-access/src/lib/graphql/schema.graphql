@@ -1,0 +1,73 @@
+type Currency {
+  id: Int!
+  name: String!
+}
+
+type Group {
+  id: Int!
+  name: String!
+  color: String!
+}
+
+type Category {
+  id: Int!
+  name: String!
+  color: String!
+}
+
+input OperationsParams {
+  currencyId: Int
+  groupId: Int
+  categoryId: Int
+  """
+  ISO 8601 string that represents the selected month.
+
+  The _day_ in the string is not taken into account.
+  """
+  month: String
+}
+
+type Operation {
+  id: Int!
+  amount: Float!
+  currency: String!
+  category: Category!
+  group: Group!
+  dateTime: String!
+}
+
+enum BudgetSummaryType {
+  CURRENCY
+  GROUP
+  CATEGORY
+}
+
+input BudgetSummaryParams {
+  type: BudgetSummaryType!
+  currencyId: Int
+  groupId: Int
+  categoryId: Int
+  """
+  ISO 8601 string that represents the selected month.
+
+  The _day_ in the string is not taken into account.
+  """
+  month: String
+}
+
+type BudgetSummary {
+  parentId: Int!
+  type: BudgetSummaryType!
+  title: String!
+  planned: Float!
+  spent: Float!
+  color: String
+}
+
+type Query {
+  currencies: [Currency!]!
+  groups: [Group!]!
+  categories: [Category!]!
+  operations(params: OperationsParams): [Operation!]!
+  budgetsSummary(params: BudgetSummaryParams!): [BudgetSummary!]!
+}

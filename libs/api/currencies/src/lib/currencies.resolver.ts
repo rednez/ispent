@@ -1,4 +1,4 @@
-import { Currency } from '@ispent/shared/data-access';
+import { Currency } from '@ispent/api/data-access';
 import { Resolver, Query } from '@nestjs/graphql';
 import { CurrenciesService } from './currencies.service';
 

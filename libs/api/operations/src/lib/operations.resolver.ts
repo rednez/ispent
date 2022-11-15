@@ -1,4 +1,4 @@
-import { OperationsParams } from '@ispent/shared/data-access';
+import { OperationsParams } from '@ispent/api/data-access';
 import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { OperationsService } from './operations.service';
 

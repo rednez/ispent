@@ -18,12 +18,14 @@
       "@ispent/api/budgets-summary": ["libs/api/budgets-summary/src/index.ts"],
       "@ispent/api/categories": ["libs/api/categories/src/index.ts"],
       "@ispent/api/currencies": ["libs/api/currencies/src/index.ts"],
+      "@ispent/api/data-access": ["libs/api/data-access/src/index.ts"],
       "@ispent/api/db": ["libs/api/db/src/index.ts"],
       "@ispent/api/groups": ["libs/api/groups/src/index.ts"],
       "@ispent/api/operations": ["libs/api/operations/src/index.ts"],
       "@ispent/front/custom-material": [
         "libs/front/custom-material/src/index.ts"
       ],
+      "@ispent/front/data-access": ["libs/front/data-access/src/index.ts"],
       "@ispent/front/feature-budgets": [
         "libs/front/feature-budgets/src/index.ts"
       ],

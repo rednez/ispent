@@ -1,9 +1,0 @@
-type Group {
-  id: Int!
-  name: String!
-  color: String!
-}
-
-extend type Query {
-  groups: [Group!]!
-}

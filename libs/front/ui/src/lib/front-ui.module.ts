@@ -14,6 +14,7 @@ import { OperationsListComponent } from './operations-list/operations-list.compo
 import { PageLayoutComponent } from './page-layout/page-layout.component';
 import { AmountPipe } from './pipes/amount.pipe';
 import { CurrencyPipe } from './pipes/currency.pipe';
+import { FetchingBlockComponent } from './fetching-block/fetching-block.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { CurrencyPipe } from './pipes/currency.pipe';
     OperationsListComponent,
     BudgetChipComponent,
     EmptyStateComponent,
+    FetchingBlockComponent,
   ],
   exports: [
     RouterModule,
@@ -50,6 +52,7 @@ import { CurrencyPipe } from './pipes/currency.pipe';
     OperationsListComponent,
     BudgetChipComponent,
     EmptyStateComponent,
+    FetchingBlockComponent,
   ],
 })
 export class FrontUiModule {}

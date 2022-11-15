@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { MockProvider } from 'ng-mocks';
 import { of } from 'rxjs';
+import { CurrentMonthService } from '../current-month.service';
 
 import { OperationsPageService } from './operations-page.service';
 
@@ -7,7 +9,9 @@ describe('OperationsPageService', () => {
   let service: OperationsPageService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [MockProvider(CurrentMonthService, { dateString: '10.2022' })],
+    });
     service = TestBed.inject(OperationsPageService);
   });
 
@@ -59,7 +63,9 @@ describe('OperationsPageService', () => {
 
     it('should return 1 item array', (done) => {
       service.getBreadcrumbs().subscribe((value) => {
-        expect(value).toEqual([{ name: 'Overview', to: ['overview'] }]);
+        expect(value).toEqual([
+          { name: 'Overview for 10.2022', to: ['overview'] },
+        ]);
         done();
       });
     });
@@ -69,7 +75,7 @@ describe('OperationsPageService', () => {
 
       service.getBreadcrumbs().subscribe((value) => {
         expect(value).toEqual([
-          { name: 'Overview', to: ['overview'] },
+          { name: 'Overview for 10.2022', to: ['overview'] },
           { name: 'UAH', to: [] },
         ]);
         done();
@@ -81,7 +87,7 @@ describe('OperationsPageService', () => {
 
       service.getBreadcrumbs().subscribe((value) => {
         expect(value).toEqual([
-          { name: 'Overview', to: ['overview'] },
+          { name: 'Overview for 10.2022', to: ['overview'] },
           { name: 'UAH', to: ['overview', '1'] },
           { name: 'Sport', to: [] },
         ]);
@@ -98,7 +104,7 @@ describe('OperationsPageService', () => {
 
       service.getBreadcrumbs().subscribe((value) => {
         expect(value).toEqual([
-          { name: 'Overview', to: ['overview'] },
+          { name: 'Overview for 10.2022', to: ['overview'] },
           { name: 'UAH', to: ['overview', '1'] },
           { name: 'Sport', to: ['overview', '1', '2'] },
           { name: 'Beer', to: [] },

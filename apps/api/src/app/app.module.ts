@@ -13,12 +13,9 @@ import { join } from 'path';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      typePaths: ['libs/api/**/*.graphql'],
+      typePaths: ['libs/shared/data-access/src/lib/**/*.graphql'],
       definitions: {
-        path: join(
-          process.cwd(),
-          'libs/shared/data-access/src/lib/data/graphql.ts'
-        ),
+        path: join(process.cwd(), 'libs/api/data-access/src/lib/data.ts'),
         outputAs: 'class',
       },
       playground: false,

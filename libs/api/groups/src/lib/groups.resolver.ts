@@ -1,4 +1,4 @@
-import { Group } from '@ispent/shared/data-access';
+import { Group } from '@ispent/api/data-access';
 import { Query, Resolver } from '@nestjs/graphql';
 import { GroupsService } from './groups.service';
 

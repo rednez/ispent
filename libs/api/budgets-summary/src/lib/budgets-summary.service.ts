@@ -3,7 +3,7 @@ import {
   BudgetSummary,
   BudgetSummaryParams,
   BudgetSummaryType,
-} from '@ispent/shared/data-access';
+} from '@ispent/api/data-access';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { format, lastDayOfMonth, parseISO } from 'date-fns';
 

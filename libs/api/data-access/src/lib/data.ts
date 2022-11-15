@@ -14,14 +14,6 @@ export enum BudgetSummaryType {
     CATEGORY = "CATEGORY"
 }
 
-export class BudgetSummaryParams {
-    type: BudgetSummaryType;
-    currencyId?: Nullable<number>;
-    groupId?: Nullable<number>;
-    categoryId?: Nullable<number>;
-    month?: Nullable<string>;
-}
-
 export class OperationsParams {
     currencyId?: Nullable<number>;
     groupId?: Nullable<number>;
@@ -29,31 +21,12 @@ export class OperationsParams {
     month?: Nullable<string>;
 }
 
-export class BudgetSummary {
-    parentId: number;
+export class BudgetSummaryParams {
     type: BudgetSummaryType;
-    title: string;
-    planned: number;
-    spent: number;
-    color?: Nullable<string>;
-}
-
-export abstract class IQuery {
-    abstract budgetsSummary(params: BudgetSummaryParams): BudgetSummary[] | Promise<BudgetSummary[]>;
-
-    abstract categories(): Category[] | Promise<Category[]>;
-
-    abstract currencies(): Currency[] | Promise<Currency[]>;
-
-    abstract groups(): Group[] | Promise<Group[]>;
-
-    abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;
-}
-
-export class Category {
-    id: number;
-    name: string;
-    color: string;
+    currencyId?: Nullable<number>;
+    groupId?: Nullable<number>;
+    categoryId?: Nullable<number>;
+    month?: Nullable<string>;
 }
 
 export class Currency {
@@ -67,6 +40,12 @@ export class Group {
     color: string;
 }
 
+export class Category {
+    id: number;
+    name: string;
+    color: string;
+}
+
 export class Operation {
     id: number;
     amount: number;
@@ -74,6 +53,27 @@ export class Operation {
     category: Category;
     group: Group;
     dateTime: string;
+}
+
+export class BudgetSummary {
+    parentId: number;
+    type: BudgetSummaryType;
+    title: string;
+    planned: number;
+    spent: number;
+    color?: Nullable<string>;
+}
+
+export abstract class IQuery {
+    abstract currencies(): Currency[] | Promise<Currency[]>;
+
+    abstract groups(): Group[] | Promise<Group[]>;
+
+    abstract categories(): Category[] | Promise<Category[]>;
+
+    abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;
+
+    abstract budgetsSummary(params: BudgetSummaryParams): BudgetSummary[] | Promise<BudgetSummary[]>;
 }
 
 type Nullable<T> = T | null;

@@ -1,4 +1,4 @@
-import { BudgetSummary, BudgetSummaryParams } from '@ispent/shared/data-access';
+import { BudgetSummary, BudgetSummaryParams } from '@ispent/api/data-access';
 import { Query, Resolver, Args } from '@nestjs/graphql';
 import { BudgetsSummaryService } from './budgets-summary.service';
 

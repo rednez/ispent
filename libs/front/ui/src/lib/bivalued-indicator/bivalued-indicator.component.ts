@@ -15,15 +15,16 @@ export class BiValuedIndicatorComponent implements OnInit {
   secondaryLineWidth = 0;
 
   ngOnInit(): void {
-    if (this.primaryAmount) {
-      if (this.secondaryAmount >= this.primaryAmount) {
-        this.primaryLineWidth = 0;
-        this.secondaryLineWidth = 100;
-      } else {
-        this.secondaryLineWidth =
-          this.secondaryAmount / (this.primaryAmount / 100);
-        this.primaryLineWidth = 100 - this.secondaryLineWidth;
-      }
+    if (
+      !this.primaryAmount ||
+      (this.primaryAmount && this.primaryAmount < this.secondaryAmount)
+    ) {
+      this.primaryLineWidth = 0;
+      this.secondaryLineWidth = 100;
+    } else {
+      this.secondaryLineWidth =
+        this.secondaryAmount / (this.primaryAmount / 100);
+      this.primaryLineWidth = 100 - this.secondaryLineWidth;
     }
   }
 

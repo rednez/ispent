@@ -52,13 +52,13 @@ describe('BiValuedProgressBarComponent', () => {
       expect(component.primaryLineWidth).toBe(0);
       expect(component.secondaryLineWidth).toBe(100);
     });
-  });
 
-  it(`shouldn't set any lines`, () => {
-    component.primaryAmount = 0;
-    component.secondaryAmount = 0;
-    fixture.detectChanges();
-    expect(component.primaryLineWidth).toBe(0);
-    expect(component.secondaryLineWidth).toBe(0);
+    it('if  primary is 0 and secondary is gr than 0', () => {
+      component.primaryAmount = 0;
+      component.secondaryAmount = 1;
+      fixture.detectChanges();
+      expect(component.primaryLineWidth).toBe(0);
+      expect(component.secondaryLineWidth).toBe(100);
+    });
   });
 });

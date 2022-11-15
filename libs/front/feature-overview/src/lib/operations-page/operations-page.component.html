@@ -15,13 +15,14 @@
   ></ispent-budget-summary-widget>
 </div>
 
-<div class="flex flex-wrap gap-2">
+<div *ngIf="!isCategoryRouteDataType" class="flex flex-wrap gap-2">
   <ispent-budget-chip
     *ngFor="let chip of budgetSummaryChips$ | async"
     [title]="chip.title"
     [plan]="chip.planned"
     [spent]="chip.spent"
     [color]="chip.color!"
+    (click)="onChipClick(chip.parentId)"
   ></ispent-budget-chip>
 </div>
 

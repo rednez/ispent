@@ -1,5 +1,5 @@
 import { PrismaService } from '@ispent/api/db';
-import { OperationsParams } from '@ispent/shared/data-access';
+import { OperationsParams } from '@ispent/api/data-access';
 import { Injectable } from '@nestjs/common';
 import { format, lastDayOfMonth, parseISO } from 'date-fns';
 

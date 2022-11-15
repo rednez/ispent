@@ -1,4 +1,4 @@
-import { Category } from '@ispent/shared/data-access';
+import { Category } from '@ispent/api/data-access';
 import { Query, Resolver } from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
 

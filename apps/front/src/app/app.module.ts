@@ -11,6 +11,7 @@ import { FrontUiModule } from '@ispent/front/ui';
 import { uk } from 'date-fns/locale';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { AppComponent } from './app.component';
+import { GraphqlModule } from './graphql.module';
 import { RoutingModule } from './routing.module';
 
 const maskConfig: Partial<IConfig> = {
@@ -37,6 +38,7 @@ const DATE_FORMATS = {
     RoutingModule,
     FrontUiModule,
     NgxMaskModule.forRoot(maskConfig),
+    GraphqlModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: uk },

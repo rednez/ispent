@@ -1,6 +1,6 @@
-<ispent-overview-header></ispent-overview-header>
+<ispent-overview-header (dateChange)="setDate($event)"></ispent-overview-header>
 
-<section
+<div
   class="flex flex-col sm:flex-row sm:justify-center space-y-4 sm:space-y-0 sm:space-x-4"
 >
   <ispent-budget-summary-widget
@@ -10,9 +10,10 @@
     [spent]="budget.spent"
     (click)="gotoOperationsPage(budget.parentId)"
   ></ispent-budget-summary-widget>
-</section>
+</div>
 
 <ispent-operations-list
   title="Recent operations"
   [operations]="(recentOperations$ | async)!"
+  [isLoading]="(isLoadingRecentOperations$ | async)!"
 ></ispent-operations-list>

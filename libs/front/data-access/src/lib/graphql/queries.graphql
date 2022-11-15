@@ -1,0 +1,46 @@
+query CurrenciesGroupsCategories {
+  currencies {
+    id
+    name
+  }
+  groups {
+    id
+    name
+    color
+  }
+  categories {
+    id
+    name
+    color
+  }
+}
+
+query Operations($params: OperationsParams!) {
+  operations(params: $params) {
+    id
+    amount
+    currency
+    category {
+      id
+      name
+      color
+    }
+    group {
+      id
+      name
+      color
+    }
+    dateTime
+  }
+}
+
+query BudgetsSummaries($params: BudgetSummaryParams!) {
+  budgetsSummary(params: $params) {
+    parentId
+    title
+    planned
+    spent
+    color
+    type
+  }
+}
