@@ -9,12 +9,12 @@ import { BudgetChipComponent } from './budget-chip/budget-chip.component';
 import { BudgetSummaryWidgetComponent } from './budget-summary-widget/budget-summary-widget.component';
 import { ChipComponent } from './chip/chip.component';
 import { EmptyStateComponent } from './empty-state/empty-state.component';
+import { LoadableWidgetComponent } from './loadable-widget/loadable-widget.component';
 import { OperationItemComponent } from './operation-item/operation-item.component';
 import { OperationsListComponent } from './operations-list/operations-list.component';
 import { PageLayoutComponent } from './page-layout/page-layout.component';
 import { AmountPipe } from './pipes/amount.pipe';
 import { CurrencyPipe } from './pipes/currency.pipe';
-import { FetchingBlockComponent } from './fetching-block/fetching-block.component';
 
 @NgModule({
   imports: [
@@ -35,7 +35,7 @@ import { FetchingBlockComponent } from './fetching-block/fetching-block.componen
     OperationsListComponent,
     BudgetChipComponent,
     EmptyStateComponent,
-    FetchingBlockComponent,
+    LoadableWidgetComponent,
   ],
   exports: [
     RouterModule,
@@ -52,7 +52,7 @@ import { FetchingBlockComponent } from './fetching-block/fetching-block.componen
     OperationsListComponent,
     BudgetChipComponent,
     EmptyStateComponent,
-    FetchingBlockComponent,
+    LoadableWidgetComponent,
   ],
 })
 export class FrontUiModule {}

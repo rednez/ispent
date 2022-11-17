@@ -15,16 +15,20 @@ import { OverviewPageService } from './overview-page.service';
   ],
 })
 export class OverviewPageComponent implements OnInit {
-  currenciesBudgets$?: Observable<BudgetSummary[]>;
-  recentOperations$?: Observable<Operation[]>;
-  isLoadingRecentOperations$?: Observable<boolean>;
+  currenciesBudgets$!: Observable<BudgetSummary[]>;
+  recentOperations$!: Observable<Operation[]>;
+  isRecentOperationsLoading$!: Observable<boolean>;
+  isCurrenciesBudgetsLoading$!: Observable<boolean>;
+  isRecentOperationsEmpty$!: Observable<boolean>;
 
   constructor(private router: Router, private service: OverviewPageService) {}
 
   ngOnInit(): void {
-    this.currenciesBudgets$ = this.service.currenciesBudgets;
-    this.recentOperations$ = this.service.recentOperations;
-    this.isLoadingRecentOperations$ = this.service.isLoadingRecentOperations$;
+    this.currenciesBudgets$ = this.service.currenciesBudgets$;
+    this.recentOperations$ = this.service.recentOperations$;
+    this.isRecentOperationsLoading$ = this.service.isRecentOperationsLoading$;
+    this.isCurrenciesBudgetsLoading$ = this.service.isCurrenciesBudgetsLoading$;
+    this.isRecentOperationsEmpty$ = this.service.isRecentOperationsEmpty$;
   }
 
   gotoOperationsPage(currencyId: number) {

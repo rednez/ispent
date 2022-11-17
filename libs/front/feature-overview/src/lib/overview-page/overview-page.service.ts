@@ -6,6 +6,7 @@ import {
   Operation,
   OperationsGQL,
 } from '@ispent/front/data-access';
+import { isEmpty } from 'lodash';
 import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { CurrentMonthService } from '../current-month.service';
 
@@ -13,16 +14,11 @@ import { CurrentMonthService } from '../current-month.service';
   providedIn: 'root',
 })
 export class OverviewPageService {
-  private _isLoadingRecentOperations$ = new BehaviorSubject(true);
-
-  private operationsResult$ = this.currentMonth.date$.pipe(
-    switchMap(
-      (month) => this.operationsGql.watch({ params: { month } }).valueChanges
-    )
-  );
+  private _isRecentOperationsLoading$ = new BehaviorSubject(true);
+  private _isCurrenciesBudgetsLoading$ = new BehaviorSubject(true);
 
   private currenciesBudgetsResult$ = this.currentMonth.date$.pipe(
-    tap(() => this._isLoadingRecentOperations$.next(true)),
+    tap(() => this._isCurrenciesBudgetsLoading$.next(true)),
     switchMap(
       (month) =>
         this.budgetsSummariesGQL.watch({
@@ -33,6 +29,12 @@ export class OverviewPageService {
         }).valueChanges
     )
   );
+  private operationsResult$ = this.currentMonth.date$.pipe(
+    tap(() => this._isRecentOperationsLoading$.next(true)),
+    switchMap(
+      (month) => this.operationsGql.watch({ params: { month } }).valueChanges
+    )
+  );
 
   constructor(
     private budgetsSummariesGQL: BudgetsSummariesGQL,
@@ -40,21 +42,30 @@ export class OverviewPageService {
     private currentMonth: CurrentMonthService
   ) {}
 
-  get recentOperations(): Observable<Operation[]> {
-    return this.operationsResult$.pipe(
-      tap(() => this._isLoadingRecentOperations$.next(false)),
-      map((r) => r.data?.operations)
-    );
-  }
-
-  get currenciesBudgets(): Observable<BudgetSummary[]> {
+  get currenciesBudgets$(): Observable<BudgetSummary[]> {
     return this.currenciesBudgetsResult$.pipe(
+      tap(() => this._isCurrenciesBudgetsLoading$.next(false)),
       map((q) => q.data?.budgetsSummary)
     );
   }
 
-  get isLoadingRecentOperations$(): BehaviorSubject<boolean> {
-    return this._isLoadingRecentOperations$;
+  get recentOperations$(): Observable<Operation[]> {
+    return this.operationsResult$.pipe(
+      tap(() => this._isRecentOperationsLoading$.next(false)),
+      map((r) => r.data?.operations)
+    );
+  }
+
+  get isRecentOperationsLoading$(): BehaviorSubject<boolean> {
+    return this._isRecentOperationsLoading$;
+  }
+
+  get isCurrenciesBudgetsLoading$(): BehaviorSubject<boolean> {
+    return this._isCurrenciesBudgetsLoading$;
+  }
+
+  get isRecentOperationsEmpty$(): Observable<boolean> {
+    return this.recentOperations$.pipe(map(isEmpty));
   }
 
   setDate(date: Date) {

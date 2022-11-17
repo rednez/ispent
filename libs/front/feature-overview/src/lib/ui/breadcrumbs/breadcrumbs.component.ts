@@ -7,7 +7,9 @@ export interface BreadcrumbsItem {
 
 @Component({
   selector: 'ispent-breadcrumbs',
-  templateUrl: './breadcrumbs.component.html',
+  template: ` <div *ngFor="let item of items" (click)="onClick(item.to)">
+    <span>{{ item.name }}</span>
+  </div>`,
   styleUrls: ['./breadcrumbs.component.scss'],
 })
 export class BreadcrumbsComponent {

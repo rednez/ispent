@@ -6,6 +6,8 @@ import { RoutingModule } from './routing.module';
 import { HeaderComponent } from './ui/header/header.component';
 import { OperationsPageComponent } from './operations-page/operations-page.component';
 import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
+import { BudgetsSummariesBlockComponent } from './ui/budgets-summaries-block/budgets-summaries-block.component';
+import { OneBudgetSummaryBlockComponent } from './ui/one-budget-summary-block/one-budget-summary-block.component';
 
 @NgModule({
   imports: [CommonModule, RoutingModule, FrontUiModule],
@@ -14,6 +16,8 @@ import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
     HeaderComponent,
     OperationsPageComponent,
     BreadcrumbsComponent,
+    BudgetsSummariesBlockComponent,
+    OneBudgetSummaryBlockComponent,
   ],
 })
 export class FrontFeatureOverviewModule {}

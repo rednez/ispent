@@ -3,17 +3,11 @@
   (clickLink)="gotoBack($event)"
 ></ispent-breadcrumbs>
 
-<div
-  *ngIf="oneBudgetSummary$ | async as budgetSummary"
-  class="sm:w-1/2 lg:w-2/5 mx-auto"
+<ispent-one-budget-summary-block
+  [budget]="(oneBudgetSummary$ | async)!"
+  [isLoading]="(isOneBudgetSummaryLoading$ | async)!"
 >
-  <ispent-budget-summary-widget
-    [title]="budgetSummary.title"
-    [planed]="budgetSummary.planned"
-    [spent]="budgetSummary.spent"
-    [isClickable]="false"
-  ></ispent-budget-summary-widget>
-</div>
+</ispent-one-budget-summary-block>
 
 <div *ngIf="!isCategoryRouteDataType" class="flex flex-wrap gap-2">
   <ispent-budget-chip
@@ -27,6 +21,6 @@
 </div>
 
 <ispent-operations-list
-  *ngIf="operations$"
   [operations]="(operations$ | async)!"
+  [isLoading]="(isOperationsLoading$ | async)!"
 ></ispent-operations-list>

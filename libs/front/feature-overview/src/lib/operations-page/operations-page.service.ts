@@ -13,11 +13,13 @@ import {
 } from '@ispent/front/data-access';
 import { eq, flow, get, mapKeys, mapValues, toString } from 'lodash/fp';
 import {
+  BehaviorSubject,
   combineLatest,
   map,
   Observable,
   of,
   switchMap,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 import { CurrentMonthService } from '../current-month.service';
@@ -35,6 +37,8 @@ type RouteParams = Partial<{
 export class OperationsPageService {
   private _routeParams$!: Observable<RouteParams>;
   private _routeData$!: Observable<Data>;
+  private _isOneBudgetSummaryLoading$ = new BehaviorSubject(false);
+  private _isOperationsLoading$ = new BehaviorSubject(false);
 
   constructor(
     private currentMonth: CurrentMonthService,
@@ -42,6 +46,14 @@ export class OperationsPageService {
     private budgetsSummariesGql: BudgetsSummariesGQL,
     private operationsGql: OperationsGQL
   ) {}
+
+  get isOneBudgetSummaryLoading$(): BehaviorSubject<boolean> {
+    return this._isOneBudgetSummaryLoading$;
+  }
+
+  get isOperationsLoading$(): BehaviorSubject<boolean> {
+    return this._isOperationsLoading$;
+  }
 
   setRouteParams(params: Observable<RouteParams>) {
     this._routeParams$ = params;
@@ -79,6 +91,7 @@ export class OperationsPageService {
       this._routeData$,
       this.currentMonth.date$,
     ]).pipe(
+      tap(() => this._isOneBudgetSummaryLoading$.next(true)),
       switchMap(([params, data, date]) =>
         this.budgetsSummariesGql
           .watch({
@@ -91,7 +104,10 @@ export class OperationsPageService {
               )(params),
             },
           })
-          .valueChanges.pipe(map((result) => result.data.budgetsSummary[0]))
+          .valueChanges.pipe(
+            tap(() => this._isOneBudgetSummaryLoading$.next(false)),
+            map((result) => result.data.budgetsSummary[0])
+          )
       )
     );
   }
@@ -124,6 +140,7 @@ export class OperationsPageService {
 
   getOperations(): Observable<Operation[]> {
     return combineLatest([this._routeParams$, this.currentMonth.date$]).pipe(
+      tap(() => this.isOperationsLoading$.next(true)),
       switchMap(([params, date]) =>
         this.operationsGql
           .watch({
@@ -135,7 +152,10 @@ export class OperationsPageService {
               )(params),
             },
           })
-          .valueChanges.pipe(map((result) => result.data.operations))
+          .valueChanges.pipe(
+            tap(() => this._isOperationsLoading$.next(false)),
+            map((result) => result.data.operations)
+          )
       )
     );
   }
