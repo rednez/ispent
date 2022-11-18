@@ -1,4 +1,10 @@
-<ispent-overview-header (dateChange)="setDate($event)"></ispent-overview-header>
+<div class="flex justify-between">
+  <h1>Overview</h1>
+  <ispent-month-date-picker
+    [label]="'Budget month'"
+    (changeDate)="setDate($event)"
+  ></ispent-month-date-picker>
+</div>
 
 <ispent-budgets-summaries-block
   [budgets]="(currenciesBudgets$ | async)!"

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FrontUiModule } from '@ispent/front/ui';
 import { OverviewPageComponent } from './overview-page/overview-page.component';
 import { RoutingModule } from './routing.module';
-import { HeaderComponent } from './ui/header/header.component';
 import { OperationsPageComponent } from './operations-page/operations-page.component';
 import { BreadcrumbsComponent } from './ui/breadcrumbs/breadcrumbs.component';
 import { BudgetsSummariesBlockComponent } from './ui/budgets-summaries-block/budgets-summaries-block.component';
@@ -13,7 +12,6 @@ import { OneBudgetSummaryBlockComponent } from './ui/one-budget-summary-block/on
   imports: [CommonModule, RoutingModule, FrontUiModule],
   declarations: [
     OverviewPageComponent,
-    HeaderComponent,
     OperationsPageComponent,
     BreadcrumbsComponent,
     BudgetsSummariesBlockComponent,

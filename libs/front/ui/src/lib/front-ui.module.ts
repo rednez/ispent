@@ -15,6 +15,7 @@ import { OperationsListComponent } from './operations-list/operations-list.compo
 import { PageLayoutComponent } from './page-layout/page-layout.component';
 import { AmountPipe } from './pipes/amount.pipe';
 import { CurrencyPipe } from './pipes/currency.pipe';
+import { MonthDatePickerComponent } from './month-date-picker/month-date-picker.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { CurrencyPipe } from './pipes/currency.pipe';
     BudgetChipComponent,
     EmptyStateComponent,
     LoadableWidgetComponent,
+    MonthDatePickerComponent,
   ],
   exports: [
     RouterModule,
@@ -53,6 +55,7 @@ import { CurrencyPipe } from './pipes/currency.pipe';
     BudgetChipComponent,
     EmptyStateComponent,
     LoadableWidgetComponent,
+    MonthDatePickerComponent,
   ],
 })
 export class FrontUiModule {}
