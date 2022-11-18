@@ -1,5 +1,5 @@
 <div [formGroup]="form" class="flex items-center space-x-4">
-  <mat-form-field appearance="standard">
+  <mat-form-field appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select formControlName="id">
       <mat-option
@@ -14,7 +14,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="standard">
+  <mat-form-field appearance="outline">
     <mat-label>Plan amount</mat-label>
     <input matInput formControlName="amount" mask="separator.2" />
     <mat-error *ngIf="form.controls['amount'].invalid">{{
