@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { timer } from 'rxjs';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 
 @Component({
   selector: 'ispent-budget-form',
   templateUrl: './budget-form.component.html',
-  styleUrls: ['./budget-form.component.scss'],
+  styles: [
+    `
+      :host {
+        @apply space-y-4;
+      }
+    `,
+  ],
   providers: [ParentBudgetEntitiesService],
 })
 export class BudgetFormComponent implements OnInit {
@@ -28,8 +35,37 @@ export class BudgetFormComponent implements OnInit {
     { id: 4, name: 'c4' },
   ];
 
-  form = this.fb.group(
-    {
+  form!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private parentBudgetEntities: ParentBudgetEntitiesService
+  ) {}
+
+  get currencies() {
+    return this.form.get('currencies') as FormArray;
+  }
+
+  ngOnInit(): void {
+    this.buildForm();
+    this.parentBudgetEntities.setAllEntities(this.currenciesList);
+  }
+
+  onAddCurrency() {
+    this.currencies.push(new FormControl({ id: null, groups: [] }));
+  }
+
+  onRemoveCurrency(index: number, currencyId: number) {
+    this.currencies.removeAt(index);
+    this.parentBudgetEntities.removeSelectedId(currencyId);
+  }
+
+  saveForm() {
+    console.log(this.form);
+  }
+
+  private buildForm() {
+    this.form = this.fb.group({
       currencies: this.fb.array([
         {
           id: 1,
@@ -63,29 +99,8 @@ export class BudgetFormComponent implements OnInit {
           ],
         },
       ]),
-    },
-    {}
-  );
+    });
 
-  constructor(
-    private fb: FormBuilder,
-    private parentBudgetEntities: ParentBudgetEntitiesService
-  ) {}
-
-  get currencies() {
-    return this.form.get('currencies') as FormArray;
-  }
-
-  ngOnInit(): void {
-    this.parentBudgetEntities.setAllEntities(this.currenciesList);
-  }
-
-  onAddCurrency() {
-    this.currencies.push(new FormControl({ id: null, groups: [] }));
-  }
-
-  onRemoveCurrency(index: number, currencyId: number) {
-    this.currencies.removeAt(index);
-    this.parentBudgetEntities.removeSelectedId(currencyId);
+    timer(0).subscribe(() => this.form.markAsPristine());
   }
 }

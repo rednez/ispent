@@ -12,13 +12,15 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
+  Validators,
 } from '@angular/forms';
 import { add, get, map as fpMap, pipe, reduce } from 'lodash/fp';
-import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { map, Observable, Subject, takeUntil, tap, timer } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { BudgetEntity, BudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
@@ -50,16 +52,9 @@ export class BudgetGroupComponent
   @Output() remove = new EventEmitter<number>();
   @Output() add = new EventEmitter();
 
-  groups$?: Observable<BudgetEntity[]>;
-
-  form = this.fb.group({
-    id: null as number | null,
-    categories: this.fb.array([]),
-  });
-
-  totalAmount$: Observable<number> = this.form.valueChanges.pipe(
-    map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
-  );
+  groups$!: Observable<BudgetEntity[]>;
+  form!: FormGroup;
+  totalAmount$!: Observable<number>;
 
   private onTouched: VoidFunction | undefined;
   private onDestroy$ = new Subject();
@@ -75,16 +70,8 @@ export class BudgetGroupComponent
   }
 
   ngOnInit(): void {
+    this.buildForm();
     this.parentBudgetEntities.setAllEntities(this.categoriesList);
-
-    this.form
-      .get('id')
-      ?.valueChanges.pipe(
-        tap(this.childBudgetEntities.addSelectedEntityId),
-        takeUntil(this.onDestroy$)
-      )
-      .subscribe();
-
     this.groups$ = this.childBudgetEntities.availableEntities;
   }
 
@@ -119,7 +106,19 @@ export class BudgetGroupComponent
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.form.invalid ? { groupError: true } : null;
+    let result: Record<string, boolean> | null = null;
+
+    if (!control.value.id) {
+      result = { requiredGroupId: true };
+    }
+    if (!control.value.categories?.length) {
+      result = { ...result, requireAtLeastOneCategory: true };
+    }
+    if (this.form.invalid) {
+      result = { ...result, invalidSomeGroupChildren: true };
+    }
+
+    return result;
   }
 
   onAddCategory() {
@@ -131,5 +130,24 @@ export class BudgetGroupComponent
   onRemoveCategory(index: number, categoryId: number) {
     this.categories.removeAt(index);
     this.parentBudgetEntities.removeSelectedId(categoryId);
+  }
+
+  private buildForm() {
+    this.form = this.fb.group({
+      id: [null as number | null, [Validators.required]],
+      categories: this.fb.array([]),
+    });
+
+    this.form
+      .get('id')
+      ?.valueChanges.pipe(
+        tap(this.childBudgetEntities.addSelectedEntityId),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe();
+
+    this.form.valueChanges.pipe(
+      map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
+    );
   }
 }

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BudgetFormComponent } from './budget-form/budget-form.component';
+import { EditBudgetPageComponent } from './edit-budget-page/edit-budget-page.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: BudgetFormComponent,
+    component: EditBudgetPageComponent,
   },
 ];
 

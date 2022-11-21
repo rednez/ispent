@@ -10,6 +10,7 @@ import {
   AbstractControl,
   ControlValueAccessor,
   FormBuilder,
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -45,14 +46,8 @@ export class BudgetCategoryComponent
   @Output() add = new EventEmitter();
   @Output() remove = new EventEmitter<number>();
 
-  categories$?: Observable<BudgetEntity[]>;
-
-  form = this.fb.group({
-    id: [0, [Validators.required]],
-    amount: [0, [Validators.required]],
-    planned: [0],
-    spent: [0],
-  });
+  categories$!: Observable<BudgetEntity[]>;
+  form!: FormGroup;
 
   private onTouched: VoidFunction | undefined;
   private onDestroy$ = new Subject();
@@ -63,14 +58,7 @@ export class BudgetCategoryComponent
   ) {}
 
   ngOnInit(): void {
-    this.form
-      .get('id')
-      ?.valueChanges.pipe(
-        tap(this.service.addSelectedEntityId),
-        takeUntil(this.onDestroy$)
-      )
-      .subscribe();
-
+    this.buildForm();
     this.categories$ = this.service.availableEntities;
   }
 
@@ -111,6 +99,35 @@ export class BudgetCategoryComponent
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.form.invalid ? { categoryError: true } : null;
+    let result: Record<string, boolean> | null = null;
+
+    if (!control.value.id) {
+      result = { requiredId: true };
+    }
+    if (!control.value.amount) {
+      result = { ...result, requireAmount: true };
+    }
+    if (this.form.invalid) {
+      result = { ...result, invalidSomeCategoryChildren: true };
+    }
+
+    return result;
+  }
+
+  private buildForm() {
+    this.form = this.fb.group({
+      id: [0, [Validators.required]],
+      amount: [0, [Validators.required]],
+      planned: [0],
+      spent: [0],
+    });
+
+    this.form
+      .get('id')
+      ?.valueChanges.pipe(
+        tap(this.service.addSelectedEntityId),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe();
   }
 }

@@ -12,10 +12,12 @@ import {
   FormArray,
   FormBuilder,
   FormControl,
+  FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validator,
+  Validators,
 } from '@angular/forms';
 import { add, flattenDeep, get, map as fpMap, pipe, reduce } from 'lodash/fp';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
@@ -51,24 +53,9 @@ export class BudgetCurrencyComponent
   @Output() addCurrency = new EventEmitter();
   @Output() removeCurrency = new EventEmitter<number>();
 
-  currencies$?: Observable<BudgetEntity[]>;
-
-  form = this.fb.group({
-    id: null as number | null,
-    groups: this.fb.array([]),
-  });
-
-  totalAmount$ = this.form.valueChanges.pipe(
-    map(
-      pipe(
-        get('groups'),
-        fpMap(get('categories')),
-        flattenDeep,
-        fpMap(get('amount')),
-        reduce(add, 0)
-      )
-    )
-  );
+  currencies$!: Observable<BudgetEntity[]>;
+  form!: FormGroup;
+  totalAmount$!: Observable<number>;
 
   private onTouched: VoidFunction | undefined;
   private onDestroy$ = new Subject();
@@ -84,7 +71,7 @@ export class BudgetCurrencyComponent
   }
 
   ngOnInit(): void {
-    this.parentBudgetEntities.setAllEntities(this.groupsList);
+    this.buildForm();
 
     this.form
       .get('id')
@@ -93,6 +80,20 @@ export class BudgetCurrencyComponent
         takeUntil(this.onDestroy$)
       )
       .subscribe();
+
+    this.totalAmount$ = this.form.valueChanges.pipe(
+      map(
+        pipe(
+          get('groups'),
+          fpMap(get('categories')),
+          flattenDeep,
+          fpMap(get('amount')),
+          reduce(add, 0)
+        )
+      )
+    );
+
+    this.parentBudgetEntities.setAllEntities(this.groupsList);
 
     this.currencies$ = this.childBudgetEntities.availableEntities;
   }
@@ -122,13 +123,23 @@ export class BudgetCurrencyComponent
     if (obj) {
       this.form.patchValue({ id: obj.id });
       obj.groups.forEach((i) => this.groups.push(new FormControl(i)));
-
-      Promise.resolve().then(() => this.form.updateValueAndValidity());
     }
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.form.invalid ? { currencyError: true } : null;
+    let result: Record<string, boolean> | null = null;
+
+    if (!control.value.id) {
+      result = { requiredCurrencyId: true };
+    }
+    if (!control.value.groups?.length) {
+      result = { ...result, requireAtLeastOneGroup: true };
+    }
+    if (this.form.invalid) {
+      result = { ...result, invalidSomeCurrencyChildren: true };
+    }
+
+    return result;
   }
 
   onAddGroup() {
@@ -138,5 +149,12 @@ export class BudgetCurrencyComponent
   onRemoveGroup(index: number, groupId: number) {
     this.groups.removeAt(index);
     this.parentBudgetEntities.removeSelectedId(groupId);
+  }
+
+  private buildForm() {
+    this.form = this.fb.group({
+      id: [null as number | null, [Validators.required]],
+      groups: this.fb.array([]),
+    });
   }
 }
