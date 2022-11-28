@@ -3,12 +3,12 @@ import {
   BudgetsSummariesGQL,
   BudgetSummary,
   BudgetSummaryType,
+  CurrentMonthService,
   Operation,
   OperationsGQL,
 } from '@ispent/front/data-access';
 import { isEmpty } from 'lodash';
 import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
-import { CurrentMonthService } from '../current-month.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class OverviewPageService {
   private _isRecentOperationsLoading$ = new BehaviorSubject(true);
   private _isCurrenciesBudgetsLoading$ = new BehaviorSubject(true);
 
-  private currenciesBudgetsResult$ = this.currentMonth.date$.pipe(
+  private currenciesBudgetsResult$ = this.currentMonth.dateIso$.pipe(
     tap(() => this._isCurrenciesBudgetsLoading$.next(true)),
     switchMap(
       (month) =>
@@ -29,7 +29,8 @@ export class OverviewPageService {
         }).valueChanges
     )
   );
-  private operationsResult$ = this.currentMonth.date$.pipe(
+
+  private operationsResult$ = this.currentMonth.dateIso$.pipe(
     tap(() => this._isRecentOperationsLoading$.next(true)),
     switchMap(
       (month) => this.operationsGql.watch({ params: { month } }).valueChanges
@@ -66,6 +67,10 @@ export class OverviewPageService {
 
   get isRecentOperationsEmpty$(): Observable<boolean> {
     return this.recentOperations$.pipe(map(isEmpty));
+  }
+
+  get currentDate$(): Observable<Date> {
+    return this.currentMonth.date$;
   }
 
   setDate(date: Date) {

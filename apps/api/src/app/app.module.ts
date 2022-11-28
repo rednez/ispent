@@ -1,8 +1,9 @@
-import { ApiBudgetsSummaryModule } from '@ispent/api/budgets-summary';
-import { ApiCategoriesModule } from '@ispent/api/categories';
-import { ApiCurrenciesModule } from '@ispent/api/currencies';
-import { ApiGroupsModule } from '@ispent/api/groups';
-import { ApiOperationsModule } from '@ispent/api/operations';
+import { BudgetsModule } from '@ispent/api/budgets';
+import { BudgetsSummaryModule } from '@ispent/api/budgets-summary';
+import { CategoriesModule } from '@ispent/api/categories';
+import { CurrenciesModule } from '@ispent/api/currencies';
+import { GroupsModule } from '@ispent/api/groups';
+import { OperationsModule } from '@ispent/api/operations';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -21,11 +22,12 @@ import { join } from 'path';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
-    ApiCurrenciesModule,
-    ApiGroupsModule,
-    ApiCategoriesModule,
-    ApiOperationsModule,
-    ApiBudgetsSummaryModule,
+    CurrenciesModule,
+    GroupsModule,
+    CategoriesModule,
+    OperationsModule,
+    BudgetsSummaryModule,
+    BudgetsModule,
   ],
 })
 export class AppModule {}

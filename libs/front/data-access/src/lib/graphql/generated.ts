@@ -23,6 +23,17 @@ export type Scalars = {
   Float: number;
 };
 
+export type BudgetRecord = {
+  __typename?: 'BudgetRecord';
+  amount: Scalars['Float'];
+  category: Category;
+  currency: Currency;
+  date: Scalars['String'];
+  group: Group;
+  prevPlannedAmount: Scalars['Float'];
+  prevSpentAmount: Scalars['Float'];
+};
+
 export type BudgetSummary = {
   __typename?: 'BudgetSummary';
   color?: Maybe<Scalars['String']>;
@@ -51,6 +62,15 @@ export enum BudgetSummaryType {
   Currency = 'CURRENCY',
   Group = 'GROUP',
 }
+
+export type BudgetsParams = {
+  /**
+   * ISO 8601 string that represents the selected month.
+   *
+   * The _day_ in the string is not taken into account.
+   */
+  date: Scalars['String'];
+};
 
 export type Category = {
   __typename?: 'Category';
@@ -96,11 +116,16 @@ export type OperationsParams = {
 
 export type Query = {
   __typename?: 'Query';
+  budgets: Array<BudgetRecord>;
   budgetsSummary: Array<BudgetSummary>;
   categories: Array<Category>;
   currencies: Array<Currency>;
   groups: Array<Group>;
   operations: Array<Operation>;
+};
+
+export type QueryBudgetsArgs = {
+  params: BudgetsParams;
 };
 
 export type QueryBudgetsSummaryArgs = {
@@ -168,6 +193,24 @@ export type BudgetsSummariesQuery = {
     spent: number;
     color?: string | null;
     type: BudgetSummaryType;
+  }>;
+};
+
+export type BudgetsQueryVariables = Exact<{
+  params: BudgetsParams;
+}>;
+
+export type BudgetsQuery = {
+  __typename?: 'Query';
+  budgets: Array<{
+    __typename?: 'BudgetRecord';
+    amount: number;
+    prevPlannedAmount: number;
+    prevSpentAmount: number;
+    date: string;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
 
@@ -258,6 +301,42 @@ export class BudgetsSummariesGQL extends Apollo.Query<
   BudgetsSummariesQueryVariables
 > {
   document = BudgetsSummariesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const BudgetsDocument = gql`
+  query Budgets($params: BudgetsParams!) {
+    budgets(params: $params) {
+      amount
+      prevPlannedAmount
+      prevSpentAmount
+      currency {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+      date
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BudgetsGQL extends Apollo.Query<
+  BudgetsQuery,
+  BudgetsQueryVariables
+> {
+  document = BudgetsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

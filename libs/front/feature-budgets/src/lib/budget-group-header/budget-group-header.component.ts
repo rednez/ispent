@@ -61,7 +61,7 @@ export class BudgetGroupHeaderComponent
 
   writeValue(id: number): void {
     this.groupId.setValue(id);
-    // this.groupId.markAsTouched();
+    this.groupId.markAsTouched();
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

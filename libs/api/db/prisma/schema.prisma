@@ -11,26 +11,29 @@ datasource db {
 }
 
 model Currency {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  Operation Operation[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  Operation    Operation[]
+  BudgetRecord BudgetRecord[]
 }
 
 model Group {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  color     String
-  Category  Category[]
-  Operation Operation[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  color        String
+  Category     Category[]
+  Operation    Operation[]
+  BudgetRecord BudgetRecord[]
 }
 
 model Category {
-  id        Int         @id @default(autoincrement())
-  name      String
-  color     String
-  group     Group       @relation(fields: [groupId], references: [id])
-  groupId   Int
-  Operation Operation[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  color        String
+  group        Group          @relation(fields: [groupId], references: [id])
+  groupId      Int
+  Operation    Operation[]
+  BudgetRecord BudgetRecord[]
 }
 
 model Operation {
@@ -43,4 +46,16 @@ model Operation {
   categoryId Int
   group      Group    @relation(fields: [groupId], references: [id])
   groupId    Int
+}
+
+model BudgetRecord {
+  id         Int      @id @default(autoincrement())
+  amount     Float
+  currency   Currency @relation(fields: [currencyId], references: [id])
+  currencyId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  group      Group    @relation(fields: [groupId], references: [id])
+  groupId    Int
+  date       DateTime @default(now())
 }

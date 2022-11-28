@@ -61,7 +61,7 @@ export class BudgetCurrencyHeaderComponent
 
   writeValue(id: number): void {
     this.currencyId.setValue(id);
-    // this.currencyId.markAsTouched();
+    this.currencyId.markAsTouched();
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

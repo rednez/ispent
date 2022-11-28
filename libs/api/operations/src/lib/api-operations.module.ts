@@ -7,4 +7,4 @@ import { OperationsService } from './operations.service';
   imports: [ApiDbModule],
   providers: [OperationsResolver, OperationsService],
 })
-export class ApiOperationsModule {}
+export class OperationsModule {}

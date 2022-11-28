@@ -8,4 +8,4 @@ import { CurrenciesService } from './currencies.service';
   providers: [CurrenciesResolver, CurrenciesService],
   exports: [CurrenciesService],
 })
-export class ApiCurrenciesModule {}
+export class CurrenciesModule {}

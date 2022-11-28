@@ -29,6 +29,10 @@ export class BudgetSummaryParams {
     month?: Nullable<string>;
 }
 
+export class BudgetsParams {
+    date: string;
+}
+
 export class Currency {
     id: number;
     name: string;
@@ -64,6 +68,16 @@ export class BudgetSummary {
     color?: Nullable<string>;
 }
 
+export class BudgetRecord {
+    amount: number;
+    prevPlannedAmount: number;
+    prevSpentAmount: number;
+    currency: Currency;
+    category: Category;
+    group: Group;
+    date: string;
+}
+
 export abstract class IQuery {
     abstract currencies(): Currency[] | Promise<Currency[]>;
 
@@ -74,6 +88,8 @@ export abstract class IQuery {
     abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;
 
     abstract budgetsSummary(params: BudgetSummaryParams): BudgetSummary[] | Promise<BudgetSummary[]>;
+
+    abstract budgets(params: BudgetsParams): BudgetRecord[] | Promise<BudgetRecord[]>;
 }
 
 type Nullable<T> = T | null;

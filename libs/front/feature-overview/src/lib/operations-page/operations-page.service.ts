@@ -7,6 +7,7 @@ import {
   Category,
   CurrenciesGroupsCategoriesGQL,
   Currency,
+  CurrentMonthService,
   Group,
   Operation,
   OperationsGQL,
@@ -22,7 +23,6 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { CurrentMonthService } from '../current-month.service';
 import { BreadcrumbsItem } from '../ui/breadcrumbs/breadcrumbs.component';
 
 type RouteParams = Partial<{
@@ -67,7 +67,7 @@ export class OperationsPageService {
     if (!this._routeParams$) {
       return of([
         {
-          name: `Overview for ${this.currentMonth.dateString}`,
+          name: `Overview for ${this.currentMonth.dateShort}`,
           to: ['overview'],
         },
       ]);
@@ -89,7 +89,7 @@ export class OperationsPageService {
     return combineLatest([
       this._routeParams$,
       this._routeData$,
-      this.currentMonth.date$,
+      this.currentMonth.dateIso$,
     ]).pipe(
       tap(() => this._isOneBudgetSummaryLoading$.next(true)),
       switchMap(([params, data, date]) =>
@@ -116,7 +116,7 @@ export class OperationsPageService {
     return combineLatest([
       this._routeParams$,
       this._routeData$,
-      this.currentMonth.date$,
+      this.currentMonth.dateIso$,
     ]).pipe(
       switchMap(([params, data, date]) =>
         this.budgetsSummariesGql
@@ -139,8 +139,8 @@ export class OperationsPageService {
   }
 
   getOperations(): Observable<Operation[]> {
-    return combineLatest([this._routeParams$, this.currentMonth.date$]).pipe(
-      tap(() => this.isOperationsLoading$.next(true)),
+    return combineLatest([this._routeParams$, this.currentMonth.dateIso$]).pipe(
+      tap(() => this._isOperationsLoading$.next(true)),
       switchMap(([params, date]) =>
         this.operationsGql
           .watch({
@@ -177,7 +177,7 @@ export class OperationsPageService {
     const { params, currencies, groups, categories } = props;
     const result: BreadcrumbsItem[] = [
       {
-        name: `Overview for ${this.currentMonth.dateString}`,
+        name: `Overview for ${this.currentMonth.dateShort}`,
         to: ['overview'],
       },
     ];

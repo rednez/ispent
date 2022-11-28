@@ -8,4 +8,4 @@ import { GroupsService } from './groups.service';
   providers: [GroupsResolver, GroupsService],
   exports: [GroupsService],
 })
-export class ApiGroupsModule {}
+export class GroupsModule {}

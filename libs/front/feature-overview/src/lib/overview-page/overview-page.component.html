@@ -2,6 +2,7 @@
   <h1>Overview</h1>
   <ispent-month-date-picker
     [label]="'Budget month'"
+    [initialDate]="(currentDate$ | async)!"
     (changeDate)="setDate($event)"
   ></ispent-month-date-picker>
 </div>

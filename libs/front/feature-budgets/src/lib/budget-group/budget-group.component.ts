@@ -20,7 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { add, get, map as fpMap, pipe, reduce } from 'lodash/fp';
-import { map, Observable, Subject, takeUntil, tap, timer } from 'rxjs';
+import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { BudgetEntity, BudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
@@ -142,11 +142,12 @@ export class BudgetGroupComponent
       .get('id')
       ?.valueChanges.pipe(
         tap(this.childBudgetEntities.addSelectedEntityId),
+        tap(() => this.categories.clear()),
         takeUntil(this.onDestroy$)
       )
       .subscribe();
 
-    this.form.valueChanges.pipe(
+    this.totalAmount$ = this.form.valueChanges.pipe(
       map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
     );
   }

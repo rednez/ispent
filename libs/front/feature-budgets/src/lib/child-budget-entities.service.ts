@@ -32,6 +32,8 @@ export class ChildBudgetEntitiesService {
     payload: BudgetEntitiesSelectedIdsChanges
   ): BudgetEntity[] => {
     const { allEntities, ids } = payload;
-    return allEntities.filter((i) => !ids.has(i.id) || i.id === this.currentId);
+    return allEntities?.filter(
+      (i) => !ids.has(i.id) || i.id === this.currentId
+    );
   };
 }

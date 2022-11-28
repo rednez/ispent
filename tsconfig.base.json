@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ispent/api/budgets": ["libs/api/budgets/src/index.ts"],
       "@ispent/api/budgets-summary": ["libs/api/budgets-summary/src/index.ts"],
       "@ispent/api/categories": ["libs/api/categories/src/index.ts"],
       "@ispent/api/currencies": ["libs/api/currencies/src/index.ts"],
@@ -34,6 +35,11 @@
       ],
       "@ispent/front/ui": ["libs/front/ui/src/index.ts"],
       "@ispent/shared/data-access": ["libs/shared/data-access/src/index.ts"]
+    }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
     }
   },
   "exclude": ["node_modules", "tmp"]

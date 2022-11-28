@@ -44,3 +44,25 @@ query BudgetsSummaries($params: BudgetSummaryParams!) {
     type
   }
 }
+
+
+query Budgets($params: BudgetsParams!) {
+  budgets(params: $params) {
+    amount
+    prevPlannedAmount
+    prevSpentAmount
+    currency {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+    date
+  }
+}

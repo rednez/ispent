@@ -121,8 +121,10 @@ export class BudgetCurrencyComponent
 
   writeValue(obj: BudgetCurrency): void {
     if (obj) {
-      this.form.patchValue({ id: obj.id });
-      obj.groups.forEach((i) => this.groups.push(new FormControl(i)));
+      Promise.resolve().then(() => {
+        this.form.patchValue({ id: obj.id });
+        obj.groups.forEach((i) => this.groups.push(new FormControl(i)));
+      });
     }
   }
 

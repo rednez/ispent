@@ -1,39 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Category, Currency, Group } from '@ispent/front/data-access';
 import { timer } from 'rxjs';
+import { BudgetsData } from '../edit-budget-page/edit-budget-page.service';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 
 @Component({
   selector: 'ispent-budget-form',
   templateUrl: './budget-form.component.html',
-  styles: [
-    `
-      :host {
-        @apply space-y-4;
-      }
-    `,
-  ],
   providers: [ParentBudgetEntitiesService],
 })
-export class BudgetFormComponent implements OnInit {
-  currenciesList = [
-    { id: 1, name: 'UAH' },
-    { id: 2, name: 'CZK' },
-  ];
-
-  groupsList = [
-    { id: 1, name: 'Group1' },
-    { id: 2, name: 'Group2' },
-    { id: 3, name: 'Group3' },
-    { id: 4, name: 'Group4' },
-  ];
-
-  categoriesList = [
-    { id: 1, name: 'c1' },
-    { id: 2, name: 'c2' },
-    { id: 3, name: 'c3' },
-    { id: 4, name: 'c4' },
-  ];
+export class BudgetFormComponent implements OnChanges {
+  @Input() currenciesList: Currency[] = [];
+  @Input() groupsList: Group[] = [];
+  @Input() categoriesList: Category[] = [];
+  @Input() budgetsData!: BudgetsData;
+  @Input() isLoading = true;
+  @Input() isError = false;
 
   form!: FormGroup;
 
@@ -42,13 +31,31 @@ export class BudgetFormComponent implements OnInit {
     private parentBudgetEntities: ParentBudgetEntitiesService
   ) {}
 
+  @HostBinding('class')
+  get hostClass() {
+    return this.isSuccessLoaded
+      ? 'block space-y-4 px-4 py-4 bg-white border rounded-md'
+      : 'block h-36';
+  }
+
   get currencies() {
     return this.form.get('currencies') as FormArray;
   }
 
-  ngOnInit(): void {
-    this.buildForm();
-    this.parentBudgetEntities.setAllEntities(this.currenciesList);
+  get isSuccessLoaded(): boolean {
+    return !this.isLoading && !this.isError;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const { isLoading, currenciesList, budgetsData } = changes;
+
+    if (!isLoading?.currentValue) {
+      this.buildForm(budgetsData?.currentValue);
+      this.parentBudgetEntities.reset();
+      if (currenciesList) {
+        this.parentBudgetEntities.setAllEntities(currenciesList.currentValue);
+      }
+    }
   }
 
   onAddCurrency() {
@@ -61,44 +68,13 @@ export class BudgetFormComponent implements OnInit {
   }
 
   saveForm() {
+    // TODO
     console.log(this.form);
   }
 
-  private buildForm() {
+  private buildForm(data?: BudgetsData) {
     this.form = this.fb.group({
-      currencies: this.fb.array([
-        {
-          id: 1,
-          groups: [
-            {
-              id: 1,
-              categories: [
-                { id: 1, amount: 1100, planned: 1100, spent: 190 },
-                { id: 2, amount: 800, planned: 800, spent: 800 },
-              ],
-            },
-            {
-              id: 2,
-              categories: [
-                { id: 3, amount: 1500, planned: 1500, spent: 1890.9 },
-                { id: 4, amount: 500, planned: 500, spent: 456.78 },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          groups: [
-            {
-              id: 1,
-              categories: [
-                { id: 3, amount: 100, planned: 100, spent: 90 },
-                { id: 4, amount: 100, planned: 100, spent: 90 },
-              ],
-            },
-          ],
-        },
-      ]),
+      currencies: this.fb.array(data ? data.currencies : []),
     });
 
     timer(0).subscribe(() => this.form.markAsPristine());

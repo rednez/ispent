@@ -20,6 +20,7 @@ export class OverviewPageComponent implements OnInit {
   isRecentOperationsLoading$!: Observable<boolean>;
   isCurrenciesBudgetsLoading$!: Observable<boolean>;
   isRecentOperationsEmpty$!: Observable<boolean>;
+  currentDate$!: Observable<Date>;
 
   constructor(private router: Router, private service: OverviewPageService) {}
 
@@ -29,6 +30,7 @@ export class OverviewPageComponent implements OnInit {
     this.isRecentOperationsLoading$ = this.service.isRecentOperationsLoading$;
     this.isCurrenciesBudgetsLoading$ = this.service.isCurrenciesBudgetsLoading$;
     this.isRecentOperationsEmpty$ = this.service.isRecentOperationsEmpty$;
+    this.currentDate$ = this.service.currentDate$;
   }
 
   gotoOperationsPage(currencyId: number) {

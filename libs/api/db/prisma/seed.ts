@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { format, parseISO } from 'date-fns';
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -23,10 +25,13 @@ async function main() {
     data: [
       { name: 'Продукти', color: '#1678c2', groupId: groups[0].id },
       { name: 'Комуналка', color: '#dc9b12', groupId: groups[0].id },
+
       { name: 'Математика', color: '#da5c04', groupId: groups[1].id },
       { name: 'Менталка', color: '#107b8d', groupId: groups[1].id },
+
       { name: 'Бензин', color: '#268311', groupId: groups[2].id },
       { name: 'Мийка', color: '#a915a3', groupId: groups[2].id },
+
       { name: 'Розваги', color: '#f6ad0f', groupId: groups[3].id },
       { name: 'Кава', color: '#9c47ee', groupId: groups[3].id },
     ],
@@ -97,6 +102,138 @@ async function main() {
         categoryId: categories[5].id,
         groupId: categories[5].group.id,
         dateTime: new Date('2022-08-27'),
+      },
+    ],
+  });
+
+  await prisma.budgetRecord.createMany({
+    data: [
+      {
+        amount: 11000,
+        currencyId: currencies[1].id,
+        groupId: groups[0].id,
+        categoryId: categories[0].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 21000,
+        currencyId: currencies[1].id,
+        groupId: groups[0].id,
+        categoryId: categories[1].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 1600,
+        currencyId: currencies[1].id,
+        groupId: groups[1].id,
+        categoryId: categories[2].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 1200,
+        currencyId: currencies[1].id,
+        groupId: groups[1].id,
+        categoryId: categories[3].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 8300,
+        currencyId: currencies[1].id,
+        groupId: groups[2].id,
+        categoryId: categories[4].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 700,
+        currencyId: currencies[1].id,
+        groupId: groups[2].id,
+        categoryId: categories[5].id,
+        date: parseISO('2022-08-05'),
+      },
+      {
+        amount: 11300,
+        currencyId: currencies[1].id,
+        groupId: groups[0].id,
+        categoryId: categories[0].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 8000,
+        currencyId: currencies[0].id,
+        groupId: groups[0].id,
+        categoryId: categories[0].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 20000,
+        currencyId: currencies[1].id,
+        groupId: groups[0].id,
+        categoryId: categories[1].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 1700,
+        currencyId: currencies[1].id,
+        groupId: groups[1].id,
+        categoryId: categories[2].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 950,
+        currencyId: currencies[1].id,
+        groupId: groups[1].id,
+        categoryId: categories[3].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 8300,
+        currencyId: currencies[1].id,
+        groupId: groups[2].id,
+        categoryId: categories[4].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 700,
+        currencyId: currencies[1].id,
+        groupId: groups[2].id,
+        categoryId: categories[5].id,
+        date: parseISO('2022-09-05'),
+      },
+      {
+        amount: 12000,
+        currencyId: currencies[0].id,
+        groupId: groups[0].id,
+        categoryId: categories[0].id,
+      },
+      {
+        amount: 23000,
+        currencyId: currencies[0].id,
+        groupId: groups[0].id,
+        categoryId: categories[1].id,
+      },
+      {
+        amount: 1800,
+        currencyId: currencies[0].id,
+        groupId: groups[1].id,
+        categoryId: categories[2].id,
+      },
+      {
+        amount: 1000,
+        currencyId: currencies[0].id,
+        groupId: groups[1].id,
+        categoryId: categories[3].id,
+      },
+      {
+        amount: 8000,
+        currencyId: currencies[0].id,
+        groupId: groups[2].id,
+        categoryId: categories[4].id,
+      },
+      {
+        amount: 500,
+        currencyId: currencies[0].id,
+        groupId: groups[2].id,
+        categoryId: categories[5].id,
       },
     ],
   });

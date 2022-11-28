@@ -1,37 +1,45 @@
-<ng-container *ngIf="form">
-  <button
-    mat-flat-button
-    color="primary"
-    [disabled]="form.pristine"
-    (click)="saveForm()"
-  >
-    Save
-  </button>
+<ispent-loadable-widget
+  *ngIf="!isSuccessLoaded; else contentState"
+  [isLoading]="isLoading"
+  [isError]="isError"
+></ispent-loadable-widget>
 
-  <ng-container
-    *ngIf="currencies.controls.length; else emptyState"
-    [formGroup]="form"
-  >
-    <ng-container formArrayName="currencies">
-      <ispent-budget-currency
-        *ngFor="let currency of currencies.controls; index as i; last as last"
-        [formControlName]="i"
-        [groupsList]="groupsList"
-        [categoriesList]="categoriesList"
-        [isLast]="last"
-        (addCurrency)="onAddCurrency()"
-        (removeCurrency)="onRemoveCurrency(i, $event)"
-      ></ispent-budget-currency>
+<ng-template #contentState>
+  <ng-container *ngIf="form">
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="form.pristine"
+      (click)="saveForm()"
+    >
+      Save
+    </button>
+
+    <ng-container
+      *ngIf="currencies.controls.length; else emptyState"
+      [formGroup]="form"
+    >
+      <ng-container formArrayName="currencies">
+        <ispent-budget-currency
+          *ngFor="let currency of currencies.controls; index as i; last as last"
+          [formControlName]="i"
+          [groupsList]="groupsList"
+          [categoriesList]="categoriesList"
+          [isLast]="last"
+          (addCurrency)="onAddCurrency()"
+          (removeCurrency)="onRemoveCurrency(i, $event)"
+        ></ispent-budget-currency>
+      </ng-container>
     </ng-container>
-  </ng-container>
 
-  <ng-template #emptyState>
-    <div>
-      <ispent-empty-state
-        [msgText]="'There is no currency. To add a currency click on '"
-        [actionText]="'Add Currency'"
-        (actionClick)="onAddCurrency()"
-      ></ispent-empty-state>
-    </div>
-  </ng-template>
-</ng-container>
+    <ng-template #emptyState>
+      <div>
+        <ispent-empty-state
+          [msgText]="'There is no currency. To add a currency click on '"
+          [actionText]="'Add Currency'"
+          (actionClick)="onAddCurrency()"
+        ></ispent-empty-state>
+      </div>
+    </ng-template>
+  </ng-container>
+</ng-template>

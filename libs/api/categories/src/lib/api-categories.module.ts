@@ -8,4 +8,4 @@ import { CategoriesService } from './categories.service';
   providers: [CategoriesService, CategoriesResolver],
   exports: [CategoriesService],
 })
-export class ApiCategoriesModule {}
+export class CategoriesModule {}

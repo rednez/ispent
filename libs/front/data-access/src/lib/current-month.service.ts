@@ -8,11 +8,15 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 export class CurrentMonthService {
   private _date$ = new BehaviorSubject(new Date());
 
-  get date$(): Observable<string> {
+  get date$(): BehaviorSubject<Date> {
+    return this._date$;
+  }
+
+  get dateIso$(): Observable<string> {
     return this._date$.pipe(map((date) => format(date, 'yyyy-MM-dd')));
   }
 
-  get dateString(): string {
+  get dateShort(): string {
     return format(this._date$.value, 'MM.yyyy');
   }
 

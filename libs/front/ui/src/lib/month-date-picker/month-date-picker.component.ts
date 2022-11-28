@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -62,15 +63,20 @@ const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class MonthDatePickerComponent {
+export class MonthDatePickerComponent implements OnInit {
+  @Input() initialDate = new Date();
   @Input() label = '';
   @Output() changeDate = new EventEmitter<Date>();
 
   @ViewChild(MatDatepicker<Date>) private datePickerChild!: MatDatepicker<Date>;
 
-  date = new FormControl(new Date());
+  date!: FormControl;
   minDate = new Date('1991-08-24');
   maxDate = new Date();
+
+  ngOnInit(): void {
+    this.date = new FormControl(this.initialDate);
+  }
 
   onSetMonth(date: Date) {
     this.date.setValue(date);

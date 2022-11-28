@@ -7,4 +7,4 @@ import { BudgetsSummaryService } from './budgets-summary.service';
   imports: [ApiDbModule],
   providers: [BudgetsSummaryService, BudgetsSummaryResolver],
 })
-export class ApiBudgetsSummaryModule {}
+export class BudgetsSummaryModule {}

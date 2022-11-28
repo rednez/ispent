@@ -42,4 +42,9 @@ export class ParentBudgetEntitiesService {
     this.selectedIds.delete(id);
     this.selectedIds$.next(this.selectedIds);
   }
+
+  reset() {
+    this.selectedIds = new Set<number>();
+    this.selectedIds$.next(this.selectedIds);
+  }
 }
