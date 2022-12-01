@@ -15,7 +15,7 @@ export class BudgetsService {
     const budgets = await this.prisma.budgetRecord.findMany({
       include: { currency: true, category: true, group: true },
       where: {
-        date: {
+        dateTime: {
           lte: lastDayOfMonth(dateCurrent),
           gte: parseISO(format(dateCurrent, 'yyyy-MM-01')),
         },
@@ -24,7 +24,7 @@ export class BudgetsService {
 
     const prevBudgets = await this.prisma.budgetRecord.findMany({
       where: {
-        date: {
+        dateTime: {
           lte: lastDayOfMonth(datePrev),
           gte: parseISO(format(datePrev, 'yyyy-MM-01')),
         },

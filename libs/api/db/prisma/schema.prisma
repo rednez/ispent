@@ -57,5 +57,5 @@ model BudgetRecord {
   categoryId Int
   group      Group    @relation(fields: [groupId], references: [id])
   groupId    Int
-  date       DateTime @default(now())
+  dateTime       DateTime @default(now())
 }

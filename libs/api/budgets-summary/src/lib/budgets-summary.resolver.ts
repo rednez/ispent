@@ -1,15 +1,16 @@
 import { BudgetSummary, BudgetSummaryParams } from '@ispent/api/data-access';
-import { Query, Resolver, Args } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { BudgetsSummaryService } from './budgets-summary.service';
+import { Observable } from 'rxjs';
 
 @Resolver('BudgetSummary')
 export class BudgetsSummaryResolver {
   constructor(private budgetsSummaryService: BudgetsSummaryService) {}
 
   @Query()
-  async budgetsSummary(
+  budgetsSummary(
     @Args('params') query: BudgetSummaryParams
-  ): Promise<BudgetSummary[]> {
+  ): Observable<BudgetSummary[]> {
     return this.budgetsSummaryService.findMany(query);
   }
 }
