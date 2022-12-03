@@ -13,6 +13,6 @@ export class BudgetsResolver {
 
   @ResolveField()
   async date(@Parent() budget) {
-    return new Date(budget.date).toISOString();
+    return new Date(budget.dateTime).toISOString();
   }
 }
