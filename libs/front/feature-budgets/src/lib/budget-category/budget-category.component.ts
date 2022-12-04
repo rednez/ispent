@@ -10,6 +10,7 @@ import {
   AbstractControl,
   ControlValueAccessor,
   FormBuilder,
+  FormControl,
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
@@ -47,7 +48,12 @@ export class BudgetCategoryComponent
   @Output() remove = new EventEmitter<number>();
 
   categories$!: Observable<BudgetEntity[]>;
-  form!: FormGroup;
+  form!: FormGroup<{
+    id: FormControl<number>;
+    amount: FormControl<number>;
+    planned: FormControl<number>;
+    spent: FormControl<number>;
+  }>;
 
   private onTouched: VoidFunction | undefined;
   private onDestroy$ = new Subject();
@@ -115,7 +121,7 @@ export class BudgetCategoryComponent
   }
 
   private buildForm() {
-    this.form = this.fb.group({
+    this.form = this.fb.nonNullable.group({
       id: [0, [Validators.required]],
       amount: [0, [Validators.required]],
       planned: [0],

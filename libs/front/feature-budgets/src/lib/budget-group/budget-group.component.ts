@@ -19,11 +19,27 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import { add, get, map as fpMap, pipe, reduce } from 'lodash/fp';
-import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { add, get, isNil, map as fpMap, negate, pipe, reduce } from 'lodash/fp';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  Observable,
+  skip,
+  Subject,
+  Subscription,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { BudgetEntity, BudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
+import {
+  BudgetsSummariesGQL,
+  BudgetSummaryType,
+  CurrentMonthService,
+} from '@ispent/front/data-access';
 
 @Component({
   selector: 'ispent-budget-group',
@@ -48,6 +64,7 @@ export class BudgetGroupComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   @Input() categoriesList: BudgetEntity[] = [];
+  @Input() currencyId!: number;
   @Input() isLast = false;
   @Output() remove = new EventEmitter<number>();
   @Output() add = new EventEmitter();
@@ -55,14 +72,16 @@ export class BudgetGroupComponent
   groups$!: Observable<BudgetEntity[]>;
   form!: FormGroup;
   totalAmount$!: Observable<number>;
-
   private onTouched: VoidFunction | undefined;
   private onDestroy$ = new Subject();
+  private categoriesSubscriptions = new Map<FormControl, Subscription>();
 
   constructor(
     private fb: FormBuilder,
     private parentBudgetEntities: ParentBudgetEntitiesService,
-    private childBudgetEntities: ChildBudgetEntitiesService
+    private childBudgetEntities: ChildBudgetEntitiesService,
+    private budgetsSummariesGQL: BudgetsSummariesGQL,
+    private currentMonth: CurrentMonthService
   ) {}
 
   get categories() {
@@ -78,6 +97,10 @@ export class BudgetGroupComponent
   ngOnDestroy(): void {
     this.onDestroy$.next(null);
     this.onDestroy$.complete();
+
+    this.categoriesSubscriptions.forEach((subscription) =>
+      subscription.unsubscribe()
+    );
   }
 
   registerOnChange(fn: VoidFunction): void {
@@ -99,7 +122,15 @@ export class BudgetGroupComponent
   writeValue(obj: BudgetGroup): void {
     if (obj) {
       this.form.patchValue({ id: obj.id });
-      obj.categories.forEach((i) => this.categories.push(new FormControl(i)));
+      obj.categories.forEach((i) => {
+        const categoryControl = this.fb.nonNullable.control(i);
+        this.categories.push(categoryControl);
+
+        this.categoriesSubscriptions.set(
+          categoryControl,
+          this.createCategoryIdSubscription(categoryControl)
+        );
+      });
 
       Promise.resolve().then(() => this.form.updateValueAndValidity());
     }
@@ -122,8 +153,17 @@ export class BudgetGroupComponent
   }
 
   onAddCategory() {
-    this.categories.push(
-      new FormControl({ id: null, amount: 0, planned: 0, spent: 0 })
+    const categoryControl = this.fb.nonNullable.control({
+      id: null,
+      amount: 0,
+      planned: 0,
+      spent: 0,
+    });
+    this.categories.push(categoryControl);
+
+    this.categoriesSubscriptions.set(
+      categoryControl,
+      this.createCategoryIdSubscription(categoryControl)
     );
   }
 
@@ -150,5 +190,36 @@ export class BudgetGroupComponent
     this.totalAmount$ = this.form.valueChanges.pipe(
       map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
     );
+  }
+
+  private createCategoryIdSubscription(control: FormControl): Subscription {
+    return control.valueChanges
+      .pipe(
+        skip(1),
+        map(get('id')),
+        filter(negate(isNil)),
+        filter(() => !!this.currencyId && this.form.get('id')?.value),
+        distinctUntilChanged(),
+        switchMap(
+          (categoryId) =>
+            this.budgetsSummariesGQL.watch({
+              params: {
+                month: this.currentMonth.previousDateIso,
+                type: BudgetSummaryType.Category,
+                currencyId: this.currencyId,
+                groupId: parseInt(this.form.value['id']),
+                categoryId,
+              },
+            }).valueChanges
+        ),
+        map((query) => query.data.budgetsSummary[0])
+      )
+      .subscribe((budgetSummary) =>
+        control.setValue({
+          ...control.value,
+          planned: budgetSummary?.planned | 0,
+          spent: budgetSummary?.spent | 0,
+        })
+      );
   }
 }

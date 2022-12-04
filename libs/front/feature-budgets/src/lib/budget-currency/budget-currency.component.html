@@ -14,6 +14,7 @@
         *ngFor="let group of groups.controls; index as i; last as last"
         [formControlName]="i"
         [categoriesList]="categoriesList"
+        [currencyId]="form.get('id')?.value"
         [isLast]="last"
         (remove)="onRemoveGroup(i, $event)"
         (add)="onAddGroup()"
