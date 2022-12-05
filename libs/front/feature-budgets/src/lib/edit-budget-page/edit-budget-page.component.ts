@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Category, Currency, Group } from '@ispent/front/data-access';
+import { Currency, Group } from '@ispent/front/data-access';
 import { Observable, Subscription } from 'rxjs';
 import { BudgetsData, EditBudgetPageService } from './edit-budget-page.service';
 
@@ -12,7 +12,6 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   isDataLoading$!: Observable<boolean>;
   currencies: Currency[] = [];
   groups: Group[] = [];
-  categories: Category[] = [];
   budgetsData!: BudgetsData;
   dataSubscription!: Subscription;
 
@@ -34,10 +33,9 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
 
   private loadData() {
     this.dataSubscription = this.service.data$.subscribe(
-      ({ currencies, groups, categories, budgetsData }) => {
+      ({ currencies, groups, budgetsData }) => {
         this.currencies = currencies;
         this.groups = groups;
-        this.categories = categories;
         this.budgetsData = budgetsData;
       }
     );

@@ -1,5 +1,4 @@
-import { Group } from '@ispent/api/data-access';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { GroupsService } from './groups.service';
 
 @Resolver('Group')
@@ -7,7 +6,12 @@ export class GroupsResolver {
   constructor(private groupsService: GroupsService) {}
 
   @Query()
-  async groups(): Promise<Group[]> {
+  async groups() {
     return this.groupsService.findAll();
+  }
+
+  @ResolveField()
+  async categories(@Parent() group) {
+    return group.Category;
   }
 }

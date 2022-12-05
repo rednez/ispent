@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Category, Currency, Group } from '@ispent/front/data-access';
+import { Currency, Group } from '@ispent/front/data-access';
 import { timer } from 'rxjs';
 import { BudgetsData } from '../edit-budget-page/edit-budget-page.service';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
@@ -19,7 +19,6 @@ import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 export class BudgetFormComponent implements OnChanges {
   @Input() currenciesList: Currency[] = [];
   @Input() groupsList: Group[] = [];
-  @Input() categoriesList: Category[] = [];
   @Input() budgetsData!: BudgetsData;
   @Input() isLoading = true;
   @Input() isError = false;

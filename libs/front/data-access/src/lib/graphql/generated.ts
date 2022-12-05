@@ -74,7 +74,7 @@ export type BudgetsParams = {
 
 export type Category = {
   __typename?: 'Category';
-  color: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
 };
@@ -87,7 +87,8 @@ export type Currency = {
 
 export type Group = {
   __typename?: 'Group';
-  color: Scalars['String'];
+  categories?: Maybe<Array<Category>>;
+  color?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
 };
@@ -147,13 +148,32 @@ export type CurrenciesGroupsCategoriesQuery = {
     __typename?: 'Group';
     id: number;
     name: string;
-    color: string;
+    color?: string | null;
   }>;
   categories: Array<{
     __typename?: 'Category';
     id: number;
     name: string;
-    color: string;
+    color?: string | null;
+  }>;
+};
+
+export type CurrenciesGroupsWithCategoriesQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CurrenciesGroupsWithCategoriesQuery = {
+  __typename?: 'Query';
+  currencies: Array<{ __typename?: 'Currency'; id: number; name: string }>;
+  groups: Array<{
+    __typename?: 'Group';
+    id: number;
+    name: string;
+    categories?: Array<{
+      __typename?: 'Category';
+      id: number;
+      name: string;
+    }> | null;
   }>;
 };
 
@@ -173,9 +193,14 @@ export type OperationsQuery = {
       __typename?: 'Category';
       id: number;
       name: string;
-      color: string;
+      color?: string | null;
     };
-    group: { __typename?: 'Group'; id: number; name: string; color: string };
+    group: {
+      __typename?: 'Group';
+      id: number;
+      name: string;
+      color?: string | null;
+    };
   }>;
 };
 
@@ -241,6 +266,36 @@ export class CurrenciesGroupsCategoriesGQL extends Apollo.Query<
   CurrenciesGroupsCategoriesQueryVariables
 > {
   document = CurrenciesGroupsCategoriesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CurrenciesGroupsWithCategoriesDocument = gql`
+  query CurrenciesGroupsWithCategories {
+    currencies {
+      id
+      name
+    }
+    groups {
+      id
+      name
+      categories {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrenciesGroupsWithCategoriesGQL extends Apollo.Query<
+  CurrenciesGroupsWithCategoriesQuery,
+  CurrenciesGroupsWithCategoriesQueryVariables
+> {
+  document = CurrenciesGroupsWithCategoriesDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

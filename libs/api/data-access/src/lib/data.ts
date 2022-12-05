@@ -41,13 +41,14 @@ export class Currency {
 export class Group {
     id: number;
     name: string;
-    color: string;
+    color?: Nullable<string>;
+    categories?: Nullable<Category[]>;
 }
 
 export class Category {
     id: number;
     name: string;
-    color: string;
+    color?: Nullable<string>;
 }
 
 export class Operation {

@@ -24,7 +24,6 @@
           *ngFor="let currency of currencies.controls; index as i; last as last"
           [formControlName]="i"
           [groupsList]="groupsList"
-          [categoriesList]="categoriesList"
           [isLast]="last"
           (addCurrency)="onAddCurrency()"
           (removeCurrency)="onRemoveCurrency(i, $event)"

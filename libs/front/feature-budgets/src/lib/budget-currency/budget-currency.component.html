@@ -13,7 +13,7 @@
       <ispent-budget-group
         *ngFor="let group of groups.controls; index as i; last as last"
         [formControlName]="i"
-        [categoriesList]="categoriesList"
+        [categoriesList]="getCategoriesList(group.value.id)"
         [currencyId]="form.get('id')?.value"
         [isLast]="last"
         (remove)="onRemoveGroup(i, $event)"

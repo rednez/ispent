@@ -19,11 +19,20 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import { add, flattenDeep, get, map as fpMap, pipe, reduce } from 'lodash/fp';
+import {
+  add,
+  flattenDeep,
+  get,
+  isEqual,
+  map as fpMap,
+  pipe,
+  reduce,
+} from 'lodash/fp';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { BudgetCurrency, BudgetEntity } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
+import { Category, Group } from '@ispent/front/data-access';
 
 @Component({
   selector: 'ispent-budget-currency',
@@ -47,8 +56,7 @@ import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 export class BudgetCurrencyComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
-  @Input() groupsList: BudgetEntity[] = [];
-  @Input() categoriesList: BudgetEntity[] = [];
+  @Input() groupsList: Group[] = [];
   @Input() isLast = false;
   @Output() addCurrency = new EventEmitter();
   @Output() removeCurrency = new EventEmitter<number>();
@@ -151,6 +159,11 @@ export class BudgetCurrencyComponent
   onRemoveGroup(index: number, groupId: number) {
     this.groups.removeAt(index);
     this.parentBudgetEntities.removeSelectedId(groupId);
+  }
+
+  getCategoriesList(groupId: number): Category[] {
+    const group = this.groupsList.find(pipe(get('id'), isEqual(groupId)));
+    return (group && group.categories) || [];
   }
 
   private buildForm() {

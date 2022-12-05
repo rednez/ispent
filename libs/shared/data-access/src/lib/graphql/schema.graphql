@@ -6,13 +6,14 @@ type Currency {
 type Group {
   id: Int!
   name: String!
-  color: String!
+  color: String
+  categories: [Category!]
 }
 
 type Category {
   id: Int!
   name: String!
-  color: String!
+  color: String
 }
 
 input OperationsParams {

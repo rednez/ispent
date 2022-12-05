@@ -7,6 +7,6 @@ export class GroupsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<GroupModel[]> {
-    return this.prisma.group.findMany();
+    return this.prisma.group.findMany({ include: { Category: true } });
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   BudgetsGQL,
   BudgetsQuery,
-  CurrenciesGroupsCategoriesGQL,
+  CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
 } from '@ispent/front/data-access';
 import {
@@ -13,7 +13,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { map as _map, groupBy } from 'lodash';
+import { groupBy, map as _map } from 'lodash';
 
 export interface BudgetsData {
   currencies: Array<{
@@ -38,7 +38,7 @@ export class EditBudgetPageService {
 
   constructor(
     private currentMonth: CurrentMonthService,
-    private currenciesGroupsCategoriesGQL: CurrenciesGroupsCategoriesGQL,
+    private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
     private budgetsGql: BudgetsGQL
   ) {}
 
@@ -55,22 +55,20 @@ export class EditBudgetPageService {
       tap(() => this._isDataLoading$.next(true)),
       switchMap((date) =>
         combineLatest([
-          this.currenciesGroupsCategoriesGQL.watch().valueChanges.pipe(
+          this.currenciesGroupsWithCategoriesGQL.watch().valueChanges.pipe(
             map((v) => v.data),
-            map(({ currencies, groups, categories }) => ({
+            map(({ currencies, groups }) => ({
               currencies,
               groups,
-              categories,
             }))
           ),
           this.budgetsGql
             .watch({ params: { date } })
             .valueChanges.pipe(map((v) => this.parseServerData(v.data))),
         ]).pipe(
-          map(([{ currencies, groups, categories }, budgetsData]) => ({
+          map(([{ currencies, groups }, budgetsData]) => ({
             currencies,
             groups,
-            categories,
             budgetsData,
           })),
           tap(() => this._isDataLoading$.next(false))

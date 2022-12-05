@@ -1,3 +1,5 @@
+import {Category} from '@ispent/front/data-access';
+
 export interface BudgetEntity {
   id: number;
   name: string;

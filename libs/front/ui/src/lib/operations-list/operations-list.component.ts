@@ -23,9 +23,9 @@ import { Operation } from '@ispent/front/data-access';
           [amount]="item.amount"
           [currency]="item.currency"
           [groupName]="item.group.name"
-          [groupColor]="item.group.color"
+          [groupColor]="item.group.color!"
           [categoryName]="item.category.name"
-          [categoryColor]="item.category.color"
+          [categoryColor]="item.category.color!"
           [date]="item.dateTime"
         ></ispent-operation-item></div
     ></ng-template>

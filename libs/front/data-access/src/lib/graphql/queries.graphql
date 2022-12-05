@@ -15,6 +15,21 @@ query CurrenciesGroupsCategories {
   }
 }
 
+query CurrenciesGroupsWithCategories {
+  currencies {
+    id
+    name
+  }
+  groups {
+    id
+    name
+    categories {
+      id
+      name
+    }
+  }
+}
+
 query Operations($params: OperationsParams!) {
   operations(params: $params) {
     id
