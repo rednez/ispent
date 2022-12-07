@@ -65,13 +65,12 @@ input BudgetsParams {
   date: String!
 }
 
-type BudgetSummary {
-  parentId: Int!
-  type: BudgetSummaryType!
-  title: String!
-  planned: Float!
-  spent: Float!
-  color: String
+input CreateBudgetRecordInput {
+  amount: Float!
+  currencyId: Int!
+  categoryId: Int!
+  groupId: Int!
+  dateTime: String!
 }
 
 type BudgetRecord {
@@ -84,6 +83,15 @@ type BudgetRecord {
   date: String!
 }
 
+type BudgetSummary {
+  parentId: Int!
+  type: BudgetSummaryType!
+  title: String!
+  planned: Float!
+  spent: Float!
+  color: String
+}
+
 type Query {
   currencies: [Currency!]!
   groups: [Group!]!
@@ -91,4 +99,8 @@ type Query {
   operations(params: OperationsParams): [Operation!]!
   budgetsSummary(params: BudgetSummaryParams!): [BudgetSummary!]!
   budgets(params: BudgetsParams!): [BudgetRecord!]!
+}
+
+type Mutation {
+  recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
 }

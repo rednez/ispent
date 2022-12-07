@@ -79,6 +79,14 @@ export type Category = {
   name: Scalars['String'];
 };
 
+export type CreateBudgetRecordInput = {
+  amount: Scalars['Float'];
+  categoryId: Scalars['Int'];
+  currencyId: Scalars['Int'];
+  dateTime: Scalars['String'];
+  groupId: Scalars['Int'];
+};
+
 export type Currency = {
   __typename?: 'Currency';
   id: Scalars['Int'];
@@ -91,6 +99,15 @@ export type Group = {
   color?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   name: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  recreateManyBudgetsRecords: Array<BudgetRecord>;
+};
+
+export type MutationRecreateManyBudgetsRecordsArgs = {
+  inputs: Array<CreateBudgetRecordInput>;
 };
 
 export type Operation = {
@@ -236,6 +253,22 @@ export type BudgetsQuery = {
     currency: { __typename?: 'Currency'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
     group: { __typename?: 'Group'; id: number; name: string };
+  }>;
+};
+
+export type RecreateBudgetsRecordsMutationVariables = Exact<{
+  inputs: Array<CreateBudgetRecordInput> | CreateBudgetRecordInput;
+}>;
+
+export type RecreateBudgetsRecordsMutation = {
+  __typename?: 'Mutation';
+  recreateManyBudgetsRecords: Array<{
+    __typename?: 'BudgetRecord';
+    amount: number;
+    date: string;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
   }>;
 };
 
@@ -392,6 +425,40 @@ export class BudgetsGQL extends Apollo.Query<
   BudgetsQueryVariables
 > {
   document = BudgetsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RecreateBudgetsRecordsDocument = gql`
+  mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
+    recreateManyBudgetsRecords(inputs: $inputs) {
+      amount
+      currency {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      date
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RecreateBudgetsRecordsGQL extends Apollo.Mutation<
+  RecreateBudgetsRecordsMutation,
+  RecreateBudgetsRecordsMutationVariables
+> {
+  document = RecreateBudgetsRecordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

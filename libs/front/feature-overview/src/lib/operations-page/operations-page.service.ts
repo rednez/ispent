@@ -89,7 +89,7 @@ export class OperationsPageService {
     return combineLatest([
       this._routeParams$,
       this._routeData$,
-      this.currentMonth.dateIso$,
+      this.currentMonth.dateISO$,
     ]).pipe(
       tap(() => this._isOneBudgetSummaryLoading$.next(true)),
       switchMap(([params, data, date]) =>
@@ -116,7 +116,7 @@ export class OperationsPageService {
     return combineLatest([
       this._routeParams$,
       this._routeData$,
-      this.currentMonth.dateIso$,
+      this.currentMonth.dateISO$,
     ]).pipe(
       switchMap(([params, data, date]) =>
         this.budgetsSummariesGql
@@ -139,7 +139,7 @@ export class OperationsPageService {
   }
 
   getOperations(): Observable<Operation[]> {
-    return combineLatest([this._routeParams$, this.currentMonth.dateIso$]).pipe(
+    return combineLatest([this._routeParams$, this.currentMonth.dateISO$]).pipe(
       tap(() => this._isOperationsLoading$.next(true)),
       switchMap(([params, date]) =>
         this.operationsGql

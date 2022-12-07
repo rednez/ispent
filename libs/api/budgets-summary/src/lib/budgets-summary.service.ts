@@ -5,8 +5,8 @@ import {
   BudgetSummaryType,
 } from '@ispent/api/data-access';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { format, lastDayOfMonth, parseISO } from 'date-fns';
 import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
+import { getMonthPeriod } from '@ispent/api/util';
 
 @Injectable()
 export class BudgetsSummaryService {
@@ -16,12 +16,7 @@ export class BudgetsSummaryService {
     const { type, currencyId, groupId, categoryId, month } = query;
 
     const where = {
-      dateTime: {
-        lte: month ? lastDayOfMonth(parseISO(month)) : undefined,
-        gte: month
-          ? parseISO(format(parseISO(month), 'yyyy-MM-01'))
-          : undefined,
-      },
+      dateTime: getMonthPeriod(month ? new Date(month) : undefined),
     };
 
     if (currencyId) {

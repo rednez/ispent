@@ -30,7 +30,7 @@ import {
 } from 'lodash/fp';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
-import { BudgetCurrency, BudgetEntity } from '../data';
+import { FormBudgetCurrency, FormBudgetEntity } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 import { Category, Group } from '@ispent/front/data-access';
 
@@ -61,7 +61,7 @@ export class BudgetCurrencyComponent
   @Output() addCurrency = new EventEmitter();
   @Output() removeCurrency = new EventEmitter<number>();
 
-  currencies$!: Observable<BudgetEntity[]>;
+  currencies$!: Observable<FormBudgetEntity[]>;
   form!: FormGroup;
   totalAmount$!: Observable<number>;
 
@@ -127,7 +127,7 @@ export class BudgetCurrencyComponent
     }
   }
 
-  writeValue(obj: BudgetCurrency): void {
+  writeValue(obj: FormBudgetCurrency): void {
     if (obj) {
       Promise.resolve().then(() => {
         this.form.patchValue({ id: obj.id });

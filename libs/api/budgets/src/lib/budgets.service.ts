@@ -1,42 +1,37 @@
-import { BudgetsParams } from '@ispent/api/data-access';
+import {
+  BudgetsParams,
+  CreateBudgetRecordInput,
+} from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
 import { Injectable } from '@nestjs/common';
-import { format, lastDayOfMonth, parseISO, subMonths } from 'date-fns';
 import { add, get, isEqual, pipe } from 'lodash/fp';
+import { getCurrentAndPreviousMonths, getMonthPeriod } from '@ispent/api/util';
 
 @Injectable()
 export class BudgetsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(params: BudgetsParams) {
-    const dateCurrent = parseISO(params.date);
-    const datePrev = subMonths(dateCurrent, 1);
+    const { currentMonth, previousMonth } = getCurrentAndPreviousMonths(
+      params.date
+    );
 
     const budgets = await this.prisma.budgetRecord.findMany({
       include: { currency: true, category: true, group: true },
       where: {
-        dateTime: {
-          lte: lastDayOfMonth(dateCurrent),
-          gte: parseISO(format(dateCurrent, 'yyyy-MM-01')),
-        },
+        dateTime: getMonthPeriod(currentMonth),
       },
     });
 
     const prevBudgets = await this.prisma.budgetRecord.findMany({
       where: {
-        dateTime: {
-          lte: lastDayOfMonth(datePrev),
-          gte: parseISO(format(datePrev, 'yyyy-MM-01')),
-        },
+        dateTime: getMonthPeriod(previousMonth),
       },
     });
 
     const operations = await this.prisma.operation.findMany({
       where: {
-        dateTime: {
-          lte: lastDayOfMonth(datePrev),
-          gte: parseISO(format(datePrev, 'yyyy-MM-01')),
-        },
+        dateTime: getMonthPeriod(previousMonth),
       },
     });
 
@@ -53,6 +48,23 @@ export class BudgetsService {
         budget.categoryId
       ),
     }));
+  }
+
+  async recreateMany(inputs: CreateBudgetRecordInput[]) {
+    const { currentMonth } = getCurrentAndPreviousMonths(inputs[0].dateTime);
+
+    await this.prisma.budgetRecord.deleteMany({
+      where: { dateTime: getMonthPeriod(currentMonth) },
+    });
+
+    await this.prisma.budgetRecord.createMany({
+      data: inputs.map((i: CreateBudgetRecordInput) => ({
+        ...i,
+        dateTime: currentMonth,
+      })),
+    });
+
+    return this.findAll({ date: currentMonth.toISOString() });
   }
 
   computeTotalAmount(

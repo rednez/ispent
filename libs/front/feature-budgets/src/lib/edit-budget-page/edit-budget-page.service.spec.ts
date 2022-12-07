@@ -2,11 +2,33 @@ import { TestBed } from '@angular/core/testing';
 import {
   BudgetsGQL,
   BudgetsQuery,
-  CurrenciesGroupsCategoriesGQL,
+  CreateBudgetRecordInput,
+  CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
 } from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
 import { EditBudgetPageService } from './edit-budget-page.service';
+
+const formData = {
+  currencies: [
+    {
+      id: 1,
+      groups: [
+        {
+          id: 1,
+          categories: [
+            { id: 1, amount: 12000, planned: 0, spent: 0 },
+            { id: 2, amount: 23000, planned: 0, spent: 0 },
+          ],
+        },
+        {
+          id: 2,
+          categories: [{ id: 3, amount: 1800, planned: 0, spent: 0 }],
+        },
+      ],
+    },
+  ],
+};
 
 describe('EditBudgetPageService', () => {
   let service: EditBudgetPageService;
@@ -15,7 +37,7 @@ describe('EditBudgetPageService', () => {
     TestBed.configureTestingModule({
       providers: [
         MockProvider(CurrentMonthService),
-        MockProvider(CurrenciesGroupsCategoriesGQL),
+        MockProvider(CurrenciesGroupsWithCategoriesGQL),
         MockProvider(BudgetsGQL),
       ],
     });
@@ -26,7 +48,7 @@ describe('EditBudgetPageService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('parseServerData should return parsed data', () => {
+  it('deserializeServerData should return FormData', () => {
     const serverData: BudgetsQuery = {
       budgets: [
         {
@@ -86,27 +108,38 @@ describe('EditBudgetPageService', () => {
       ],
     };
 
-    const parsedData = {
-      currencies: [
-        {
-          id: 1,
-          groups: [
-            {
-              id: 1,
-              categories: [
-                { id: 1, amount: 12000, planned: 0, spent: 0 },
-                { id: 2, amount: 23000, planned: 0, spent: 0 },
-              ],
-            },
-            {
-              id: 2,
-              categories: [{ id: 3, amount: 1800, planned: 0, spent: 0 }],
-            },
-          ],
-        },
-      ],
-    };
+    expect((service as any).deserializeServerData(serverData)).toEqual(
+      formData
+    );
+  });
 
-    expect(service.parseServerData(serverData)).toEqual(parsedData);
+  it('serializeServerData should return CreateBudgetRecordInput[]', () => {
+    const budgetRecordsInputs: CreateBudgetRecordInput[] = [
+      {
+        amount: 12000,
+        currencyId: 1,
+        groupId: 1,
+        categoryId: 1,
+        dateTime: '2022-12-01',
+      },
+      {
+        amount: 23000,
+        currencyId: 1,
+        groupId: 1,
+        categoryId: 2,
+        dateTime: '2022-12-01',
+      },
+      {
+        amount: 1800,
+        currencyId: 1,
+        groupId: 2,
+        categoryId: 3,
+        dateTime: '2022-12-01',
+      },
+    ];
+
+    expect(
+      (service as any).serializeServerData(formData, '2022-12-01')
+    ).toEqual(budgetRecordsInputs);
   });
 });

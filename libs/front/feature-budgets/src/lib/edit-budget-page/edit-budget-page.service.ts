@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   BudgetsGQL,
   BudgetsQuery,
+  CreateBudgetRecordInput,
   CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
+  RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
 import {
   BehaviorSubject,
@@ -14,32 +16,20 @@ import {
   tap,
 } from 'rxjs';
 import { groupBy, map as _map } from 'lodash';
-
-export interface BudgetsData {
-  currencies: Array<{
-    id: number;
-    groups: Array<{
-      id: number;
-      categories: Array<{
-        id: number;
-        amount: number;
-        planned: number;
-        spent: number;
-      }>;
-    }>;
-  }>;
-}
+import { FormData } from '../data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EditBudgetPageService {
   private _isDataLoading$ = new BehaviorSubject(false);
+  private _isDataSaving$ = new BehaviorSubject(false);
 
   constructor(
     private currentMonth: CurrentMonthService,
     private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
-    private budgetsGql: BudgetsGQL
+    private budgetsGql: BudgetsGQL,
+    private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL
   ) {}
 
   get currentDate$(): Observable<Date> {
@@ -51,7 +41,7 @@ export class EditBudgetPageService {
   }
 
   get data$() {
-    return this.currentMonth.dateIso$.pipe(
+    return this.currentMonth.dateISO$.pipe(
       tap(() => this._isDataLoading$.next(true)),
       switchMap((date) =>
         combineLatest([
@@ -64,7 +54,7 @@ export class EditBudgetPageService {
           ),
           this.budgetsGql
             .watch({ params: { date } })
-            .valueChanges.pipe(map((v) => this.parseServerData(v.data))),
+            .valueChanges.pipe(map((v) => this.deserializeServerData(v.data))),
         ]).pipe(
           map(([{ currencies, groups }, budgetsData]) => ({
             currencies,
@@ -81,7 +71,15 @@ export class EditBudgetPageService {
     this.currentMonth.setDate(date);
   }
 
-  parseServerData(data: BudgetsQuery): BudgetsData {
+  saveFormData(formData: FormData) {
+    const inputs = this.serializeServerData(
+      formData,
+      this.currentMonth.date$.value.toISOString()
+    );
+    this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe();
+  }
+
+  private deserializeServerData(data: BudgetsQuery): FormData {
     return {
       currencies: _map(groupBy(data.budgets, 'currency.id'), (value, key) => ({
         id: parseInt(key),
@@ -96,5 +94,28 @@ export class EditBudgetPageService {
         })),
       })),
     };
+  }
+
+  private serializeServerData(
+    formData: FormData,
+    dateISO: string
+  ): CreateBudgetRecordInput[] {
+    const result: CreateBudgetRecordInput[] = [];
+
+    formData.currencies.forEach((currency) =>
+      currency.groups.forEach((group) =>
+        group.categories.forEach((category) => {
+          result.push({
+            amount: category.amount,
+            currencyId: currency.id,
+            groupId: group.id,
+            categoryId: category.id,
+            dateTime: dateISO,
+          });
+        })
+      )
+    );
+
+    return result;
   }
 }

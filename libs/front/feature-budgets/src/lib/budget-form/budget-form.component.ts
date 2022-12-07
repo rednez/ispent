@@ -1,15 +1,17 @@
 import {
   Component,
+  EventEmitter,
   HostBinding,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Currency, Group } from '@ispent/front/data-access';
 import { timer } from 'rxjs';
-import { BudgetsData } from '../edit-budget-page/edit-budget-page.service';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
+import { FormData } from '../data';
 
 @Component({
   selector: 'ispent-budget-form',
@@ -19,9 +21,10 @@ import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 export class BudgetFormComponent implements OnChanges {
   @Input() currenciesList: Currency[] = [];
   @Input() groupsList: Group[] = [];
-  @Input() budgetsData!: BudgetsData;
+  @Input() formData!: FormData;
   @Input() isLoading = true;
   @Input() isError = false;
+  @Output() saveForm = new EventEmitter<FormData>();
 
   form!: FormGroup;
 
@@ -46,10 +49,10 @@ export class BudgetFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { isLoading, currenciesList, budgetsData } = changes;
+    const { isLoading, currenciesList, formData } = changes;
 
     if (!isLoading?.currentValue) {
-      this.buildForm(budgetsData?.currentValue);
+      this.buildForm(formData?.currentValue);
       this.parentBudgetEntities.reset();
       if (currenciesList) {
         this.parentBudgetEntities.setAllEntities(currenciesList.currentValue);
@@ -66,12 +69,13 @@ export class BudgetFormComponent implements OnChanges {
     this.parentBudgetEntities.removeSelectedId(currencyId);
   }
 
-  saveForm() {
-    // TODO
-    console.log(this.form);
+  onSaveForm() {
+    if (this.form.valid) {
+      this.saveForm.emit(this.form.value);
+    }
   }
 
-  private buildForm(data?: BudgetsData) {
+  private buildForm(data?: FormData) {
     this.form = this.fb.group({
       currencies: this.fb.array(data ? data.currencies : []),
     });

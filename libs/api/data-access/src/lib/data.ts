@@ -33,6 +33,14 @@ export class BudgetsParams {
     date: string;
 }
 
+export class CreateBudgetRecordInput {
+    amount: number;
+    currencyId: number;
+    categoryId: number;
+    groupId: number;
+    dateTime: string;
+}
+
 export class Currency {
     id: number;
     name: string;
@@ -60,15 +68,6 @@ export class Operation {
     dateTime: string;
 }
 
-export class BudgetSummary {
-    parentId: number;
-    type: BudgetSummaryType;
-    title: string;
-    planned: number;
-    spent: number;
-    color?: Nullable<string>;
-}
-
 export class BudgetRecord {
     amount: number;
     prevPlannedAmount: number;
@@ -77,6 +76,15 @@ export class BudgetRecord {
     category: Category;
     group: Group;
     date: string;
+}
+
+export class BudgetSummary {
+    parentId: number;
+    type: BudgetSummaryType;
+    title: string;
+    planned: number;
+    spent: number;
+    color?: Nullable<string>;
 }
 
 export abstract class IQuery {
@@ -91,6 +99,10 @@ export abstract class IQuery {
     abstract budgetsSummary(params: BudgetSummaryParams): BudgetSummary[] | Promise<BudgetSummary[]>;
 
     abstract budgets(params: BudgetsParams): BudgetRecord[] | Promise<BudgetRecord[]>;
+}
+
+export abstract class IMutation {
+    abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
 }
 
 type Nullable<T> = T | null;

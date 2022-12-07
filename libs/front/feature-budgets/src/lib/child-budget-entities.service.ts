@@ -1,6 +1,6 @@
 import { Injectable, Optional, SkipSelf } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { BudgetEntity } from './data';
+import { FormBudgetEntity } from './data';
 import {
   BudgetEntitiesSelectedIdsChanges,
   ParentBudgetEntitiesService,
@@ -16,7 +16,7 @@ export class ChildBudgetEntitiesService {
     private parentBudgetEntities: ParentBudgetEntitiesService
   ) {}
 
-  get availableEntities(): Observable<BudgetEntity[]> {
+  get availableEntities(): Observable<FormBudgetEntity[]> {
     return this.parentBudgetEntities.selectedIdsChanges.pipe(
       map(this.defineAvailableEntities)
     );
@@ -30,7 +30,7 @@ export class ChildBudgetEntitiesService {
 
   private defineAvailableEntities = (
     payload: BudgetEntitiesSelectedIdsChanges
-  ): BudgetEntity[] => {
+  ): FormBudgetEntity[] => {
     const { allEntities, ids } = payload;
     return allEntities?.filter(
       (i) => !ids.has(i.id) || i.id === this.currentId

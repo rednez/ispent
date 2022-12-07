@@ -11,5 +11,6 @@
   [isLoading]="(isDataLoading$ | async)!"
   [currenciesList]="currencies"
   [groupsList]="groups"
-  [budgetsData]="budgetsData"
+  [formData]="budgetsData"
+  (saveForm)="onSaveForm($event)"
 ></ispent-budget-form>

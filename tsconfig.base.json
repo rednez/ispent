@@ -23,6 +23,7 @@
       "@ispent/api/db": ["libs/api/db/src/index.ts"],
       "@ispent/api/groups": ["libs/api/groups/src/index.ts"],
       "@ispent/api/operations": ["libs/api/operations/src/index.ts"],
+      "@ispent/api/util": ["libs/api/util/src/index.ts"],
       "@ispent/front/custom-material": [
         "libs/front/custom-material/src/index.ts"
       ],

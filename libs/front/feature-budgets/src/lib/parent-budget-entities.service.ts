@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
-import { BudgetEntity } from './data';
+import { FormBudgetEntity } from './data';
 
 export interface BudgetEntitiesSelectedIdsChanges {
-  allEntities: BudgetEntity[];
+  allEntities: FormBudgetEntity[];
   ids: Set<number>;
 }
 
 @Injectable()
 export class ParentBudgetEntitiesService {
-  private allEntities: BudgetEntity[] = [];
+  private allEntities: FormBudgetEntity[] = [];
   private selectedIds = new Set<number>();
   private allEntities$ = new BehaviorSubject(this.allEntities);
   private selectedIds$ = new BehaviorSubject(this.selectedIds);
@@ -20,7 +20,7 @@ export class ParentBudgetEntitiesService {
     );
   }
 
-  setAllEntities(list: BudgetEntity[]): void {
+  setAllEntities(list: FormBudgetEntity[]): void {
     this.allEntities = list;
     this.allEntities$.next(list);
   }

@@ -1,23 +1,25 @@
-import {Category} from '@ispent/front/data-access';
-
-export interface BudgetEntity {
+export interface FormBudgetEntity {
   id: number;
   name: string;
 }
 
-export interface BudgetCurrency {
+export interface FormBudgetCurrency {
   id: number;
-  groups: BudgetGroup[];
+  groups: FormBudgetGroup[];
 }
 
-export interface BudgetGroup {
+export interface FormBudgetGroup {
   id: number;
-  categories: BudgetCategory[];
+  categories: FormBudgetCategory[];
 }
 
-export interface BudgetCategory {
+export interface FormBudgetCategory {
   id: number;
   amount: number;
   planned: number;
   spent: number;
+}
+
+export interface FormData {
+  currencies: FormBudgetCurrency[];
 }

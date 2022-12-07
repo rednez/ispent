@@ -20,7 +20,7 @@ import {
 } from '@angular/forms';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
-import { BudgetCategory, BudgetEntity } from '../data';
+import { FormBudgetCategory, FormBudgetEntity } from '../data';
 
 @Component({
   selector: 'ispent-budget-category',
@@ -47,7 +47,7 @@ export class BudgetCategoryComponent
   @Output() add = new EventEmitter();
   @Output() remove = new EventEmitter<number>();
 
-  categories$!: Observable<BudgetEntity[]>;
+  categories$!: Observable<FormBudgetEntity[]>;
   form!: FormGroup<{
     id: FormControl<number>;
     amount: FormControl<number>;
@@ -93,7 +93,7 @@ export class BudgetCategoryComponent
     }
   }
 
-  writeValue(obj: BudgetCategory): void {
+  writeValue(obj: FormBudgetCategory): void {
     if (obj) {
       this.form.setValue(obj);
 

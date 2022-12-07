@@ -9,7 +9,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import { BudgetEntity } from '../data';
+import { FormBudgetEntity } from '../data';
 
 @Component({
   selector: 'ispent-budget-currency-header',
@@ -31,7 +31,7 @@ import { BudgetEntity } from '../data';
 export class BudgetCurrencyHeaderComponent
   implements ControlValueAccessor, Validator
 {
-  @Input() currenciesList: BudgetEntity[] = [];
+  @Input() currenciesList: FormBudgetEntity[] = [];
   @Input() total = 0;
   @Input() isLast = false;
   @Output() addCurrency = new EventEmitter();

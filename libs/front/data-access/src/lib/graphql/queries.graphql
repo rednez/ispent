@@ -81,3 +81,22 @@ query Budgets($params: BudgetsParams!) {
     date
   }
 }
+
+mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
+  recreateManyBudgetsRecords(inputs: $inputs) {
+    amount
+    currency {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    date
+  }
+}

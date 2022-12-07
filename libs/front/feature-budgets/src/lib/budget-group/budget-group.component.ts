@@ -2,9 +2,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -33,7 +35,7 @@ import {
   tap,
 } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
-import { BudgetEntity, BudgetGroup } from '../data';
+import { FormBudgetEntity, FormBudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 import {
   BudgetsSummariesGQL,
@@ -61,15 +63,15 @@ import {
   ],
 })
 export class BudgetGroupComponent
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator, OnChanges
 {
-  @Input() categoriesList: BudgetEntity[] = [];
+  @Input() categoriesList: FormBudgetEntity[] = [];
   @Input() currencyId!: number;
   @Input() isLast = false;
   @Output() remove = new EventEmitter<number>();
   @Output() add = new EventEmitter();
 
-  groups$!: Observable<BudgetEntity[]>;
+  groups$!: Observable<FormBudgetEntity[]>;
   form!: FormGroup;
   totalAmount$!: Observable<number>;
   private onTouched: VoidFunction | undefined;
@@ -90,8 +92,14 @@ export class BudgetGroupComponent
 
   ngOnInit(): void {
     this.buildForm();
-    this.parentBudgetEntities.setAllEntities(this.categoriesList);
     this.groups$ = this.childBudgetEntities.availableEntities;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const categoriesList = changes['categoriesList'];
+    if (categoriesList && categoriesList.currentValue?.length) {
+      this.parentBudgetEntities.setAllEntities(categoriesList.currentValue);
+    }
   }
 
   ngOnDestroy(): void {
@@ -119,7 +127,7 @@ export class BudgetGroupComponent
     }
   }
 
-  writeValue(obj: BudgetGroup): void {
+  writeValue(obj: FormBudgetGroup): void {
     if (obj) {
       this.form.patchValue({ id: obj.id });
       obj.categories.forEach((i) => {

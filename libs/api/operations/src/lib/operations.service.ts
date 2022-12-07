@@ -1,7 +1,7 @@
 import { PrismaService } from '@ispent/api/db';
 import { OperationsParams } from '@ispent/api/data-access';
 import { Injectable } from '@nestjs/common';
-import { format, lastDayOfMonth, parseISO } from 'date-fns';
+import { getMonthPeriod } from '@ispent/api/util';
 
 @Injectable()
 export class OperationsService {
@@ -17,12 +17,7 @@ export class OperationsService {
           currencyId,
           groupId,
           categoryId,
-          dateTime: {
-            lte: month ? lastDayOfMonth(parseISO(month)) : undefined,
-            gte: month
-              ? parseISO(format(parseISO(month), 'yyyy-MM-01'))
-              : undefined,
-          },
+          dateTime: getMonthPeriod(month ? new Date(month) : undefined),
         },
       },
     });

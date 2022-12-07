@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Currency, Group } from '@ispent/front/data-access';
 import { Observable, Subscription } from 'rxjs';
-import { BudgetsData, EditBudgetPageService } from './edit-budget-page.service';
+import { EditBudgetPageService } from './edit-budget-page.service';
+import { FormData } from '../data';
 
 @Component({
   templateUrl: './edit-budget-page.component.html',
@@ -12,7 +13,7 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   isDataLoading$!: Observable<boolean>;
   currencies: Currency[] = [];
   groups: Group[] = [];
-  budgetsData!: BudgetsData;
+  budgetsData!: FormData;
   dataSubscription!: Subscription;
 
   constructor(private service: EditBudgetPageService) {}
@@ -29,6 +30,10 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
 
   onChangeDate(date: Date) {
     this.service.setDate(date);
+  }
+
+  onSaveForm(formData: FormData) {
+    this.service.saveFormData(formData);
   }
 
   private loadData() {

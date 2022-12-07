@@ -17,7 +17,7 @@ export class OverviewPageService {
   private _isRecentOperationsLoading$ = new BehaviorSubject(true);
   private _isCurrenciesBudgetsLoading$ = new BehaviorSubject(true);
 
-  private currenciesBudgetsResult$ = this.currentMonth.dateIso$.pipe(
+  private currenciesBudgetsResult$ = this.currentMonth.dateISO$.pipe(
     tap(() => this._isCurrenciesBudgetsLoading$.next(true)),
     switchMap(
       (month) =>
@@ -30,7 +30,7 @@ export class OverviewPageService {
     )
   );
 
-  private operationsResult$ = this.currentMonth.dateIso$.pipe(
+  private operationsResult$ = this.currentMonth.dateISO$.pipe(
     tap(() => this._isRecentOperationsLoading$.next(true)),
     switchMap(
       (month) => this.operationsGql.watch({ params: { month } }).valueChanges

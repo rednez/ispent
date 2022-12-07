@@ -9,7 +9,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import { BudgetEntity } from '../data';
+import { FormBudgetEntity } from '../data';
 
 @Component({
   selector: 'ispent-budget-group-header',
@@ -32,7 +32,7 @@ export class BudgetGroupHeaderComponent
   implements ControlValueAccessor, Validator
 {
   @Input() total = 0;
-  @Input() groupsList: BudgetEntity[] = [];
+  @Input() groupsList: FormBudgetEntity[] = [];
   @Input() isLast = false;
   @Output() addGroup = new EventEmitter();
   @Output() removeGroup = new EventEmitter();
