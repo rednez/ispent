@@ -8,6 +8,8 @@ import { BudgetSummary } from '@ispent/front/data-access';
       *ngIf="!isSuccessLoaded; else contentState"
       [isLoading]="isLoading"
       [isError]="isError"
+      [isEmpty]="isEmpty"
+      [emptyText]="'There are no budgets summaries for this period'"
     ></ispent-loadable-widget>
 
     <ng-template #contentState>
@@ -25,8 +27,12 @@ export class OneBudgetSummaryBlockComponent {
   @Input() isLoading = false;
   @Input() isError = false;
 
+  get isEmpty(): boolean {
+    return !this.budget;
+  }
+
   get isSuccessLoaded(): boolean {
-    return !this.isLoading && !this.isError;
+    return !this.isLoading && !this.isError && !this.isEmpty;
   }
 
   @HostBinding('class')

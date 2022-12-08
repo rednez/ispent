@@ -7,7 +7,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 })
 export class CurrentMonthService {
   private readonly formatISO = 'yyyy-MM-dd';
-  private readonly formatShort = 'yyyy-MM-dd';
+  private readonly formatShort = 'MM.yyyy';
   private _date$ = new BehaviorSubject(new Date());
 
   get date$(): BehaviorSubject<Date> {
