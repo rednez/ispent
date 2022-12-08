@@ -1,21 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MonthDatePickerComponent } from './month-date-picker.component';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 
 describe('MonthDatePickerComponent', () => {
-  let component: MonthDatePickerComponent;
-  let fixture: ComponentFixture<MonthDatePickerComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [MonthDatePickerComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(MonthDatePickerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() => MockBuilder(MonthDatePickerComponent, FrontUiModule));
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(MonthDatePickerComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

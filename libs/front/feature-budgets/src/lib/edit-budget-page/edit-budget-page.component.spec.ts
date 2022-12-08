@@ -1,21 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditBudgetPageComponent } from './edit-budget-page.component';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
+import { EMPTY } from 'rxjs';
+import { EditBudgetPageService } from './edit-budget-page.service';
 
 describe('EditBudgetPageComponent', () => {
-  let component: EditBudgetPageComponent;
-  let fixture: ComponentFixture<EditBudgetPageComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [EditBudgetPageComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(EditBudgetPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(async () =>
+    MockBuilder(EditBudgetPageComponent, FrontFeatureBudgetsModule).provide({
+      provide: EditBudgetPageService,
+      useValue: {
+        currentDate$: EMPTY,
+        isDataLoading$: EMPTY,
+        data$: EMPTY,
+      },
+    })
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(EditBudgetPageComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

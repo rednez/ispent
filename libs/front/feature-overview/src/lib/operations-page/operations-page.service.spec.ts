@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import {
   BudgetsSummariesGQL,
   CurrenciesGroupsCategoriesGQL,
+  CurrentMonthService,
   OperationsGQL,
 } from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
 import { of } from 'rxjs';
-import { CurrentMonthService } from '../current-month.service';
 
 import { OperationsPageService } from './operations-page.service';
 
@@ -16,7 +16,7 @@ describe('OperationsPageService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MockProvider(CurrentMonthService, { dateString: '10.2022' }),
+        MockProvider(CurrentMonthService, { dateShort: '10.2022' }),
         MockProvider(CurrenciesGroupsCategoriesGQL, {
           watch: () =>
             <any>{

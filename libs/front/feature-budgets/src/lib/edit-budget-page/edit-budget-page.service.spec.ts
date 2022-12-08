@@ -5,6 +5,7 @@ import {
   CreateBudgetRecordInput,
   CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
+  RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
 import { EditBudgetPageService } from './edit-budget-page.service';
@@ -39,6 +40,7 @@ describe('EditBudgetPageService', () => {
         MockProvider(CurrentMonthService),
         MockProvider(CurrenciesGroupsWithCategoriesGQL),
         MockProvider(BudgetsGQL),
+        MockProvider(RecreateBudgetsRecordsGQL),
       ],
     });
     service = TestBed.inject(EditBudgetPageService);

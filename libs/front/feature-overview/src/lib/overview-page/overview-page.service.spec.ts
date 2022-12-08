@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { BudgetsSummariesGQL, OperationsGQL } from '@ispent/front/data-access';
+import {
+  BudgetsSummariesGQL,
+  CurrentMonthService,
+  OperationsGQL,
+} from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
-import { EMPTY } from 'rxjs';
-import { CurrentMonthService } from '../current-month.service';
 
 import { OverviewPageService } from './overview-page.service';
+import { EMPTY } from 'rxjs';
 
 describe('OverviewPageService', () => {
   let service: OverviewPageService;
@@ -14,9 +17,7 @@ describe('OverviewPageService', () => {
       providers: [
         MockProvider(BudgetsSummariesGQL),
         MockProvider(OperationsGQL),
-        MockProvider(CurrentMonthService, {
-          date$: EMPTY,
-        }),
+        MockProvider(CurrentMonthService, { dateISO$: EMPTY }),
       ],
     });
     service = TestBed.inject(OverviewPageService);

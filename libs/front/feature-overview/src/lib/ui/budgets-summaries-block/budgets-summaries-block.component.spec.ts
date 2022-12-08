@@ -1,22 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BudgetsSummariesBlockComponent } from './budgets-summaries-block.component';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontFeatureOverviewModule } from '../../front-feature-overview.module';
 
 describe('BudgetsSummariesBlockComponent', () => {
-  let component: BudgetsSummariesBlockComponent;
-  let fixture: ComponentFixture<BudgetsSummariesBlockComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BudgetsSummariesBlockComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(BudgetsSummariesBlockComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(BudgetsSummariesBlockComponent, FrontFeatureOverviewModule)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(BudgetsSummariesBlockComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });
