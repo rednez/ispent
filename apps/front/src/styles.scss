@@ -1,132 +1,8 @@
-@use '@angular/material' as mat;
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@include mat.core();
-@include mat.strong-focus-indicators(
-  (
-    border-width: 0,
-    border-radius: 2px,
-  )
-);
-
-$primary-palette: (
-  50: #e1f4fc,
-  100: #b3e3f8,
-  200: #82d1f4,
-  300: #54beee,
-  400: #35b1eb,
-  500: #0e538f,
-  600: #1b96d9,
-  700: #1783c5,
-  800: #1472b1,
-  900: #0e538f,
-  A100: #b3e3f8,
-  A200: #82d1f4,
-  A400: #35b1eb,
-  A700: #1783c5,
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: rgba(black, 0.87),
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
-  ),
-);
-
-$secondary-palette: (
-  50: #e6f6e6,
-  100: #c4e7c3,
-  200: #9dd89c,
-  300: #73ca73,
-  400: #50be54,
-  500: #27b232,
-  600: #1ba329,
-  700: #03911c,
-  800: #00800e,
-  900: #006100,
-  A100: #c4e7c3,
-  A200: #9dd89c,
-  A400: #50be54,
-  A700: #03911c,
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: rgba(black, 0.87),
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
-  ),
-);
-
-$warn-palette: (
-  50: #ffeaef,
-  100: #ffcbd3,
-  200: #f3979b,
-  300: #eb6d74,
-  400: #f64852,
-  500: #fc3037,
-  600: #ed2437,
-  700: #db1630,
-  800: #ce0729,
-  900: #c0001c,
-  A100: #ffcbd3,
-  A200: #f3979b,
-  A400: #f64852,
-  A700: #db1630,
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: rgba(black, 0.87),
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(black, 0.87),
-    A200: white,
-    A400: white,
-    A700: white,
-  ),
-);
-
-$app-primary: mat.define-palette($primary-palette);
-$app-accent: mat.define-palette($secondary-palette);
-$app-warn: mat.define-palette($warn-palette);
-
-$app-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $app-primary,
-      accent: $app-accent,
-      warn: $app-warn,
-    ),
-  )
-);
-
-@include mat.all-component-themes($app-theme);
-@include mat.strong-focus-indicators-theme($app-theme);
+@import "custom-material";
 
 *,
 *::before,
@@ -141,6 +17,8 @@ body {
 
 body {
   @apply bg-slate-50 text-slate-700;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 h1 {
