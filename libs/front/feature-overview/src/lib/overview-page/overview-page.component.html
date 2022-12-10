@@ -10,6 +10,7 @@
 <ispent-budgets-summaries-block
   [budgets]="(currenciesBudgets$ | async)!"
   [isLoading]="(isCurrenciesBudgetsLoading$ | async)!"
+  [isError]="(isCurrenciesBudgetsError$ | async)!"
   (clickBudget)="gotoOperationsPage($event)"
 ></ispent-budgets-summaries-block>
 
@@ -17,4 +18,5 @@
   title="Recent operations"
   [operations]="(recentOperations$ | async)!"
   [isLoading]="(isRecentOperationsLoading$ | async)!"
+  [isError]="(isRecentOperationsError$ | async)!"
 ></ispent-operations-list>

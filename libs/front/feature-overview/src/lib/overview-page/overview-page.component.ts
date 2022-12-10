@@ -19,6 +19,8 @@ export class OverviewPageComponent implements OnInit {
   recentOperations$!: Observable<Operation[]>;
   isRecentOperationsLoading$!: Observable<boolean>;
   isCurrenciesBudgetsLoading$!: Observable<boolean>;
+  isRecentOperationsError$!: Observable<boolean>;
+  isCurrenciesBudgetsError$!: Observable<boolean>;
   isRecentOperationsEmpty$!: Observable<boolean>;
   currentDate$!: Observable<Date>;
 
@@ -29,6 +31,8 @@ export class OverviewPageComponent implements OnInit {
     this.recentOperations$ = this.service.recentOperations$;
     this.isRecentOperationsLoading$ = this.service.isRecentOperationsLoading$;
     this.isCurrenciesBudgetsLoading$ = this.service.isCurrenciesBudgetsLoading$;
+    this.isRecentOperationsError$ = this.service.isRecentOperationsError$;
+    this.isCurrenciesBudgetsError$ = this.service.isCurrenciesBudgetsError$;
     this.isRecentOperationsEmpty$ = this.service.isRecentOperationsEmpty$;
     this.currentDate$ = this.service.currentDate$;
   }

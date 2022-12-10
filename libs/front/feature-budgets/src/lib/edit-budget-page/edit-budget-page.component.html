@@ -9,6 +9,8 @@
 
 <ispent-budget-form
   [isLoading]="(isDataLoading$ | async)!"
+  [isError]="(isDataError$ | async)!"
+  [isSaving]="(isDataSaving$ | async)!"
   [currenciesList]="currencies"
   [groupsList]="groups"
   [formData]="budgetsData"

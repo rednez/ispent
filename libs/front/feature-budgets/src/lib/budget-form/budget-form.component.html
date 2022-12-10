@@ -9,7 +9,7 @@
     <button
       mat-flat-button
       color="primary"
-      [disabled]="form.pristine"
+      [disabled]="form.pristine || isSaving"
       (click)="onSaveForm()"
     >
       Save

@@ -24,6 +24,7 @@ export class BudgetFormComponent implements OnChanges {
   @Input() formData!: FormData;
   @Input() isLoading = true;
   @Input() isError = false;
+  @Input() isSaving = false;
   @Output() saveForm = new EventEmitter<FormData>();
 
   form!: FormGroup;
@@ -51,7 +52,7 @@ export class BudgetFormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const { isLoading, currenciesList, formData } = changes;
 
-    if (!isLoading?.currentValue) {
+    if (isLoading && !isLoading.currentValue) {
       this.buildForm(formData?.currentValue);
       this.parentBudgetEntities.reset();
       if (currenciesList) {

@@ -37,12 +37,5 @@ describe('date-util', () => {
       expect(isSameDay(currentMonth, results.currentMonth)).toBeTruthy();
       expect(isSameDay(previousMonth, results.previousMonth)).toBeTruthy();
     });
-
-    it('should always return first day in dates', () => {
-      const { currentMonth, previousMonth } =
-        getCurrentAndPreviousMonths('2022-12-08');
-      expect(isSameDay(currentMonth, results.currentMonth)).toBeTruthy();
-      expect(isSameDay(previousMonth, results.previousMonth)).toBeTruthy();
-    });
   });
 });

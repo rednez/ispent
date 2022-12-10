@@ -6,6 +6,7 @@
 <ispent-one-budget-summary-block
   [budget]="(oneBudgetSummary$ | async)!"
   [isLoading]="(isOneBudgetSummaryLoading$ | async)!"
+  [isError]="(isOneBudgetSummaryError$ | async)!"
 >
 </ispent-one-budget-summary-block>
 
@@ -23,4 +24,5 @@
 <ispent-operations-list
   [operations]="(operations$ | async)!"
   [isLoading]="(isOperationsLoading$ | async)!"
+  [isError]="(isOneBudgetSummaryError$ | async)!"
 ></ispent-operations-list>

@@ -21,7 +21,9 @@ export class OperationsPageComponent implements OnInit {
   budgetSummaryChips$!: Observable<BudgetSummary[]>;
   operations$!: Observable<Operation[]>;
   isOneBudgetSummaryLoading$!: Observable<boolean>;
+  isOneBudgetSummaryError$!: Observable<boolean>;
   isOperationsLoading$!: Observable<boolean>;
+  isOperationsError$!: Observable<boolean>;
 
   constructor(
     private router: Router,
@@ -41,7 +43,9 @@ export class OperationsPageComponent implements OnInit {
     this.budgetSummaryChips$ = this.service.getBudgetSummariesList();
     this.operations$ = this.service.getOperations();
     this.isOneBudgetSummaryLoading$ = this.service.isOneBudgetSummaryLoading$;
+    this.isOneBudgetSummaryError$ = this.service.isOneBudgetSummaryError$;
     this.isOperationsLoading$ = this.service.isOperationsLoading$;
+    this.isOperationsError$ = this.service.isOperationsError$;
   }
 
   gotoBack(link: string[]) {

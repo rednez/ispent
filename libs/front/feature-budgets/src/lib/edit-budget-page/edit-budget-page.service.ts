@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   BudgetsGQL,
   BudgetsQuery,
@@ -7,15 +8,19 @@ import {
   CurrentMonthService,
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
+import { groupBy, map as _map } from 'lodash';
+import { logger } from 'nx/src/utils/logger';
 import {
   BehaviorSubject,
+  catchError,
   combineLatest,
   map,
   Observable,
+  of,
   switchMap,
   tap,
+  throwError,
 } from 'rxjs';
-import { groupBy, map as _map } from 'lodash';
 import { FormData } from '../data';
 
 @Injectable({
@@ -23,13 +28,15 @@ import { FormData } from '../data';
 })
 export class EditBudgetPageService {
   private _isDataLoading$ = new BehaviorSubject(false);
+  private _isDataError$ = new BehaviorSubject(false);
   private _isDataSaving$ = new BehaviorSubject(false);
 
   constructor(
     private currentMonth: CurrentMonthService,
     private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
     private budgetsGql: BudgetsGQL,
-    private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL
+    private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
+    private snackBar: MatSnackBar
   ) {}
 
   get currentDate$(): Observable<Date> {
@@ -40,9 +47,20 @@ export class EditBudgetPageService {
     return this._isDataLoading$;
   }
 
+  get isDataSaving$(): BehaviorSubject<boolean> {
+    return this._isDataSaving$;
+  }
+
+  get isDataError$(): BehaviorSubject<boolean> {
+    return this._isDataError$;
+  }
+
   get data$() {
     return this.currentMonth.dateISO$.pipe(
-      tap(() => this._isDataLoading$.next(true)),
+      tap(() => {
+        this._isDataLoading$.next(true);
+        this._isDataError$.next(false);
+      }),
       switchMap((date) =>
         combineLatest([
           this.currenciesGroupsWithCategoriesGQL.watch().valueChanges.pipe(
@@ -63,7 +81,12 @@ export class EditBudgetPageService {
           })),
           tap(() => this._isDataLoading$.next(false))
         )
-      )
+      ),
+      catchError((err) => {
+        this._isDataLoading$.next(false);
+        this._isDataError$.next(true);
+        return throwError(() => of(err));
+      })
     );
   }
 
@@ -76,7 +99,23 @@ export class EditBudgetPageService {
       formData,
       this.currentMonth.date$.value.toISOString()
     );
-    this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe();
+
+    this._isDataSaving$.next(true);
+
+    this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe({
+      next: () => {
+        this.isDataSaving$.next(false);
+        this.snackBar.open('The data has been saved successfully', undefined, {
+          duration: 1000,
+        });
+      },
+      error: () => {
+        this.isDataSaving$.next(false);
+        this.snackBar.open(`Fail. The data hasn't been saved`, undefined, {
+          duration: 1000,
+        });
+      },
+    });
   }
 
   private deserializeServerData(data: BudgetsQuery): FormData {

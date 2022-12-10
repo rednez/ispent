@@ -21,6 +21,11 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {
+  BudgetsSummariesGQL,
+  BudgetSummaryType,
+  CurrentMonthService,
+} from '@ispent/front/data-access';
 import { add, get, isNil, map as fpMap, negate, pipe, reduce } from 'lodash/fp';
 import {
   distinctUntilChanged,
@@ -37,11 +42,6 @@ import {
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetEntity, FormBudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
-import {
-  BudgetsSummariesGQL,
-  BudgetSummaryType,
-  CurrentMonthService,
-} from '@ispent/front/data-access';
 
 @Component({
   selector: 'ispent-budget-group',
@@ -129,18 +129,20 @@ export class BudgetGroupComponent
 
   writeValue(obj: FormBudgetGroup): void {
     if (obj) {
-      this.form.patchValue({ id: obj.id });
-      obj.categories.forEach((i) => {
-        const categoryControl = this.fb.nonNullable.control(i);
-        this.categories.push(categoryControl);
+      Promise.resolve().then(() => {
+        this.form.patchValue({ id: obj.id });
+        obj.categories.forEach((i) => {
+          const categoryControl = this.fb.nonNullable.control(i);
+          this.categories.push(categoryControl);
 
-        this.categoriesSubscriptions.set(
-          categoryControl,
-          this.createCategoryIdSubscription(categoryControl)
-        );
+          this.categoriesSubscriptions.set(
+            categoryControl,
+            this.createCategoryIdSubscription(categoryControl)
+          );
+        });
+
+        this.form.updateValueAndValidity();
       });
-
-      Promise.resolve().then(() => this.form.updateValueAndValidity());
     }
   }
 

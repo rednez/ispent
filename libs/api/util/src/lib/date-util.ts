@@ -11,11 +11,9 @@ export function getCurrentAndPreviousMonths(dateISO: string): {
   currentMonth: Date;
   previousMonth: Date;
 } {
-  const currentMonthFirstDay = parseISO(
-    format(parseISO(dateISO), 'yyyy-MM-01')
-  );
+  const currentMonth = parseISO(dateISO);
   return {
-    currentMonth: currentMonthFirstDay,
-    previousMonth: subMonths(currentMonthFirstDay, 1),
+    currentMonth,
+    previousMonth: subMonths(currentMonth, 1),
   };
 }

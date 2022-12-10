@@ -8,32 +8,62 @@ import {
   OperationsGQL,
 } from '@ispent/front/data-access';
 import { isEmpty } from 'lodash';
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
+import { ApolloError } from '@apollo/client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OverviewPageService {
   private _isRecentOperationsLoading$ = new BehaviorSubject(true);
+  private _isRecentOperationsError$ = new BehaviorSubject(false);
   private _isCurrenciesBudgetsLoading$ = new BehaviorSubject(true);
+  private _isCurrenciesBudgetsError$ = new BehaviorSubject(false);
 
   private currenciesBudgetsResult$ = this.currentMonth.dateISO$.pipe(
-    tap(() => this._isCurrenciesBudgetsLoading$.next(true)),
-    switchMap(
-      (month) =>
-        this.budgetsSummariesGQL.watch({
+    tap(() => {
+      this._isCurrenciesBudgetsLoading$.next(true);
+      this._isCurrenciesBudgetsError$.next(false);
+    }),
+    switchMap((month) =>
+      this.budgetsSummariesGQL
+        .watch({
           params: {
             type: BudgetSummaryType.Currency,
             month,
           },
-        }).valueChanges
+        })
+        .valueChanges.pipe(
+          catchError((err: ApolloError) => {
+            this._isCurrenciesBudgetsLoading$.next(false);
+            this._isCurrenciesBudgetsError$.next(true);
+            return throwError(() => err);
+          })
+        )
     )
   );
 
   private operationsResult$ = this.currentMonth.dateISO$.pipe(
-    tap(() => this._isRecentOperationsLoading$.next(true)),
-    switchMap(
-      (month) => this.operationsGql.watch({ params: { month } }).valueChanges
+    tap(() => {
+      this._isRecentOperationsLoading$.next(true);
+      this._isRecentOperationsError$.next(false);
+    }),
+    switchMap((month) =>
+      this.operationsGql.watch({ params: { month } }).valueChanges.pipe(
+        catchError((err: ApolloError) => {
+          this._isRecentOperationsLoading$.next(false);
+          this._isRecentOperationsError$.next(true);
+          return throwError(() => err);
+        })
+      )
     )
   );
 
@@ -63,6 +93,14 @@ export class OverviewPageService {
 
   get isCurrenciesBudgetsLoading$(): BehaviorSubject<boolean> {
     return this._isCurrenciesBudgetsLoading$;
+  }
+
+  get isRecentOperationsError$(): BehaviorSubject<boolean> {
+    return this._isRecentOperationsError$;
+  }
+
+  get isCurrenciesBudgetsError$(): BehaviorSubject<boolean> {
+    return this._isCurrenciesBudgetsError$;
   }
 
   get isRecentOperationsEmpty$(): Observable<boolean> {
