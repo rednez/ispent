@@ -9,7 +9,8 @@ import { BudgetSummary } from '@ispent/front/data-access';
       [isLoading]="isLoading"
       [isError]="isError"
       [isEmpty]="isEmpty"
-      [emptyText]="'There are no budgets summaries for this period'"
+      [emptyText]="'There are no budgets summaries for this period' | translate"
+      [errorText]="'Failed data' | translate"
     ></ispent-loadable-widget>
 
     <ng-template #contentState>

@@ -23,8 +23,10 @@
 
     <ng-template #emptyState>
       <ispent-empty-state
-        [msgText]="'There is no categories yet. To add a category click on '"
-        [actionText]="'Add Category'"
+        [msgText]="
+          'There is no categories yet. To add a category click on ' | translate
+        "
+        [actionText]="'Add Category' | translate"
         (actionClick)="onAddCategory()"
       ></ispent-empty-state>
     </ng-template>

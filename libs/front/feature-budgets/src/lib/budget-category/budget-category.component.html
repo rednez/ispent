@@ -1,6 +1,6 @@
 <div [formGroup]="form" class="flex items-center space-x-4">
   <mat-form-field appearance="outline">
-    <mat-label>Category</mat-label>
+    <mat-label>{{ 'Category' | translate }}</mat-label>
     <mat-select formControlName="id">
       <mat-option
         *ngFor="let category of categories$ | async"
@@ -10,7 +10,7 @@
       </mat-option>
     </mat-select>
     <mat-error *ngIf="form.controls['id'].invalid">
-      {{ 'Select category' }}
+      {{ 'Select category' | translate }}
     </mat-error>
   </mat-form-field>
 
@@ -18,7 +18,7 @@
     <mat-label>Plan amount</mat-label>
     <input matInput formControlName="amount" mask="separator.2" />
     <mat-error *ngIf="form.controls['amount'].invalid">{{
-      'Enter amount'
+      'Enter amount' | translate
     }}</mat-error>
   </mat-form-field>
 

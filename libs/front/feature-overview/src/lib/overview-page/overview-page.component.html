@@ -1,7 +1,7 @@
 <div class="flex justify-between">
-  <h1>Overview</h1>
+  <h1>{{ 'Overview' | translate }}</h1>
   <ispent-month-date-picker
-    [label]="'Budget month'"
+    [label]="'Budget month' | translate"
     [initialDate]="(currentDate$ | async)!"
     (changeDate)="setDate($event)"
   ></ispent-month-date-picker>
@@ -15,7 +15,7 @@
 ></ispent-budgets-summaries-block>
 
 <ispent-operations-list
-  title="Recent operations"
+  [title]="'Recent operations' | translate"
   [operations]="(recentOperations$ | async)!"
   [isLoading]="(isRecentOperationsLoading$ | async)!"
   [isError]="(isRecentOperationsError$ | async)!"

@@ -1,0 +1,12 @@
+<button mat-button [matMenuTriggerFor]="menu">
+  {{ currentLocale.titleShort }}
+</button>
+<mat-menu #menu="matMenu">
+  <button
+    *ngFor="let locale of locales"
+    mat-menu-item
+    (click)="onChangeLocale(locale)"
+  >
+    {{ locale.titleFull }}
+  </button>
+</mat-menu>

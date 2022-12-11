@@ -24,8 +24,8 @@
 
   <ng-template #emptyState>
     <ispent-empty-state
-      [msgText]="'There is no groups yet. To add a group click on '"
-      [actionText]="'Add Group'"
+      [msgText]="'There is no groups yet. To add a group click on ' | translate"
+      [actionText]="'Add Group' | translate"
       (actionClick)="onAddGroup()"
     ></ispent-empty-state>
   </ng-template>

@@ -10,12 +10,16 @@
         class="px-3 py-1 rounded-full text-blue-500"
         routerLinkActive="bg-blue-500 text-white"
       >
-        <span class="text">{{ link.name }}</span>
+        <span class="text">{{ link.name | translate }}</span>
       </a>
     </div>
   </div>
 
-  <div>
+  <div class="flex items-center space-x-2">
+    <ispent-language-switcher
+      [localeName]="'uk'"
+      (changeLocale)="changeLocale.emit($event)"
+    ></ispent-language-switcher>
     <div
       class="bg-green-400 rounded-full w-10 h-10 flex items-center justify-center"
     >

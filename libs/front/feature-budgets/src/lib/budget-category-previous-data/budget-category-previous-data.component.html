@@ -1,8 +1,12 @@
 <div class="space-x-1 flex content-between items-center">
-  <div class="text-xs text-gray-400 hidden sm:flex">Planned:</div>
+  <div class="text-xs text-gray-400 hidden sm:flex">
+    {{ 'Planned' | translate }}:
+  </div>
   <div class="text-green-600">{{ planned | amount }}</div>
 </div>
 <div class="space-x-1 flex content-between items-center">
-  <div class="text-xs text-gray-400 hidden sm:flex">Spent:</div>
+  <div class="text-xs text-gray-400 hidden sm:flex">
+    {{ 'Spent' | translate }}:
+  </div>
   <div class="text-red-600">{{ spent | amount }}</div>
 </div>

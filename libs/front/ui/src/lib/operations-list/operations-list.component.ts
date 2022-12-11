@@ -13,7 +13,8 @@ import { Operation } from '@ispent/front/data-access';
       [isLoading]="isLoading"
       [isError]="isError"
       [isEmpty]="isEmpty"
-      [emptyText]="'There are no operations for this period'"
+      [emptyText]="'There are no operations for this period' | translate"
+      [errorText]="'Failed data' | translate"
     ></ispent-loadable-widget>
 
     <ng-template #contentState>
@@ -27,8 +28,9 @@ import { Operation } from '@ispent/front/data-access';
           [categoryName]="item.category.name"
           [categoryColor]="item.category.color!"
           [date]="item.dateTime"
-        ></ispent-operation-item></div
-    ></ng-template>
+        ></ispent-operation-item>
+      </div>
+    </ng-template>
   `,
 })
 export class OperationsListComponent {

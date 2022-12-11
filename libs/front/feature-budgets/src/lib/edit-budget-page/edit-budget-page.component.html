@@ -1,7 +1,7 @@
 <div class="flex justify-between">
-  <h1>Budget Edit</h1>
+  <h1>{{ 'Budget Edit' | translate }}</h1>
   <ispent-month-date-picker
-    [label]="'Budget month'"
+    [label]="'Budget month' | translate"
     [initialDate]="(currentDate$ | async)!"
     (changeDate)="onChangeDate($event)"
   ></ispent-month-date-picker>

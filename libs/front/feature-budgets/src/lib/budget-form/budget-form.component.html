@@ -2,6 +2,8 @@
   *ngIf="!isSuccessLoaded; else contentState"
   [isLoading]="isLoading"
   [isError]="isError"
+  [emptyText]="'Content is empty' | translate"
+  [errorText]="'Failed data' | translate"
 ></ispent-loadable-widget>
 
 <ng-template #contentState>
@@ -12,7 +14,7 @@
       [disabled]="form.pristine || isSaving"
       (click)="onSaveForm()"
     >
-      Save
+      {{ 'Save' | translate }}
     </button>
 
     <ng-container
@@ -34,8 +36,10 @@
     <ng-template #emptyState>
       <div>
         <ispent-empty-state
-          [msgText]="'There is no currency. To add a currency click on '"
-          [actionText]="'Add Currency'"
+          [msgText]="
+            'There is no currencies. To add a currency click on ' | translate
+          "
+          [actionText]="'Add Currency' | translate"
           (actionClick)="onAddCurrency()"
         ></ispent-empty-state>
       </div>

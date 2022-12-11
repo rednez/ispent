@@ -25,8 +25,8 @@ export class LoadableWidgetComponent {
   @Input() isLoading = false;
   @Input() isError = false;
   @Input() isEmpty = false;
-  @Input() emptyText = 'Content is empty';
-  @Input() errorText = 'Failed data';
+  @Input() emptyText!: string;
+  @Input() errorText!: string;
 
   @HostBinding('class')
   get hostClass() {
