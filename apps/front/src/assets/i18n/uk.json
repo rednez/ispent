@@ -15,10 +15,13 @@
   "Select currency": "Виберіть валюту",
   "Planned": "Заплановано",
   "Spent": "Витрачено",
+  "Currency": "Валюта",
   "Category": "Категорія",
+  "Group": "Група",
   "Enter amount": "Введіть суму",
   "Select category": "Виберіть категорію",
   "Budget Edit": "Редагування бюджету",
   "Recent operations": "Останні операції",
-  "Save": "Зберегти"
+  "Save": "Зберегти",
+  "Plan amount": "Планова сума"
 }

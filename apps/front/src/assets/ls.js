@@ -63,9 +63,17 @@ const ls = {
     uk: 'Витрачено',
     eng: 'Spent',
   },
+  Currency: {
+    uk: 'Валюта',
+    eng: 'Currency',
+  },
   Category: {
     uk: 'Категорія',
     eng: 'Category',
+  },
+  Group: {
+    uk: 'Група',
+    eng: 'Group',
   },
   'Enter amount': {
     uk: 'Введіть суму',
@@ -86,6 +94,10 @@ const ls = {
   Save: {
     uk: 'Зберегти',
     eng: 'Save',
+  },
+  'Plan amount': {
+    uk: 'Планова сума',
+    eng: 'Plan amount',
   },
 };
 

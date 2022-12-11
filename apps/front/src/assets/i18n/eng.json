@@ -15,10 +15,13 @@
   "Select currency": "Select currency",
   "Planned": "Planned",
   "Spent": "Spent",
+  "Currency": "Currency",
   "Category": "Category",
+  "Group": "Group",
   "Enter amount": "Enter amount",
   "Select category": "Select category",
   "Budget Edit": "Budget Edit",
   "Recent operations": "Recent operations",
-  "Save": "Save"
+  "Save": "Save",
+  "Plan amount": "Plan amount"
 }

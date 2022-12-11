@@ -15,7 +15,7 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Plan amount</mat-label>
+    <mat-label>{{ 'Plan amount' | translate }}</mat-label>
     <input matInput formControlName="amount" mask="separator.2" />
     <mat-error *ngIf="form.controls['amount'].invalid">{{
       'Enter amount' | translate
