@@ -1,7 +1,11 @@
+import {
+  OperationCreateInput,
+  OperationsParams,
+  OperationUpdateInput,
+} from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
-import { OperationsParams } from '@ispent/api/data-access';
-import { Injectable } from '@nestjs/common';
 import { getMonthPeriod } from '@ispent/api/util';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class OperationsService {
@@ -19,6 +23,28 @@ export class OperationsService {
           categoryId,
           dateTime: getMonthPeriod(month ? new Date(month) : undefined),
         },
+      },
+    });
+  }
+
+  create(params: OperationCreateInput) {
+    return this.prisma.operation.create({
+      data: {
+        ...params,
+        dateTime: params.dateTime ? new Date(params.dateTime) : new Date(),
+      },
+      include: { currency: true, group: true, category: true },
+    });
+  }
+
+  update(params: OperationUpdateInput) {
+    const { id, ...data } = params;
+    return this.prisma.operation.update({
+      where: { id },
+      include: { currency: true, group: true, category: true },
+      data: {
+        ...data,
+        dateTime: params.dateTime ? new Date(params.dateTime) : new Date(),
       },
     });
   }

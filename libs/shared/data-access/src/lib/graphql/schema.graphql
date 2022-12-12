@@ -37,6 +37,23 @@ type Operation {
   dateTime: String!
 }
 
+input OperationCreateInput {
+  amount: Float!
+  currencyId: Int!
+  categoryId: Int!
+  groupId: Int!
+  dateTime: String
+}
+
+input OperationUpdateInput {
+  id: Int!
+  amount: Float
+  currencyId: Int
+  categoryId: Int
+  groupId: Int
+  dateTime: String
+}
+
 enum BudgetSummaryType {
   CURRENCY
   GROUP
@@ -103,4 +120,6 @@ type Query {
 
 type Mutation {
   recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
+  createOperation(params: OperationCreateInput!): Operation!
+  updateOperation(params: OperationUpdateInput!): Operation!
 }

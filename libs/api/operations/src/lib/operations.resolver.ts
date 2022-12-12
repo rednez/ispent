@@ -1,5 +1,16 @@
-import { OperationsParams } from '@ispent/api/data-access';
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  OperationCreateInput,
+  OperationsParams,
+  OperationUpdateInput,
+} from '@ispent/api/data-access';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { OperationsService } from './operations.service';
 
 @Resolver('Operation')
@@ -9,6 +20,19 @@ export class OperationsResolver {
   @Query()
   async operations(@Args('params') params: OperationsParams) {
     return this.operationsService.findAll(params);
+  }
+
+  @Mutation()
+  async createOperation(@Args('params') params: OperationCreateInput) {
+    return this.operationsService.create(params);
+  }
+
+  @Mutation()
+  async updateOperation(
+    @Args('id') id: string,
+    @Args('params') params: OperationUpdateInput
+  ) {
+    return this.operationsService.update(params);
   }
 
   @ResolveField()

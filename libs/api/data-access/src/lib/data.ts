@@ -21,6 +21,23 @@ export class OperationsParams {
     month?: Nullable<string>;
 }
 
+export class OperationCreateInput {
+    amount: number;
+    currencyId: number;
+    categoryId: number;
+    groupId: number;
+    dateTime?: Nullable<string>;
+}
+
+export class OperationUpdateInput {
+    id: number;
+    amount?: Nullable<number>;
+    currencyId?: Nullable<number>;
+    categoryId?: Nullable<number>;
+    groupId?: Nullable<number>;
+    dateTime?: Nullable<string>;
+}
+
 export class BudgetSummaryParams {
     type: BudgetSummaryType;
     currencyId?: Nullable<number>;
@@ -103,6 +120,10 @@ export abstract class IQuery {
 
 export abstract class IMutation {
     abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
+
+    abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
+
+    abstract updateOperation(params: OperationUpdateInput): Operation | Promise<Operation>;
 }
 
 type Nullable<T> = T | null;
