@@ -1,12 +1,15 @@
-import { PrismaService } from '@ispent/api/db';
 import {
   BudgetSummary,
   BudgetSummaryParams,
   BudgetSummaryType,
+  Category,
+  Currency,
+  Group,
 } from '@ispent/api/data-access';
+import { PrismaService } from '@ispent/api/db';
+import { getMonthPeriod } from '@ispent/api/util';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
-import { getMonthPeriod } from '@ispent/api/util';
 
 @Injectable()
 export class BudgetsSummaryService {
@@ -109,42 +112,6 @@ export class BudgetsSummaryService {
     }
   }
 
-  private mapAggregatesToSummary =
-    (params: {
-      key: 'currencyId' | 'groupId' | 'categoryId';
-      type: BudgetSummaryType;
-      auxiliaryList: Array<{ id: number; name: string; color?: string }>;
-      plannedAmountsList: Array<{
-        currencyId: number;
-        groupId?: number;
-        categoryId?: number;
-        _sum: { amount: number };
-      }>;
-    }) =>
-    (input: {
-      currencyId?: number;
-      groupId?: number;
-      categoryId?: number;
-      _sum: { amount: number };
-    }) => {
-      const { key, type, auxiliaryList, plannedAmountsList } = params;
-
-      const planned =
-        plannedAmountsList.find((i) => i[key] === input[key])?._sum.amount | 0;
-
-      return {
-        parentId: input[key],
-        type,
-        title: auxiliaryList.find(({ id }) => id === input[key]).name,
-        planned,
-        spent: input._sum.amount,
-        color:
-          key !== 'currencyId'
-            ? auxiliaryList.find(({ id }) => id === input[key]).color
-            : null,
-      };
-    };
-
   private getBudgetsSummaries(
     type: BudgetSummaryType,
     params: {
@@ -153,45 +120,97 @@ export class BudgetsSummaryService {
         | ['currencyId', 'groupId']
         | ['currencyId', 'groupId', 'categoryId'];
       _sum: { amount: true };
-      where: unknown;
-      having?: unknown;
+      where: { dateTime?: { lte?: Date; gte?: Date } };
+      having?: {
+        currencyId?: { equals: number };
+        groupId?: { equals: number };
+        categoryId?: { equals: number };
+      };
     }
   ): Observable<BudgetSummary[]> {
-    const auxiliaryListQuery =
+    const key =
       type === BudgetSummaryType.CURRENCY
-        ? this.prisma.currency.findMany()
+        ? 'currencyId'
         : type === BudgetSummaryType.GROUP
-        ? this.prisma.group.findMany()
-        : this.prisma.category.findMany();
+        ? 'groupId'
+        : 'categoryId';
 
-    const key = BudgetSummaryType.CURRENCY
-      ? 'currencyId'
-      : type === BudgetSummaryType.GROUP
-      ? 'groupId'
-      : 'categoryId';
+    const baseQueryWhere =
+      params?.having && params.having[key]
+        ? { id: params.having[key].equals }
+        : {};
 
-    return from(this.prisma.operation.groupBy(params)).pipe(
-      switchMap((groupByList) =>
+    const baseQuery: Promise<Array<Currency | Group | Category>> =
+      type === BudgetSummaryType.CURRENCY
+        ? this.prisma.currency.findMany({ where: baseQueryWhere })
+        : type === BudgetSummaryType.GROUP
+        ? this.prisma.group.findMany({ where: baseQueryWhere })
+        : this.prisma.category.findMany({ where: baseQueryWhere });
+
+    return from(baseQuery).pipe(
+      switchMap((baseList) =>
         iif(
-          () => !groupByList.length,
+          () => !baseList.length,
           of([]),
           forkJoin([
-            from(auxiliaryListQuery),
+            from(this.prisma.operation.groupBy(params)),
             from(this.prisma.budgetRecord.groupBy(params)),
           ]).pipe(
-            map(([auxiliaryList, plannedAmountsList]) =>
-              groupByList.map(
-                this.mapAggregatesToSummary({
-                  key,
-                  type,
-                  auxiliaryList,
-                  plannedAmountsList,
-                })
-              )
+            map(([groupedOperations, groupedBudgetsRecords]) =>
+              baseList
+                .map(
+                  this.mapAggregatesToSummary({
+                    key,
+                    type,
+                    groupedOperations,
+                    groupedBudgetsRecords,
+                  })
+                )
+                .filter(this.noneZeroAmounts)
             )
           )
         )
       )
     );
   }
+
+  private mapAggregatesToSummary =
+    (params: {
+      key: 'currencyId' | 'groupId' | 'categoryId';
+      type: BudgetSummaryType;
+      groupedOperations: Array<{
+        currencyId: number;
+        groupId?: number;
+        categoryId?: number;
+        _sum: { amount: number };
+      }>;
+      groupedBudgetsRecords: Array<{
+        currencyId?: number;
+        groupId?: number;
+        categoryId?: number;
+        _sum: { amount: number };
+      }>;
+    }) =>
+    (mainQueryItem: { id: number; name: string; color?: string }) => {
+      const { key, type, groupedOperations, groupedBudgetsRecords } = params;
+
+      const planned =
+        groupedBudgetsRecords.find((i) => i[key] === mainQueryItem.id)?._sum
+          .amount | 0;
+      const spent =
+        groupedOperations.find((i) => i[key] === mainQueryItem.id)?._sum
+          .amount | 0;
+
+      return {
+        parentId: mainQueryItem.id,
+        type,
+        title: mainQueryItem.name,
+        planned,
+        spent,
+        color: mainQueryItem.color || null,
+      };
+    };
+
+  private noneZeroAmounts = (obj: { planned: number; spent: number }) =>
+    !!obj.planned || obj.spent;
 }
