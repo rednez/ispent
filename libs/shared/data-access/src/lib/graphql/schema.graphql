@@ -122,4 +122,5 @@ type Mutation {
   recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
   createOperation(params: OperationCreateInput!): Operation!
   updateOperation(params: OperationUpdateInput!): Operation!
+  deleteOperation(id: Int!): Operation!
 }

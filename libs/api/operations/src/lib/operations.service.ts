@@ -48,4 +48,8 @@ export class OperationsService {
       },
     });
   }
+
+  deleteOperation(id: number) {
+    return this.prisma.operation.delete({ where: { id } });
+  }
 }

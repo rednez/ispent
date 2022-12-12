@@ -124,6 +124,8 @@ export abstract class IMutation {
     abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
 
     abstract updateOperation(params: OperationUpdateInput): Operation | Promise<Operation>;
+
+    abstract deleteOperation(id: number): Operation | Promise<Operation>;
 }
 
 type Nullable<T> = T | null;

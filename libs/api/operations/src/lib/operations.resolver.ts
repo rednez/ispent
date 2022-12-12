@@ -35,6 +35,11 @@ export class OperationsResolver {
     return this.operationsService.update(params);
   }
 
+  @Mutation()
+  async deleteOperation(@Args('id') id: string) {
+    return this.operationsService.deleteOperation(+id);
+  }
+
   @ResolveField()
   async dateTime(@Parent() operation) {
     return new Date(operation.dateTime).toISOString();
