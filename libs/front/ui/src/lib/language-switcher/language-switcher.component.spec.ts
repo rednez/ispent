@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 
 import { LanguageSwitcherComponent } from './language-switcher.component';
 
 describe('LanguageSwitcherComponent', () => {
-  let component: LanguageSwitcherComponent;
-  let fixture: ComponentFixture<LanguageSwitcherComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LanguageSwitcherComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(LanguageSwitcherComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() => MockBuilder(LanguageSwitcherComponent, FrontUiModule));
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(LanguageSwitcherComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

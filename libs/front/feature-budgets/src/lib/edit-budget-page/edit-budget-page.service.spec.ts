@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {
   BudgetsGQL,
   BudgetsQuery,
@@ -41,6 +42,7 @@ describe('EditBudgetPageService', () => {
         MockProvider(CurrenciesGroupsWithCategoriesGQL),
         MockProvider(BudgetsGQL),
         MockProvider(RecreateBudgetsRecordsGQL),
+        MockProvider(MatSnackBar)
       ],
     });
     service = TestBed.inject(EditBudgetPageService);

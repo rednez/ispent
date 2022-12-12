@@ -9,7 +9,6 @@ import {
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
 import { groupBy, map as _map } from 'lodash';
-import { logger } from 'nx/src/utils/logger';
 import {
   BehaviorSubject,
   catchError,
