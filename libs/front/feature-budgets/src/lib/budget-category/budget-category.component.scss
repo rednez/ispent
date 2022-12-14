@@ -1,11 +1,10 @@
 :host {
   @apply flex items-center justify-between border rounded-md px-2 sm:px-4
-    pb-2 pt-4 bg-white;
+  pb-2 pt-4 bg-white;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   @media (max-width: 620px) {
-    @apply text-sm;
     width: 16vw;
   }
 }

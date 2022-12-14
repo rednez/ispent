@@ -21,6 +21,14 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-size: 14px;
+}
+
 h1 {
   @apply text-xl;
 }

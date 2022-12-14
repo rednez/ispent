@@ -16,6 +16,13 @@ const routes: Routes = [
         (m) => m.FrontFeatureBudgetsModule
       ),
   },
+  {
+    path: 'operations',
+    loadChildren: () =>
+      import('@ispent/front/feature-operation-editor').then(
+        (m) => m.FrontFeatureOperationEditorModule
+      ),
+  },
 ];
 
 @NgModule({

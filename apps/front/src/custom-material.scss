@@ -32,15 +32,6 @@ $ispent-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($ispent-theme);
 
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-size: 14px;
-}
-
 .mdc-notched-outline__notch {
   border-style: none;
 }
