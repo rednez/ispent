@@ -33,10 +33,7 @@ export class OperationsResolver {
   }
 
   @Mutation()
-  async updateOperation(
-    @Args('id') id: string,
-    @Args('params') params: OperationUpdateInput
-  ) {
+  async updateOperation(@Args('params') params: OperationUpdateInput) {
     return this.operationsService.update(params);
   }
 

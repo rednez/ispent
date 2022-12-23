@@ -10,9 +10,32 @@ type Group {
   categories: [Category!]
 }
 
+input GroupCreateInput {
+  name: String!
+  color: String
+}
+
+input GroupUpdateInput {
+  id: Int!
+  name: String
+  color: String
+}
+
 type Category {
   id: Int!
   name: String!
+  color: String
+}
+
+input CategoryCreateInput {
+  name: String!
+  groupId: Int!
+  color: String
+}
+
+input CategoryUpdateInput {
+  id: Int!
+  name: String
   color: String
 }
 
@@ -128,6 +151,15 @@ type Query {
 type Mutation {
   recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
   createOperation(params: OperationCreateInput!): Operation!
+  createCurrency(name: String!): Currency!
+  createGroup(params: GroupCreateInput!): Group!
+  createCategory(params: CategoryCreateInput!): Category!
   updateOperation(params: OperationUpdateInput!): Operation!
+  updateCurrency(id: Int!, name: String!): Currency!
+  updateGroup(params: GroupUpdateInput!): Group!
+  updateCategory(params: CategoryUpdateInput!): Category!
   deleteOperation(id: Int!): Operation!
+  deleteCurrency(id: Int!): Currency!
+  deleteGroup(id: Int!): Group!
+  deleteCategory(id: Int!): Category!
 }

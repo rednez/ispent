@@ -14,6 +14,29 @@ export enum BudgetSummaryType {
     CATEGORY = "CATEGORY"
 }
 
+export class GroupCreateInput {
+    name: string;
+    color?: Nullable<string>;
+}
+
+export class GroupUpdateInput {
+    id: number;
+    name?: Nullable<string>;
+    color?: Nullable<string>;
+}
+
+export class CategoryCreateInput {
+    name: string;
+    groupId: number;
+    color?: Nullable<string>;
+}
+
+export class CategoryUpdateInput {
+    id: number;
+    name?: Nullable<string>;
+    color?: Nullable<string>;
+}
+
 export class OperationsParams {
     currencyId?: Nullable<number>;
     groupId?: Nullable<number>;
@@ -131,9 +154,27 @@ export abstract class IMutation {
 
     abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
 
+    abstract createCurrency(name: string): Currency | Promise<Currency>;
+
+    abstract createGroup(params: GroupCreateInput): Group | Promise<Group>;
+
+    abstract createCategory(params: CategoryCreateInput): Category | Promise<Category>;
+
     abstract updateOperation(params: OperationUpdateInput): Operation | Promise<Operation>;
 
+    abstract updateCurrency(id: number, name: string): Currency | Promise<Currency>;
+
+    abstract updateGroup(params: GroupUpdateInput): Group | Promise<Group>;
+
+    abstract updateCategory(params: CategoryUpdateInput): Category | Promise<Category>;
+
     abstract deleteOperation(id: number): Operation | Promise<Operation>;
+
+    abstract deleteCurrency(id: number): Currency | Promise<Currency>;
+
+    abstract deleteGroup(id: number): Group | Promise<Group>;
+
+    abstract deleteCategory(id: number): Category | Promise<Category>;
 }
 
 type Nullable<T> = T | null;
