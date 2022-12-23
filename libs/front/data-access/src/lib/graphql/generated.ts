@@ -103,21 +103,59 @@ export type Group = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createOperation: Operation;
+  deleteOperation: Operation;
   recreateManyBudgetsRecords: Array<BudgetRecord>;
+  updateOperation: Operation;
+};
+
+export type MutationCreateOperationArgs = {
+  params: OperationCreateInput;
+};
+
+export type MutationDeleteOperationArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationRecreateManyBudgetsRecordsArgs = {
   inputs: Array<CreateBudgetRecordInput>;
 };
 
+export type MutationUpdateOperationArgs = {
+  params: OperationUpdateInput;
+};
+
 export type Operation = {
   __typename?: 'Operation';
   amount: Scalars['Float'];
   category: Category;
-  currency: Scalars['String'];
+  currency: Currency;
   dateTime: Scalars['String'];
   group: Group;
   id: Scalars['Int'];
+  withdrawalAmount?: Maybe<Scalars['Float']>;
+  withdrawalCurrencyId?: Maybe<Scalars['Int']>;
+};
+
+export type OperationCreateInput = {
+  amount: Scalars['Float'];
+  categoryId: Scalars['Int'];
+  currencyId: Scalars['Int'];
+  dateTime?: InputMaybe<Scalars['String']>;
+  groupId: Scalars['Int'];
+  withdrawalAmount?: InputMaybe<Scalars['Float']>;
+  withdrawalCurrencyId?: InputMaybe<Scalars['Int']>;
+};
+
+export type OperationUpdateInput = {
+  amount?: InputMaybe<Scalars['Float']>;
+  categoryId?: InputMaybe<Scalars['Int']>;
+  currencyId?: InputMaybe<Scalars['Int']>;
+  dateTime?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  withdrawalAmount?: InputMaybe<Scalars['Float']>;
+  withdrawalCurrencyId?: InputMaybe<Scalars['Int']>;
 };
 
 export type OperationsParams = {
@@ -139,6 +177,7 @@ export type Query = {
   categories: Array<Category>;
   currencies: Array<Currency>;
   groups: Array<Group>;
+  operation?: Maybe<Operation>;
   operations: Array<Operation>;
 };
 
@@ -148,6 +187,10 @@ export type QueryBudgetsArgs = {
 
 export type QueryBudgetsSummaryArgs = {
   params: BudgetSummaryParams;
+};
+
+export type QueryOperationArgs = {
+  id: Scalars['Int'];
 };
 
 export type QueryOperationsArgs = {
@@ -204,8 +247,10 @@ export type OperationsQuery = {
     __typename?: 'Operation';
     id: number;
     amount: number;
-    currency: string;
     dateTime: string;
+    withdrawalAmount?: number | null;
+    withdrawalCurrencyId?: number | null;
+    currency: { __typename?: 'Currency'; id: number; name: string };
     category: {
       __typename?: 'Category';
       id: number;
@@ -219,6 +264,25 @@ export type OperationsQuery = {
       color?: string | null;
     };
   }>;
+};
+
+export type OperationQueryVariables = Exact<{
+  operationId: Scalars['Int'];
+}>;
+
+export type OperationQuery = {
+  __typename?: 'Query';
+  operation?: {
+    __typename?: 'Operation';
+    id: number;
+    amount: number;
+    dateTime: string;
+    withdrawalAmount?: number | null;
+    withdrawalCurrencyId?: number | null;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+  } | null;
 };
 
 export type BudgetsSummariesQueryVariables = Exact<{
@@ -270,6 +334,53 @@ export type RecreateBudgetsRecordsMutation = {
     group: { __typename?: 'Group'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
   }>;
+};
+
+export type DeleteOperationMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type DeleteOperationMutation = {
+  __typename?: 'Mutation';
+  deleteOperation: { __typename?: 'Operation'; id: number };
+};
+
+export type UpdateOperationMutationVariables = Exact<{
+  params: OperationUpdateInput;
+}>;
+
+export type UpdateOperationMutation = {
+  __typename?: 'Mutation';
+  updateOperation: {
+    __typename?: 'Operation';
+    id: number;
+    amount: number;
+    dateTime: string;
+    withdrawalAmount?: number | null;
+    withdrawalCurrencyId?: number | null;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+  };
+};
+
+export type CreateOperationMutationVariables = Exact<{
+  params: OperationCreateInput;
+}>;
+
+export type CreateOperationMutation = {
+  __typename?: 'Mutation';
+  createOperation: {
+    __typename?: 'Operation';
+    id: number;
+    amount: number;
+    dateTime: string;
+    withdrawalAmount?: number | null;
+    withdrawalCurrencyId?: number | null;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+  };
 };
 
 export const CurrenciesGroupsCategoriesDocument = gql`
@@ -339,7 +450,10 @@ export const OperationsDocument = gql`
     operations(params: $params) {
       id
       amount
-      currency
+      currency {
+        id
+        name
+      }
       category {
         id
         name
@@ -351,6 +465,8 @@ export const OperationsDocument = gql`
         color
       }
       dateTime
+      withdrawalAmount
+      withdrawalCurrencyId
     }
   }
 `;
@@ -363,6 +479,43 @@ export class OperationsGQL extends Apollo.Query<
   OperationsQueryVariables
 > {
   document = OperationsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const OperationDocument = gql`
+  query Operation($operationId: Int!) {
+    operation(id: $operationId) {
+      id
+      amount
+      currency {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      dateTime
+      withdrawalAmount
+      withdrawalCurrencyId
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OperationGQL extends Apollo.Query<
+  OperationQuery,
+  OperationQueryVariables
+> {
+  document = OperationDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -459,6 +612,101 @@ export class RecreateBudgetsRecordsGQL extends Apollo.Mutation<
   RecreateBudgetsRecordsMutationVariables
 > {
   document = RecreateBudgetsRecordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteOperationDocument = gql`
+  mutation DeleteOperation($id: Int!) {
+    deleteOperation(id: $id) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteOperationGQL extends Apollo.Mutation<
+  DeleteOperationMutation,
+  DeleteOperationMutationVariables
+> {
+  document = DeleteOperationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateOperationDocument = gql`
+  mutation UpdateOperation($params: OperationUpdateInput!) {
+    updateOperation(params: $params) {
+      id
+      amount
+      currency {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      dateTime
+      withdrawalAmount
+      withdrawalCurrencyId
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateOperationGQL extends Apollo.Mutation<
+  UpdateOperationMutation,
+  UpdateOperationMutationVariables
+> {
+  document = UpdateOperationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateOperationDocument = gql`
+  mutation CreateOperation($params: OperationCreateInput!) {
+    createOperation(params: $params) {
+      id
+      amount
+      currency {
+        id
+        name
+      }
+      group {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
+      dateTime
+      withdrawalAmount
+      withdrawalCurrencyId
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateOperationGQL extends Apollo.Mutation<
+  CreateOperationMutation,
+  CreateOperationMutationVariables
+> {
+  document = CreateOperationDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

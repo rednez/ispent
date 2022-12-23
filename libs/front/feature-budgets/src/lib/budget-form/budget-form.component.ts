@@ -37,7 +37,7 @@ export class BudgetFormComponent implements OnChanges {
   @HostBinding('class')
   get hostClass() {
     return this.isSuccessLoaded
-      ? 'block space-y-4 px-4 py-4 bg-white border rounded-md'
+      ? 'block space-y-4 p-4 bg-white border rounded-md'
       : 'block h-36';
   }
 

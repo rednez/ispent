@@ -16,6 +16,9 @@
   "Planned": "Заплановано",
   "Spent": "Витрачено",
   "Currency": "Валюта",
+  "Amount": "Сума",
+  "Date": "Дата",
+  "Rate": "Курс",
   "Category": "Категорія",
   "Group": "Група",
   "Enter amount": "Введіть суму",
@@ -23,5 +26,13 @@
   "Budget Edit": "Редагування бюджету",
   "Recent operations": "Останні операції",
   "Save": "Зберегти",
-  "Plan amount": "Планова сума"
+  "Plan amount": "Планова сума",
+  "New Operation": "Нова операція",
+  "Edit Operation": "Редагування операції",
+  "Other currency of withdrawal": "Інша валюта списання",
+  "Cancel": "Скасувати",
+  "Delete": "Видалити",
+  "Update": "Оновити",
+  "Create": "Створити",
+  "Add operation": "Додати операцію"
 }

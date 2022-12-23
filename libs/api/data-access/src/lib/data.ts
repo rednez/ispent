@@ -27,6 +27,8 @@ export class OperationCreateInput {
     categoryId: number;
     groupId: number;
     dateTime?: Nullable<string>;
+    withdrawalAmount?: Nullable<number>;
+    withdrawalCurrencyId?: Nullable<number>;
 }
 
 export class OperationUpdateInput {
@@ -36,6 +38,8 @@ export class OperationUpdateInput {
     categoryId?: Nullable<number>;
     groupId?: Nullable<number>;
     dateTime?: Nullable<string>;
+    withdrawalAmount?: Nullable<number>;
+    withdrawalCurrencyId?: Nullable<number>;
 }
 
 export class BudgetSummaryParams {
@@ -79,10 +83,12 @@ export class Category {
 export class Operation {
     id: number;
     amount: number;
-    currency: string;
+    currency: Currency;
     category: Category;
     group: Group;
     dateTime: string;
+    withdrawalAmount?: Nullable<number>;
+    withdrawalCurrencyId?: Nullable<number>;
 }
 
 export class BudgetRecord {
@@ -112,6 +118,8 @@ export abstract class IQuery {
     abstract categories(): Category[] | Promise<Category[]>;
 
     abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;
+
+    abstract operation(id: number): Nullable<Operation> | Promise<Nullable<Operation>>;
 
     abstract budgetsSummary(params: BudgetSummaryParams): BudgetSummary[] | Promise<BudgetSummary[]>;
 

@@ -1,0 +1,9 @@
+<ispent-editor-form
+  [id]="operationId"
+  [groups]="groups"
+  [currencies]="currencies"
+  [operation]="operation"
+  (clickCancel)="goBack()"
+  (clickDelete)="onClickDelete($event)"
+  (clickSubmit)="onClickSubmit($event)"
+></ispent-editor-form>

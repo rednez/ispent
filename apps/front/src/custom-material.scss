@@ -36,6 +36,6 @@ $ispent-theme: mat.define-light-theme((
   border-style: none;
 }
 
-.mat-mdc-form-field-error {
+.mat-mdc-form-field-error, .mat-mdc-form-field-hint {
   font-size: 0.75rem;
 }

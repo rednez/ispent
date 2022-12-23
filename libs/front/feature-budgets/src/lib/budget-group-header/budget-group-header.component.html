@@ -1,5 +1,5 @@
 <div class="block sm:flex sm:items-baseline sm:space-x-4">
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="fill">
     <mat-label>{{ 'Group' | translate }}</mat-label>
     <mat-select [formControl]="groupId">
       <mat-option *ngFor="let group of groupsList" [value]="group.id">

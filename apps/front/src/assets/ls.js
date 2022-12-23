@@ -67,6 +67,18 @@ const ls = {
     uk: 'Валюта',
     eng: 'Currency',
   },
+  Amount: {
+    uk: 'Сума',
+    eng: 'Amount',
+  },
+  Date: {
+    uk: 'Дата',
+    eng: 'Date',
+  },
+  Rate: {
+    uk: 'Курс',
+    eng: 'Rate',
+  },
   Category: {
     uk: 'Категорія',
     eng: 'Category',
@@ -98,6 +110,38 @@ const ls = {
   'Plan amount': {
     uk: 'Планова сума',
     eng: 'Plan amount',
+  },
+  'New Operation': {
+    uk: 'Нова операція',
+    eng: 'New Operation',
+  },
+  'Edit Operation': {
+    uk: 'Редагування операції',
+    eng: 'Edit Operation',
+  },
+  'Other currency of withdrawal': {
+    uk: 'Інша валюта списання',
+    eng: 'Other currency of withdrawal',
+  },
+  Cancel: {
+    uk: 'Скасувати',
+    eng: 'Cancel',
+  },
+  Delete: {
+    uk: 'Видалити',
+    eng: 'Delete',
+  },
+  Update: {
+    uk: 'Оновити',
+    eng: 'Update',
+  },
+  Create: {
+    uk: 'Створити',
+    eng: 'Create',
+  },
+  'Add operation': {
+    uk: 'Додати операцію',
+    eng: 'Add operation',
   },
 };
 

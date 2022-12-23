@@ -31,6 +31,9 @@
       "@ispent/front/feature-budgets": [
         "libs/front/feature-budgets/src/index.ts"
       ],
+      "@ispent/front/feature-operation-editor": [
+        "libs/front/feature-operation-editor/src/index.ts"
+      ],
       "@ispent/front/feature-overview": [
         "libs/front/feature-overview/src/index.ts"
       ],

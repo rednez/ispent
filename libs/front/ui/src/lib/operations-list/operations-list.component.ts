@@ -1,4 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
 import { Operation } from '@ispent/front/data-access';
 
 @Component({
@@ -22,12 +28,13 @@ import { Operation } from '@ispent/front/data-access';
         <ispent-operation-item
           *ngFor="let item of operations"
           [amount]="item.amount"
-          [currency]="item.currency"
+          [currency]="item.currency.name"
           [groupName]="item.group.name"
           [groupColor]="item.group.color!"
           [categoryName]="item.category.name"
           [categoryColor]="item.category.color!"
           [date]="item.dateTime"
+          (click)="clickItem.emit(item.id)"
         ></ispent-operation-item>
       </div>
     </ng-template>
@@ -38,6 +45,7 @@ export class OperationsListComponent {
   @Input() operations: Operation[] = [];
   @Input() isLoading = false;
   @Input() isError = false;
+  @Output() clickItem = new EventEmitter<number>();
 
   @HostBinding('class')
   get hostClass() {

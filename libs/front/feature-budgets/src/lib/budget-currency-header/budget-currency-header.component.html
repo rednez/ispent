@@ -1,5 +1,5 @@
 <div class="block sm:flex sm:items-baseline sm:space-x-4">
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="fill">
     <mat-label>{{ 'Currency' | translate }}</mat-label>
     <mat-select [formControl]="currencyId">
       <mat-option *ngFor="let currency of currenciesList" [value]="currency.id">

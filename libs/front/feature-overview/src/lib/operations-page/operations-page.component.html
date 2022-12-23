@@ -21,8 +21,13 @@
   ></ispent-budget-chip>
 </div>
 
+<button mat-flat-button color="primary" (click)="gotoNewOperation()">
+  {{ 'Add operation' | translate }}
+</button>
+
 <ispent-operations-list
   [operations]="(operations$ | async)!"
   [isLoading]="(isOperationsLoading$ | async)!"
   [isError]="(isOneBudgetSummaryError$ | async)!"
+  (clickItem)="onClickOperation($event)"
 ></ispent-operations-list>

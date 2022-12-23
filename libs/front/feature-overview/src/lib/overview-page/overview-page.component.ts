@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetSummary, Operation } from '@ispent/front/data-access';
 import { Observable } from 'rxjs';
 import { OverviewPageService } from './overview-page.service';
@@ -24,7 +24,11 @@ export class OverviewPageComponent implements OnInit {
   isRecentOperationsEmpty$!: Observable<boolean>;
   currentDate$!: Observable<Date>;
 
-  constructor(private router: Router, private service: OverviewPageService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private service: OverviewPageService
+  ) {}
 
   ngOnInit(): void {
     this.currenciesBudgets$ = this.service.currenciesBudgets$;
@@ -43,5 +47,13 @@ export class OverviewPageComponent implements OnInit {
 
   setDate(date: Date) {
     this.service.setDate(date);
+  }
+
+  onClickOperation(id: number) {
+    this.router.navigate(['operations', id]);
+  }
+
+  gotoNewOperation() {
+    this.router.navigate(['operations', 'new']);
   }
 }

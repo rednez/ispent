@@ -34,7 +34,10 @@ query Operations($params: OperationsParams!) {
   operations(params: $params) {
     id
     amount
-    currency
+    currency {
+      id
+      name
+    }
     category {
       id
       name
@@ -46,8 +49,33 @@ query Operations($params: OperationsParams!) {
       color
     }
     dateTime
+    withdrawalAmount
+    withdrawalCurrencyId
   }
 }
+
+query Operation($operationId: Int!) {
+  operation(id: $operationId) {
+    id
+    amount
+    currency {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    dateTime
+    withdrawalAmount
+    withdrawalCurrencyId
+  }
+}
+
 
 query BudgetsSummaries($params: BudgetSummaryParams!) {
   budgetsSummary(params: $params) {
@@ -98,5 +126,55 @@ mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
       name
     }
     date
+  }
+}
+
+mutation DeleteOperation($id: Int!) {
+  deleteOperation(id: $id) {
+    id
+  }
+}
+
+mutation UpdateOperation($params: OperationUpdateInput!) {
+  updateOperation(params: $params) {
+    id
+    amount
+    currency {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    dateTime
+    withdrawalAmount
+    withdrawalCurrencyId
+  }
+}
+
+mutation CreateOperation($params: OperationCreateInput!) {
+  createOperation(params: $params) {
+    id
+    amount
+    currency {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+    category {
+      id
+      name
+    }
+    dateTime
+    withdrawalAmount
+    withdrawalCurrencyId
   }
 }

@@ -27,6 +27,13 @@ export class OperationsService {
     });
   }
 
+  async findOne(id: number) {
+    return this.prisma.operation.findUnique({
+      where: { id },
+      include: { currency: true, group: true, category: true },
+    });
+  }
+
   create(params: OperationCreateInput) {
     return this.prisma.operation.create({
       data: {

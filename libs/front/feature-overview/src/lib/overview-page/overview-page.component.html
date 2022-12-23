@@ -14,9 +14,14 @@
   (clickBudget)="gotoOperationsPage($event)"
 ></ispent-budgets-summaries-block>
 
+<button mat-flat-button color="primary" (click)="gotoNewOperation()">
+  {{ 'Add operation' | translate }}
+</button>
+
 <ispent-operations-list
   [title]="'Recent operations' | translate"
   [operations]="(recentOperations$ | async)!"
   [isLoading]="(isRecentOperationsLoading$ | async)!"
   [isError]="(isRecentOperationsError$ | async)!"
+  (clickItem)="onClickOperation($event)"
 ></ispent-operations-list>

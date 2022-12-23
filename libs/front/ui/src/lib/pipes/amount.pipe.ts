@@ -22,12 +22,12 @@ numeral.register('locale', 'ua', {
   name: 'amount',
 })
 export class AmountPipe implements PipeTransform {
-  transform(value: number | undefined): string {
+  transform(value: number | undefined, fraction = '00'): string {
     if (value === undefined) {
       return '–';
     } else {
       numeral.locale('ua');
-      return numeral(value).format('0,0.00');
+      return numeral(value).format(fraction ? `0,0.${fraction}` : '0,0');
     }
   }
 }

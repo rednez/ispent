@@ -31,10 +31,12 @@ input OperationsParams {
 type Operation {
   id: Int!
   amount: Float!
-  currency: String!
+  currency: Currency!
   category: Category!
   group: Group!
   dateTime: String!
+  withdrawalAmount: Float
+  withdrawalCurrencyId: Int
 }
 
 input OperationCreateInput {
@@ -43,6 +45,8 @@ input OperationCreateInput {
   categoryId: Int!
   groupId: Int!
   dateTime: String
+  withdrawalAmount: Float
+  withdrawalCurrencyId: Int
 }
 
 input OperationUpdateInput {
@@ -52,6 +56,8 @@ input OperationUpdateInput {
   categoryId: Int
   groupId: Int
   dateTime: String
+  withdrawalAmount: Float
+  withdrawalCurrencyId: Int
 }
 
 enum BudgetSummaryType {
@@ -114,6 +120,7 @@ type Query {
   groups: [Group!]!
   categories: [Category!]!
   operations(params: OperationsParams): [Operation!]!
+  operation(id: Int!): Operation
   budgetsSummary(params: BudgetSummaryParams!): [BudgetSummary!]!
   budgets(params: BudgetsParams!): [BudgetRecord!]!
 }

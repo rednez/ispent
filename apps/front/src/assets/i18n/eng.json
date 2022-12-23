@@ -16,6 +16,9 @@
   "Planned": "Planned",
   "Spent": "Spent",
   "Currency": "Currency",
+  "Amount": "Amount",
+  "Date": "Date",
+  "Rate": "Rate",
   "Category": "Category",
   "Group": "Group",
   "Enter amount": "Enter amount",
@@ -23,5 +26,13 @@
   "Budget Edit": "Budget Edit",
   "Recent operations": "Recent operations",
   "Save": "Save",
-  "Plan amount": "Plan amount"
+  "Plan amount": "Plan amount",
+  "New Operation": "New Operation",
+  "Edit Operation": "Edit Operation",
+  "Other currency of withdrawal": "Other currency of withdrawal",
+  "Cancel": "Cancel",
+  "Delete": "Delete",
+  "Update": "Update",
+  "Create": "Create",
+  "Add operation": "Add operation"
 }

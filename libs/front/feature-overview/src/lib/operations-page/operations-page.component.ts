@@ -65,4 +65,12 @@ export class OperationsPageComponent implements OnInit {
       this.router.navigate(['overview', currency, group, id]);
     }
   }
+
+  onClickOperation(id: number) {
+    this.router.navigate(['operations', id]);
+  }
+
+  gotoNewOperation() {
+    this.router.navigate(['operations', 'new']);
+  }
 }

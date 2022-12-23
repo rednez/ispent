@@ -22,6 +22,11 @@ export class OperationsResolver {
     return this.operationsService.findAll(params);
   }
 
+  @Query()
+  async operation(@Args('id') id: number) {
+    return this.operationsService.findOne(id);
+  }
+
   @Mutation()
   async createOperation(@Args('params') params: OperationCreateInput) {
     return this.operationsService.create(params);
@@ -43,10 +48,5 @@ export class OperationsResolver {
   @ResolveField()
   async dateTime(@Parent() operation) {
     return new Date(operation.dateTime).toISOString();
-  }
-
-  @ResolveField()
-  async currency(@Parent() operation) {
-    return operation.currency.name;
   }
 }
