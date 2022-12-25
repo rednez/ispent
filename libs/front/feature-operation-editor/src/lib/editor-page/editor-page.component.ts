@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Currency, Group, Operation } from '@ispent/front/data-access';
 import { Subject, takeUntil } from 'rxjs';
@@ -55,14 +56,12 @@ export class EditorPageComponent implements OnInit, OnDestroy {
 
   onClickDelete(id: number) {
     this.service.deleteOperation(id).subscribe(() => {
-      // TODO: Add snackbar
       this.goBack();
     });
   }
 
   onClickSubmit(data: SubmitEventData) {
     this.service.upsertOperation(data).subscribe(() => {
-      // TODO: show snackbar
       this.goBack();
     });
   }

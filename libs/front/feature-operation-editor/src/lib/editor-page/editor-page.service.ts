@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   CreateOperationGQL,
   CurrenciesGroupsWithCategoriesGQL,
@@ -9,7 +10,7 @@ import {
 } from '@ispent/front/data-access';
 import { gql, MutationResult } from 'apollo-angular';
 import { omit } from 'lodash';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { SubmitEventData } from '../editor-form/editor-form.component';
 
 @Injectable({
@@ -21,7 +22,8 @@ export class EditorPageService {
     private operationGQL: OperationGQL,
     private deleteOperationGQL: DeleteOperationGQL,
     private updateOperationGQL: UpdateOperationGQL,
-    private createOperationGQL: CreateOperationGQL
+    private createOperationGQL: CreateOperationGQL,
+    private snackBar: MatSnackBar
   ) {}
 
   fetchCurrenciesGroupsWithCategories() {
@@ -39,20 +41,28 @@ export class EditorPageService {
   }
 
   deleteOperation(id: number) {
-    return this.deleteOperationGQL.mutate(
-      { id },
-      {
-        update: (cache) => {
-          cache.modify({
-            fields: {
-              operations(existingOperationsRef, { DELETE }) {
-                return DELETE;
+    return this.deleteOperationGQL
+      .mutate(
+        { id },
+        {
+          update: (cache) => {
+            cache.modify({
+              fields: {
+                operations(existingOperationsRef, { DELETE }) {
+                  return DELETE;
+                },
               },
-            },
-          });
-        },
-      }
-    );
+            });
+          },
+        }
+      )
+      .pipe(
+        tap(() =>
+          this.snackBar.open('The operation has been deleted', undefined, {
+            duration: 2000,
+          })
+        )
+      );
   }
 
   upsertOperation(data: SubmitEventData): Observable<MutationResult> {
@@ -60,41 +70,57 @@ export class EditorPageService {
     const dateTime = date.toISOString();
 
     if (params.id) {
-      return this.updateOperationGQL.mutate({
-        params: {
-          ...omit(params, 'isOtherWithdrawalCurrency'),
-          id: params.id,
-          dateTime,
-        },
-      });
-    } else {
-      return this.createOperationGQL.mutate(
-        {
+      return this.updateOperationGQL
+        .mutate({
           params: {
-            ...omit(params, ['id', 'isOtherWithdrawalCurrency']),
+            ...omit(params, 'isOtherWithdrawalCurrency'),
+            id: params.id,
             dateTime,
           },
-        },
-        {
-          update: (cache, { data }) => {
-            cache.modify({
-              fields: {
-                operations(existingOperationsRef = []) {
-                  const newOperationRef = cache.writeFragment({
-                    data: data?.createOperation,
-                    fragment: gql`
-                      fragment NewOperation on Operation {
-                        id
-                      }
-                    `,
-                  });
-                  return [...existingOperationsRef, newOperationRef];
-                },
-              },
-            });
+        })
+        .pipe(
+          tap(() =>
+            this.snackBar.open('The operation has been updated', undefined, {
+              duration: 2000,
+            })
+          )
+        );
+    } else {
+      return this.createOperationGQL
+        .mutate(
+          {
+            params: {
+              ...omit(params, ['id', 'isOtherWithdrawalCurrency']),
+              dateTime,
+            },
           },
-        }
-      );
+          {
+            update: (cache, { data }) => {
+              cache.modify({
+                fields: {
+                  operations(existingOperationsRef = []) {
+                    const newOperationRef = cache.writeFragment({
+                      data: data?.createOperation,
+                      fragment: gql`
+                        fragment NewOperation on Operation {
+                          id
+                        }
+                      `,
+                    });
+                    return [...existingOperationsRef, newOperationRef];
+                  },
+                },
+              });
+            },
+          }
+        )
+        .pipe(
+          tap(() =>
+            this.snackBar.open('The operation has been created', undefined, {
+              duration: 2000,
+            })
+          )
+        );
     }
   }
 }
