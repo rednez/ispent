@@ -5,6 +5,10 @@
       <mat-option *ngFor="let currency of currenciesList" [value]="currency.id">
         {{ currency.name }}
       </mat-option>
+      <mat-option (click)="onCreateCurrency()">
+        <mat-icon color="primary">add_circle</mat-icon>
+        <div class="text-indigo-800">{{ 'Create currency' | translate }}</div>
+      </mat-option>
     </mat-select>
     <mat-error *ngIf="currencyId.invalid">
       {{ 'Select currency' | translate }}

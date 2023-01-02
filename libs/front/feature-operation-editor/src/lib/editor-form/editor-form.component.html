@@ -8,6 +8,10 @@
         <mat-option *ngFor="let group of groups" [value]="group.id"
           >{{ group.name }}
         </mat-option>
+        <mat-option (click)="onCreateGroup()">
+          <mat-icon color="primary">add_circle</mat-icon>
+          <div class="text-indigo-800">{{ 'Create group' | translate }}</div>
+        </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('groupId')">{{
         'Select group' | translate
@@ -19,6 +23,10 @@
       <mat-select formControlName="categoryId">
         <mat-option *ngFor="let category of categories" [value]="category.id">
           {{ category.name }}
+        </mat-option>
+        <mat-option (click)="onCreateCategory()">
+          <mat-icon color="primary">add_circle</mat-icon>
+          <div class="text-indigo-800">{{ 'Create category' | translate }}</div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('categoryId')">{{
@@ -41,6 +49,10 @@
       <mat-select formControlName="currencyId">
         <mat-option *ngFor="let currency of currencies" [value]="currency.id"
           >{{ currency.name }}
+        </mat-option>
+        <mat-option (click)="onCreateCurrency()">
+          <mat-icon color="primary">add_circle</mat-icon>
+          <div class="text-indigo-800">{{ 'Create currency' | translate }}</div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('currencyId')">{{

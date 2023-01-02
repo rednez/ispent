@@ -30,6 +30,30 @@ query CurrenciesGroupsWithCategories {
   }
 }
 
+query Groups {
+  groups {
+    id
+    name
+    categories {
+      id
+      name
+    }
+  }
+}
+
+query Group($id: Int!) {
+  group(id: $id) {
+    id
+    name
+    color
+    categories {
+      id
+      name
+      color
+    }
+  }
+}
+
 query Operations($params: OperationsParams!) {
   operations(params: $params) {
     id
@@ -176,5 +200,28 @@ mutation CreateOperation($params: OperationCreateInput!) {
     dateTime
     withdrawalAmount
     withdrawalCurrencyId
+  }
+}
+
+mutation CreateCurrency($name: String!) {
+  createCurrency(name: $name) {
+    id
+    name
+  }
+}
+
+mutation CreateGroup($params: GroupCreateInput!) {
+  createGroup(params: $params) {
+    id
+    name
+    color
+  }
+}
+
+mutation CreateCategory($params: CategoryCreateInput!) {
+  createCategory(params: $params) {
+    id
+    name
+    color
   }
 }

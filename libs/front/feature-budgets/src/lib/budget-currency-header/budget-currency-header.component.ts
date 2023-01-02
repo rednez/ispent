@@ -9,6 +9,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { ActionsService } from '@ispent/front/data-access';
 import { FormBudgetEntity } from '../data';
 
 @Component({
@@ -43,6 +44,8 @@ export class BudgetCurrencyHeaderComponent
 
   private onTouched: VoidFunction | undefined;
 
+  constructor(private actions: ActionsService) {}
+
   registerOnChange(fn: VoidFunction): void {
     this.currencyId.valueChanges.subscribe(fn);
   }
@@ -66,5 +69,9 @@ export class BudgetCurrencyHeaderComponent
 
   validate(control: AbstractControl): ValidationErrors | null {
     return this.currencyId.invalid ? this.currencyId.errors : null;
+  }
+
+  onCreateCurrency() {
+    this.actions.createCurrency$.next(null);
   }
 }

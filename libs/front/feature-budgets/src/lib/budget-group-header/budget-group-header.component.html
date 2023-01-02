@@ -5,6 +5,10 @@
       <mat-option *ngFor="let group of groupsList" [value]="group.id">
         {{ group.name }}
       </mat-option>
+      <mat-option (click)="onCreateGroup()">
+        <mat-icon color="primary">add_circle</mat-icon>
+        <div class="text-indigo-800">{{ 'Create group' | translate }}</div>
+      </mat-option>
     </mat-select>
     <mat-error *ngIf="groupId.invalid">
       {{ 'Select group' | translate }}

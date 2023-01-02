@@ -22,6 +22,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  ActionsService,
   BudgetsSummariesGQL,
   BudgetSummaryType,
   CurrentMonthService,
@@ -63,7 +64,7 @@ import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
   ],
 })
 export class BudgetGroupComponent
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator, OnChanges
+  implements OnInit, OnChanges, OnDestroy, ControlValueAccessor, Validator
 {
   @Input() categoriesList: FormBudgetEntity[] = [];
   @Input() currencyId!: number;
@@ -83,7 +84,8 @@ export class BudgetGroupComponent
     private parentBudgetEntities: ParentBudgetEntitiesService,
     private childBudgetEntities: ChildBudgetEntitiesService,
     private budgetsSummariesGQL: BudgetsSummariesGQL,
-    private currentMonth: CurrentMonthService
+    private currentMonth: CurrentMonthService,
+    private actions: ActionsService
   ) {}
 
   get categories() {
@@ -175,6 +177,12 @@ export class BudgetGroupComponent
       categoryControl,
       this.createCategoryIdSubscription(categoryControl)
     );
+  }
+
+  onCreateCategory() {
+    if (this.form.value.id) {
+      this.actions.createCategory$.next({ parentGroupId: this.form.value.id });
+    }
   }
 
   onRemoveCategory(index: number, categoryId: number) {

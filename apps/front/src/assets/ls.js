@@ -143,6 +143,26 @@ const ls = {
     uk: 'Додати операцію',
     eng: 'Add operation',
   },
+  'Must be filled': {
+    uk: 'Має бути заповнене',
+    eng: 'Must be filled',
+  },
+  'The length must be 3': {
+    uk: 'Довжина повинна бути 3',
+    eng: 'The length must be 3',
+  },
+  'Currency name': {
+    uk: 'Назва валюти',
+    eng: 'Currency name',
+  },
+  'Group name': {
+    uk: 'Назва групи',
+    eng: 'Group name',
+  },
+  'Category name': {
+    uk: 'Назва категорії',
+    eng: 'Category name',
+  },
 };
 
 module.exports = ls;

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Currency, Group } from '@ispent/front/data-access';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormData } from '../data';
 import { EditBudgetPageService } from './edit-budget-page.service';
 
@@ -16,7 +16,7 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   currencies: Currency[] = [];
   groups: Group[] = [];
   budgetsData!: FormData;
-  dataSubscription!: Subscription;
+  private onDestroy$ = new Subject();
 
   constructor(private service: EditBudgetPageService) {}
 
@@ -25,11 +25,25 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
     this.isDataLoading$ = this.service.isDataLoading$;
     this.isDataError$ = this.service.isDataError$;
     this.isDataSaving$ = this.service.isDataSaving$;
+
+    this.service
+      .onCreateCurrency$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
+
+    this.service.onCreateGroup$().pipe(takeUntil(this.onDestroy$)).subscribe();
+
+    this.service
+      .onCreateCategory$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
+
     this.loadData();
   }
 
   ngOnDestroy(): void {
-    this.dataSubscription.unsubscribe();
+    this.onDestroy$.next(null);
+    this.onDestroy$.complete();
   }
 
   onChangeDate(date: Date) {
@@ -41,12 +55,12 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   }
 
   private loadData() {
-    this.dataSubscription = this.service.data$.subscribe(
-      ({ currencies, groups, budgetsData }) => {
+    this.service.data$
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(({ currencies, groups, budgetsData }) => {
         this.currencies = currencies;
         this.groups = groups;
         this.budgetsData = budgetsData;
-      }
-    );
+      });
   }
 }

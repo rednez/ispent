@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  ActionsService,
   BudgetsGQL,
   BudgetsQuery,
   CreateBudgetRecordInput,
+  CreateCategoryService,
+  CreateCurrencyService,
+  CreateGroupService,
   CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
+  GroupsGQL,
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
+import {
+  DialogCreateCategoryComponent,
+  DialogCreateCurrencyComponent,
+  DialogCreateGroupComponent,
+} from '@ispent/front/ui';
 import { groupBy, map as _map } from 'lodash';
+import { isEqual, pipe, prop } from 'lodash/fp';
 import {
   BehaviorSubject,
   catchError,
@@ -19,6 +31,7 @@ import {
   switchMap,
   tap,
   throwError,
+  withLatestFrom,
 } from 'rxjs';
 import { FormData } from '../data';
 
@@ -33,9 +46,15 @@ export class EditBudgetPageService {
   constructor(
     private currentMonth: CurrentMonthService,
     private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
+    private groupsGQL: GroupsGQL,
     private budgetsGql: BudgetsGQL,
     private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
-    private snackBar: MatSnackBar
+    private createCurrencyService: CreateCurrencyService,
+    private createGroupService: CreateGroupService,
+    private createCategoryService: CreateCategoryService,
+    private snackBar: MatSnackBar,
+    private actions: ActionsService,
+    private dialog: MatDialog
   ) {}
 
   get currentDate$(): Observable<Date> {
@@ -104,17 +123,100 @@ export class EditBudgetPageService {
     this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe({
       next: () => {
         this.isDataSaving$.next(false);
-        this.snackBar.open('The data has been saved successfully', undefined, {
-          duration: 1000,
-        });
+        this.showSnackBar('The data has been saved successfully');
       },
       error: () => {
         this.isDataSaving$.next(false);
-        this.snackBar.open(`Fail. The data hasn't been saved`, undefined, {
-          duration: 1000,
-        });
+        this.showSnackBar(`Fail. The data hasn't been saved`);
       },
     });
+  }
+
+  onCreateCurrency$() {
+    return this.actions.createCurrency$.pipe(
+      switchMap(() => of(this.dialog.open(DialogCreateCurrencyComponent))),
+      switchMap((dialogRef) =>
+        dialogRef.componentInstance.create.pipe(
+          tap(() => (dialogRef.componentInstance.loading = true)),
+          switchMap((currency) =>
+            this.createCurrencyService.create$(currency).pipe(
+              tap(() => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+              }),
+              tap(() =>
+                this.showSnackBar(`The currency ${currency} has been created`)
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+  onCreateGroup$() {
+    return this.actions.createGroup$.pipe(
+      switchMap(() => of(this.dialog.open(DialogCreateGroupComponent))),
+      switchMap((dialogRef) =>
+        dialogRef.componentInstance.create.pipe(
+          tap(() => (dialogRef.componentInstance.loading = true)),
+          switchMap((name) =>
+            this.createGroupService
+              .create$(name)
+              .pipe(
+                tap(() =>
+                  this.showSnackBar(`The group ${name}  has been created`)
+                )
+              )
+          ),
+          tap(() => {
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+          })
+        )
+      )
+    );
+  }
+
+  onCreateCategory$() {
+    return this.actions.createCategory$.pipe(
+      withLatestFrom(this.groupsGQL.watch().valueChanges),
+      map(([{ parentGroupId }, groupsQuery]) =>
+        groupsQuery.data.groups.find(pipe(prop('id'), isEqual(parentGroupId)))
+      ),
+      map((group) => ({
+        parentGroupId: group?.id,
+        parentGroupName: group?.name,
+      })),
+      switchMap((dialogData) =>
+        of(
+          this.dialog.open(DialogCreateCategoryComponent, {
+            data: dialogData,
+          })
+        ).pipe(
+          switchMap((dialogRef) =>
+            dialogRef.componentInstance.create.pipe(
+              tap(() => (dialogRef.componentInstance.loading = true)),
+              switchMap((categoryParams) =>
+                this.createCategoryService
+                  .create$(categoryParams)
+                  .pipe(
+                    tap(() =>
+                      this.showSnackBar(
+                        `The category ${categoryParams.name}  has been created`
+                      )
+                    )
+                  )
+              ),
+              tap(() => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+              })
+            )
+          )
+        )
+      )
+    );
   }
 
   private deserializeServerData(data: BudgetsQuery): FormData {
@@ -155,5 +257,11 @@ export class EditBudgetPageService {
     );
 
     return result;
+  }
+
+  private showSnackBar(message: string, duration = 2000) {
+    this.snackBar.open(message, undefined, {
+      duration,
+    });
   }
 }

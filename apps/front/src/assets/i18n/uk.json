@@ -34,5 +34,10 @@
   "Delete": "Видалити",
   "Update": "Оновити",
   "Create": "Створити",
-  "Add operation": "Додати операцію"
+  "Add operation": "Додати операцію",
+  "Must be filled": "Має бути заповнене",
+  "The length must be 3": "Довжина повинна бути 3",
+  "Currency name": "Назва валюти",
+  "Group name": "Назва групи",
+  "Category name": "Назва категорії"
 }

@@ -138,6 +138,8 @@ export abstract class IQuery {
 
     abstract groups(): Group[] | Promise<Group[]>;
 
+    abstract group(id: number): Nullable<Group> | Promise<Nullable<Group>>;
+
     abstract categories(): Category[] | Promise<Category[]>;
 
     abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;

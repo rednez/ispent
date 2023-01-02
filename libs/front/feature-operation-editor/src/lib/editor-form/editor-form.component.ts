@@ -15,7 +15,7 @@ import {
   Group,
   Operation,
 } from '@ispent/front/data-access';
-import { get, isEqual, negate, pipe } from 'lodash/fp';
+import { prop, isEqual, negate, pipe } from 'lodash/fp';
 import { map, Subject, takeUntil } from 'rxjs';
 import { EditorFormService } from './editor-form.service';
 
@@ -50,6 +50,9 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() clickCancel = new EventEmitter();
   @Output() clickDelete = new EventEmitter<number>();
   @Output() clickSubmit = new EventEmitter<SubmitEventData>();
+  @Output() createCurrency = new EventEmitter();
+  @Output() createGroup = new EventEmitter();
+  @Output() createCategory = new EventEmitter<{ parentGroupId: number }>();
 
   operationForm!: FormGroup;
   rate = 0;
@@ -81,7 +84,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { currencies, operation } = changes;
+    const { currencies, operation, groups } = changes;
 
     if (currencies && currencies.currentValue?.length) {
       this.withdrawalCurrencies = [...currencies.currentValue];
@@ -108,6 +111,15 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
         isOtherWithdrawalCurrency: !!withdrawalCurrencyId,
       });
     }
+
+    if (groups?.currentValue && this.operationForm?.get('groupId')?.value) {
+      const group = groups.currentValue.find(
+        pipe(prop('id'), isEqual(this.operationForm.get('groupId')?.value))
+      ) as Group;
+      if (group) {
+        this.categories = group.categories as Category[];
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -122,6 +134,22 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       this.clickSubmit.emit({
         ...this.operationForm.value,
         id: this.id,
+      });
+    }
+  }
+
+  onCreateCurrency() {
+    this.createCurrency.emit();
+  }
+
+  onCreateGroup() {
+    this.createGroup.emit();
+  }
+
+  onCreateCategory() {
+    if (this.operationForm.get('groupId')?.value) {
+      this.createCategory.emit({
+        parentGroupId: this.operationForm.get('groupId')?.value,
       });
     }
   }
@@ -197,7 +225,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       .get('groupId')
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
       .subscribe((groupId) => {
-        const group = this.groups.find(pipe(get('id'), isEqual(groupId)));
+        const group = this.groups.find(pipe(prop('id'), isEqual(groupId)));
         if (group) {
           this.categories = group.categories as Category[];
           this.operationForm.get('categoryId')?.reset();
@@ -209,7 +237,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
       .subscribe((id) => {
         this.withdrawalCurrencies = this.currencies.filter(
-          pipe(get('id'), negate(isEqual(id)))
+          pipe(prop('id'), negate(isEqual(id)))
         );
         if (this.operationForm.get('isOtherWithdrawalCurrency')?.value) {
           this.operationForm.get('withdrawalCurrencyId')?.reset();

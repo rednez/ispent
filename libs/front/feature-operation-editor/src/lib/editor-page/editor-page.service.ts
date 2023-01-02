@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  ActionsService,
+  CreateCategoryService,
+  CreateCurrencyService,
+  CreateGroupService,
   CreateOperationGQL,
   CurrenciesGroupsWithCategoriesGQL,
   DeleteOperationGQL,
+  GroupsGQL,
   Operation,
   OperationGQL,
   UpdateOperationGQL,
 } from '@ispent/front/data-access';
+import {
+  DialogCreateCategoryComponent,
+  DialogCreateCurrencyComponent,
+  DialogCreateGroupComponent,
+} from '@ispent/front/ui';
 import { gql, MutationResult } from 'apollo-angular';
 import { omit } from 'lodash';
-import { map, Observable, tap } from 'rxjs';
+import { isEqual, pipe, prop } from 'lodash/fp';
+import { map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { SubmitEventData } from '../editor-form/editor-form.component';
 
 @Injectable({
@@ -18,12 +30,18 @@ import { SubmitEventData } from '../editor-form/editor-form.component';
 })
 export class EditorPageService {
   constructor(
+    private actions: ActionsService,
     private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
     private operationGQL: OperationGQL,
     private deleteOperationGQL: DeleteOperationGQL,
     private updateOperationGQL: UpdateOperationGQL,
     private createOperationGQL: CreateOperationGQL,
-    private snackBar: MatSnackBar
+    private groupsGQL: GroupsGQL,
+    private createCurrencyService: CreateCurrencyService,
+    private createGroupService: CreateGroupService,
+    private createCategoryService: CreateCategoryService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   fetchCurrenciesGroupsWithCategories() {
@@ -122,5 +140,110 @@ export class EditorPageService {
           )
         );
     }
+  }
+
+  createCurrency() {
+    this.actions.createCurrency$.next(null);
+  }
+
+  createGroup() {
+    this.actions.createGroup$.next(null);
+  }
+
+  createCategory(params: { parentGroupId: number }) {
+    this.actions.createCategory$.next(params);
+  }
+
+  onCreateCurrency$() {
+    return this.actions.createCurrency$.pipe(
+      switchMap(() => of(this.dialog.open(DialogCreateCurrencyComponent))),
+      switchMap((dialogRef) =>
+        dialogRef.componentInstance.create.pipe(
+          tap(() => (dialogRef.componentInstance.loading = true)),
+          switchMap((currency) =>
+            this.createCurrencyService.create$(currency).pipe(
+              tap(() => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+              }),
+              tap(() =>
+                this.showSnackBar(`The currency ${currency} has been created`)
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+  onCreateGroup$() {
+    return this.actions.createGroup$.pipe(
+      switchMap(() => of(this.dialog.open(DialogCreateGroupComponent))),
+      switchMap((dialogRef) =>
+        dialogRef.componentInstance.create.pipe(
+          tap(() => (dialogRef.componentInstance.loading = true)),
+          switchMap((name) =>
+            this.createGroupService
+              .create$(name)
+              .pipe(
+                tap(() =>
+                  this.showSnackBar(`The group ${name}  has been created`)
+                )
+              )
+          ),
+          tap(() => {
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+          })
+        )
+      )
+    );
+  }
+
+  onCreateCategory$() {
+    return this.actions.createCategory$.pipe(
+      withLatestFrom(this.groupsGQL.watch().valueChanges),
+      map(([{ parentGroupId }, groupsQuery]) =>
+        groupsQuery.data.groups.find(pipe(prop('id'), isEqual(parentGroupId)))
+      ),
+      map((group) => ({
+        parentGroupId: group?.id,
+        parentGroupName: group?.name,
+      })),
+      switchMap((dialogData) =>
+        of(
+          this.dialog.open(DialogCreateCategoryComponent, {
+            data: dialogData,
+          })
+        ).pipe(
+          switchMap((dialogRef) =>
+            dialogRef.componentInstance.create.pipe(
+              tap(() => (dialogRef.componentInstance.loading = true)),
+              switchMap((categoryParams) =>
+                this.createCategoryService
+                  .create$(categoryParams)
+                  .pipe(
+                    tap(() =>
+                      this.showSnackBar(
+                        `The category ${categoryParams.name}  has been created`
+                      )
+                    )
+                  )
+              ),
+              tap(() => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+              })
+            )
+          )
+        )
+      )
+    );
+  }
+
+  private showSnackBar(message: string, duration = 2000) {
+    this.snackBar.open(message, undefined, {
+      duration,
+    });
   }
 }

@@ -16,6 +16,7 @@
           [formControlName]="i"
           [isLast]="last"
           (add)="onAddCategory()"
+          (createCategory)="onCreateCategory()"
           (remove)="onRemoveCategory(i, $event)"
         ></ispent-budget-category>
       </ng-container>

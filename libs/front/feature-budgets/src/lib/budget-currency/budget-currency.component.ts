@@ -2,9 +2,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -19,6 +21,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { Category, Group } from '@ispent/front/data-access';
 import {
   add,
   flattenDeep,
@@ -32,7 +35,6 @@ import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetCurrency, FormBudgetEntity } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
-import { Category, Group } from '@ispent/front/data-access';
 
 @Component({
   selector: 'ispent-budget-currency',
@@ -54,7 +56,7 @@ import { Category, Group } from '@ispent/front/data-access';
   ],
 })
 export class BudgetCurrencyComponent
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+  implements OnInit, OnDestroy, OnChanges, ControlValueAccessor, Validator
 {
   @Input() groupsList: Group[] = [];
   @Input() isLast = false;
@@ -101,9 +103,14 @@ export class BudgetCurrencyComponent
       )
     );
 
-    this.parentBudgetEntities.setAllEntities(this.groupsList);
-
     this.currencies$ = this.childBudgetEntities.availableEntities;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const { groupsList } = changes;
+    if (groupsList) {
+      this.parentBudgetEntities.setAllEntities(groupsList.currentValue);
+    }
   }
 
   ngOnDestroy(): void {

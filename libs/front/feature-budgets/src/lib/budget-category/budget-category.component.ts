@@ -45,6 +45,7 @@ export class BudgetCategoryComponent
 {
   @Input() isLast = false;
   @Output() add = new EventEmitter();
+  @Output() createCategory = new EventEmitter();
   @Output() remove = new EventEmitter<number>();
 
   categories$!: Observable<FormBudgetEntity[]>;
@@ -118,6 +119,10 @@ export class BudgetCategoryComponent
     }
 
     return result;
+  }
+
+  onCreateCategory() {
+    this.createCategory.emit();
   }
 
   private buildForm() {

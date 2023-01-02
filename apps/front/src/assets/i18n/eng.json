@@ -34,5 +34,10 @@
   "Delete": "Delete",
   "Update": "Update",
   "Create": "Create",
-  "Add operation": "Add operation"
+  "Add operation": "Add operation",
+  "Must be filled": "Must be filled",
+  "The length must be 3": "The length must be 3",
+  "Currency name": "Currency name",
+  "Group name": "Group name",
+  "Category name": "Category name"
 }

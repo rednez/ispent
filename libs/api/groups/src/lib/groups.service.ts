@@ -12,6 +12,13 @@ export class GroupsService {
     return this.prisma.group.findMany({ include: { Category: true } });
   }
 
+  async findOne(id: number): Promise<GroupModel> {
+    return this.prisma.group.findUnique({
+      where: { id },
+      include: { Category: true },
+    });
+  }
+
   create(params: GroupCreateInput) {
     const { color: inputColor, ...data } = params;
     const color = inputColor || randomColorHex();

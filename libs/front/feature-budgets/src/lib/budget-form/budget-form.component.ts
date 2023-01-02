@@ -55,9 +55,9 @@ export class BudgetFormComponent implements OnChanges {
     if (isLoading && !isLoading.currentValue) {
       this.buildForm(formData?.currentValue);
       this.parentBudgetEntities.reset();
-      if (currenciesList) {
-        this.parentBudgetEntities.setAllEntities(currenciesList.currentValue);
-      }
+    }
+    if (currenciesList) {
+      this.parentBudgetEntities.setAllEntities(currenciesList.currentValue);
     }
   }
 

@@ -22,6 +22,11 @@ export class GroupsResolver {
     return this.groupsService.findAll();
   }
 
+  @Query()
+  async group(@Args('id') id: number) {
+    return this.groupsService.findOne(id);
+  }
+
   @Mutation()
   async createGroup(@Args('params') params: GroupCreateInput): Promise<Group> {
     return this.groupsService.create(params);

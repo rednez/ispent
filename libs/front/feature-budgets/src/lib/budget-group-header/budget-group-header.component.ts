@@ -9,6 +9,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import { ActionsService } from '@ispent/front/data-access';
 import { FormBudgetEntity } from '../data';
 
 @Component({
@@ -43,6 +44,8 @@ export class BudgetGroupHeaderComponent
 
   private onTouched: VoidFunction | undefined;
 
+  constructor(private actions: ActionsService) {}
+
   registerOnChange(fn: VoidFunction): void {
     this.groupId.valueChanges.subscribe(fn);
   }
@@ -66,5 +69,9 @@ export class BudgetGroupHeaderComponent
 
   validate(control: AbstractControl): ValidationErrors | null {
     return this.groupId.invalid ? this.groupId.errors : null;
+  }
+
+  onCreateGroup() {
+    this.actions.createGroup$.next(null);
   }
 }

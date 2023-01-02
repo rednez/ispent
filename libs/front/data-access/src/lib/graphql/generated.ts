@@ -79,6 +79,18 @@ export type Category = {
   name: Scalars['String'];
 };
 
+export type CategoryCreateInput = {
+  color?: InputMaybe<Scalars['String']>;
+  groupId: Scalars['Int'];
+  name: Scalars['String'];
+};
+
+export type CategoryUpdateInput = {
+  color?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type CreateBudgetRecordInput = {
   amount: Scalars['Float'];
   categoryId: Scalars['Int'];
@@ -101,16 +113,60 @@ export type Group = {
   name: Scalars['String'];
 };
 
+export type GroupCreateInput = {
+  color?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type GroupUpdateInput = {
+  color?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createCategory: Category;
+  createCurrency: Currency;
+  createGroup: Group;
   createOperation: Operation;
+  deleteCategory: Category;
+  deleteCurrency: Currency;
+  deleteGroup: Group;
   deleteOperation: Operation;
   recreateManyBudgetsRecords: Array<BudgetRecord>;
+  updateCategory: Category;
+  updateCurrency: Currency;
+  updateGroup: Group;
   updateOperation: Operation;
+};
+
+export type MutationCreateCategoryArgs = {
+  params: CategoryCreateInput;
+};
+
+export type MutationCreateCurrencyArgs = {
+  name: Scalars['String'];
+};
+
+export type MutationCreateGroupArgs = {
+  params: GroupCreateInput;
 };
 
 export type MutationCreateOperationArgs = {
   params: OperationCreateInput;
+};
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationDeleteCurrencyArgs = {
+  id: Scalars['Int'];
+};
+
+export type MutationDeleteGroupArgs = {
+  id: Scalars['Int'];
 };
 
 export type MutationDeleteOperationArgs = {
@@ -119,6 +175,19 @@ export type MutationDeleteOperationArgs = {
 
 export type MutationRecreateManyBudgetsRecordsArgs = {
   inputs: Array<CreateBudgetRecordInput>;
+};
+
+export type MutationUpdateCategoryArgs = {
+  params: CategoryUpdateInput;
+};
+
+export type MutationUpdateCurrencyArgs = {
+  id: Scalars['Int'];
+  name: Scalars['String'];
+};
+
+export type MutationUpdateGroupArgs = {
+  params: GroupUpdateInput;
 };
 
 export type MutationUpdateOperationArgs = {
@@ -176,6 +245,7 @@ export type Query = {
   budgetsSummary: Array<BudgetSummary>;
   categories: Array<Category>;
   currencies: Array<Currency>;
+  group?: Maybe<Group>;
   groups: Array<Group>;
   operation?: Maybe<Operation>;
   operations: Array<Operation>;
@@ -187,6 +257,10 @@ export type QueryBudgetsArgs = {
 
 export type QueryBudgetsSummaryArgs = {
   params: BudgetSummaryParams;
+};
+
+export type QueryGroupArgs = {
+  id: Scalars['Int'];
 };
 
 export type QueryOperationArgs = {
@@ -235,6 +309,42 @@ export type CurrenciesGroupsWithCategoriesQuery = {
       name: string;
     }> | null;
   }>;
+};
+
+export type GroupsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GroupsQuery = {
+  __typename?: 'Query';
+  groups: Array<{
+    __typename?: 'Group';
+    id: number;
+    name: string;
+    categories?: Array<{
+      __typename?: 'Category';
+      id: number;
+      name: string;
+    }> | null;
+  }>;
+};
+
+export type GroupQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+export type GroupQuery = {
+  __typename?: 'Query';
+  group?: {
+    __typename?: 'Group';
+    id: number;
+    name: string;
+    color?: string | null;
+    categories?: Array<{
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      color?: string | null;
+    }> | null;
+  } | null;
 };
 
 export type OperationsQueryVariables = Exact<{
@@ -383,6 +493,43 @@ export type CreateOperationMutation = {
   };
 };
 
+export type CreateCurrencyMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+export type CreateCurrencyMutation = {
+  __typename?: 'Mutation';
+  createCurrency: { __typename?: 'Currency'; id: number; name: string };
+};
+
+export type CreateGroupMutationVariables = Exact<{
+  params: GroupCreateInput;
+}>;
+
+export type CreateGroupMutation = {
+  __typename?: 'Mutation';
+  createGroup: {
+    __typename?: 'Group';
+    id: number;
+    name: string;
+    color?: string | null;
+  };
+};
+
+export type CreateCategoryMutationVariables = Exact<{
+  params: CategoryCreateInput;
+}>;
+
+export type CreateCategoryMutation = {
+  __typename?: 'Mutation';
+  createCategory: {
+    __typename?: 'Category';
+    id: number;
+    name: string;
+    color?: string | null;
+  };
+};
+
 export const CurrenciesGroupsCategoriesDocument = gql`
   query CurrenciesGroupsCategories {
     currencies {
@@ -440,6 +587,54 @@ export class CurrenciesGroupsWithCategoriesGQL extends Apollo.Query<
   CurrenciesGroupsWithCategoriesQueryVariables
 > {
   document = CurrenciesGroupsWithCategoriesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GroupsDocument = gql`
+  query Groups {
+    groups {
+      id
+      name
+      categories {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GroupsGQL extends Apollo.Query<GroupsQuery, GroupsQueryVariables> {
+  document = GroupsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GroupDocument = gql`
+  query Group($id: Int!) {
+    group(id: $id) {
+      id
+      name
+      color
+      categories {
+        id
+        name
+        color
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GroupGQL extends Apollo.Query<GroupQuery, GroupQueryVariables> {
+  document = GroupDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -707,6 +902,74 @@ export class CreateOperationGQL extends Apollo.Mutation<
   CreateOperationMutationVariables
 > {
   document = CreateOperationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateCurrencyDocument = gql`
+  mutation CreateCurrency($name: String!) {
+    createCurrency(name: $name) {
+      id
+      name
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateCurrencyGQL extends Apollo.Mutation<
+  CreateCurrencyMutation,
+  CreateCurrencyMutationVariables
+> {
+  document = CreateCurrencyDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateGroupDocument = gql`
+  mutation CreateGroup($params: GroupCreateInput!) {
+    createGroup(params: $params) {
+      id
+      name
+      color
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateGroupGQL extends Apollo.Mutation<
+  CreateGroupMutation,
+  CreateGroupMutationVariables
+> {
+  document = CreateGroupDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateCategoryDocument = gql`
+  mutation CreateCategory($params: CategoryCreateInput!) {
+    createCategory(params: $params) {
+      id
+      name
+      color
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateCategoryGQL extends Apollo.Mutation<
+  CreateCategoryMutation,
+  CreateCategoryMutationVariables
+> {
+  document = CreateCategoryDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

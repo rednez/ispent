@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Currency, Group, Operation } from '@ispent/front/data-access';
 import { Subject, takeUntil } from 'rxjs';
@@ -27,6 +26,18 @@ export class EditorPageComponent implements OnInit, OnDestroy {
     const paramId = this.route.snapshot.paramMap.get('id');
     this.operationId = paramId ? parseInt(paramId) : null;
     this.loadData();
+
+    this.service
+      .onCreateCurrency$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
+
+    this.service.onCreateGroup$().pipe(takeUntil(this.onDestroy$)).subscribe();
+
+    this.service
+      .onCreateCategory$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -64,5 +75,17 @@ export class EditorPageComponent implements OnInit, OnDestroy {
     this.service.upsertOperation(data).subscribe(() => {
       this.goBack();
     });
+  }
+
+  createCurrency() {
+    this.service.createCurrency();
+  }
+
+  createGroup() {
+    this.service.createGroup();
+  }
+
+  createCategory(params: { parentGroupId: number }) {
+    this.service.createCategory(params);
   }
 }

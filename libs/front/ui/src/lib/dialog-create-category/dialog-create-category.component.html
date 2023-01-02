@@ -1,0 +1,44 @@
+<mat-card>
+  <mat-card-header class="mb-4">
+    <mat-card-title>
+      <h1>{{ 'Create category' | translate }}</h1>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="mb-4 space-y-4">
+    <div>
+      <span
+        class="text-re mr-1"
+        [class.text-gray-500]="data.parentGroupId"
+        [class.text-red-600]="!data.parentGroupId"
+        >{{ 'Parent Group' | translate }} :</span
+      >
+      <span *ngIf="data.parentGroupId" class="font-medium">{{
+        data.parentGroupName
+      }}</span>
+    </div>
+
+    <mat-form-field class="w-full">
+      <mat-label>{{ 'Category name' | translate }}</mat-label>
+      <input matInput [formControl]="category" />
+      <mat-error *ngIf="category.errors">{{
+        'Must be filled' | translate
+      }}</mat-error>
+    </mat-form-field>
+  </mat-card-content>
+
+  <mat-card-actions
+    class="space-x-2"
+    [class.mb-3]="!loading"
+    [class.mb-2]="loading"
+  >
+    <button mat-button (click)="close()">{{ 'Cancel' | translate }}</button>
+    <button mat-flat-button color="primary" (click)="onClickCreate()">
+      {{ 'Create' | translate }}
+    </button>
+  </mat-card-actions>
+
+  <mat-card-footer>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  </mat-card-footer>
+</mat-card>
