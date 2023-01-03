@@ -67,7 +67,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   get isOtherWithdrawalCurrency(): boolean {
-    return !!this.operationForm.get('isOtherWithdrawalCurrency')?.value;
+    return !!this.operationForm?.get('isOtherWithdrawalCurrency')?.value;
   }
 
   get headerTitle(): string {
@@ -155,7 +155,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasErrorIn(formControlName: string) {
-    return this.operationForm.get(formControlName)?.errors;
+    return this.operationForm?.get(formControlName)?.errors;
   }
 
   private buildForm() {
@@ -172,6 +172,10 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private subscribeToFormChanges() {
+    if (!this.operationForm) {
+      return;
+    }
+
     this.operationForm
       .get('amount')
       ?.valueChanges.pipe(

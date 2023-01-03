@@ -8,7 +8,6 @@ interface CreateCategoryEvent {
 }
 
 @Component({
-  selector: 'ispent-dialog-create-category',
   templateUrl: './dialog-create-category.component.html',
 })
 export class DialogCreateCategoryComponent {

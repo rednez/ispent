@@ -1,22 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontFeatureOperationEditorModule } from '../front-feature-operation-editor.module';
 import { EditorFormComponent } from './editor-form.component';
 
 describe('EditorFormComponent', () => {
-  let component: EditorFormComponent;
-  let fixture: ComponentFixture<EditorFormComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [EditorFormComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(EditorFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(EditorFormComponent, FrontFeatureOperationEditorModule)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(EditorFormComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

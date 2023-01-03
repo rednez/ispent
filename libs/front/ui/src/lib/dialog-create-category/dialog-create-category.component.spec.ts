@@ -1,22 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 import { DialogCreateCategoryComponent } from './dialog-create-category.component';
 
 describe('DialogCreateCategoryComponent', () => {
-  let component: DialogCreateCategoryComponent;
-  let fixture: ComponentFixture<DialogCreateCategoryComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [DialogCreateCategoryComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(DialogCreateCategoryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(DialogCreateCategoryComponent, FrontUiModule)
+      .mock(MatDialogRef, { close: () => null }, { export: true })
+      .mock(
+        MAT_DIALOG_DATA,
+        {
+          data: { parentGroupId: 1, parentGroupName: 'name' },
+        },
+        { export: true }
+      )
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(DialogCreateCategoryComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

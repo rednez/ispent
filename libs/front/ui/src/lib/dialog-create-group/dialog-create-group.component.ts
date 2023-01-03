@@ -3,7 +3,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'ispent-dialog-create-group',
   template: ` <mat-card>
     <mat-card-header class="mb-4">
       <mat-card-title>

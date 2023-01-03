@@ -1,22 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ActivatedRoute } from '@angular/router';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { EMPTY } from 'rxjs';
+import { FrontFeatureOperationEditorModule } from '../front-feature-operation-editor.module';
 import { EditorPageComponent } from './editor-page.component';
+import { EditorPageService } from './editor-page.service';
 
 describe('EditorPageComponent', () => {
-  let component: EditorPageComponent;
-  let fixture: ComponentFixture<EditorPageComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [EditorPageComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(EditorPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(EditorPageComponent, FrontFeatureOperationEditorModule)
+      .mock(
+        ActivatedRoute,
+        { snapshot: { paramMap: { get: () => null } } as any },
+        { export: true }
+      )
+      .mock(EditorPageService, {
+        fetchCurrenciesGroupsWithCategories: () => EMPTY,
+        fetchOperation: () => EMPTY,
+        onCreateCurrency$: () => EMPTY,
+        onCreateGroup$: () => EMPTY,
+        onCreateCategory$: () => EMPTY,
+      })
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(EditorPageComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

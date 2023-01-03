@@ -1,22 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatDialogRef } from '@angular/material/dialog';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 import { DialogCreateCurrencyComponent } from './dialog-create-currency.component';
 
 describe('DialogCreateCurrencyComponent', () => {
-  let component: DialogCreateCurrencyComponent;
-  let fixture: ComponentFixture<DialogCreateCurrencyComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [DialogCreateCurrencyComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(DialogCreateCurrencyComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(DialogCreateCurrencyComponent, FrontUiModule).mock(
+      MatDialogRef,
+      { close: () => null },
+      {
+        export: true,
+      }
+    )
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(DialogCreateCurrencyComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

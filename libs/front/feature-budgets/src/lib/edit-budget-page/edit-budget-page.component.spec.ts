@@ -11,7 +11,12 @@ describe('EditBudgetPageComponent', () => {
       useValue: {
         currentDate$: EMPTY,
         isDataLoading$: EMPTY,
+        isDataError$: EMPTY,
+        isDataSaving$: EMPTY,
         data$: EMPTY,
+        onCreateCurrency$: () => EMPTY,
+        onCreateGroup$: () => EMPTY,
+        onCreateCategory$: () => EMPTY,
       },
     })
   );

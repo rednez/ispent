@@ -1,22 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatDialogRef } from '@angular/material/dialog';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontUiModule } from '../front-ui.module';
 import { DialogCreateGroupComponent } from './dialog-create-group.component';
 
 describe('DialogCreateGroupComponent', () => {
-  let component: DialogCreateGroupComponent;
-  let fixture: ComponentFixture<DialogCreateGroupComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [DialogCreateGroupComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(DialogCreateGroupComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(DialogCreateGroupComponent, FrontUiModule).mock(
+      MatDialogRef,
+      { close: () => null },
+      {
+        export: true,
+      }
+    )
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(DialogCreateGroupComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });

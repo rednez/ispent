@@ -1,4 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  ActionsService,
+  CreateCategoryService,
+  CreateCurrencyService,
+  CreateGroupService,
+  CreateOperationGQL,
+  CurrenciesGroupsWithCategoriesGQL,
+  DeleteOperationGQL,
+  GroupsGQL,
+  OperationGQL,
+  UpdateOperationGQL,
+} from '@ispent/front/data-access';
+import { MockProvider } from 'ng-mocks';
 
 import { EditorPageService } from './editor-page.service';
 
@@ -6,7 +21,22 @@ describe('EditorPageService', () => {
   let service: EditorPageService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        MockProvider(ActionsService),
+        MockProvider(CurrenciesGroupsWithCategoriesGQL),
+        MockProvider(OperationGQL),
+        MockProvider(DeleteOperationGQL),
+        MockProvider(UpdateOperationGQL),
+        MockProvider(CreateOperationGQL),
+        MockProvider(GroupsGQL),
+        MockProvider(CreateCurrencyService),
+        MockProvider(CreateGroupService),
+        MockProvider(CreateCategoryService),
+        MockProvider(MatSnackBar),
+        MockProvider(MatDialog),
+      ],
+    });
     service = TestBed.inject(EditorPageService);
   });
 
