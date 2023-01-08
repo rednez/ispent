@@ -12,7 +12,7 @@ export class OperationsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(params: OperationsParams, userId: string) {
-    const { currencyId, groupId, categoryId, month } = params || {};
+    const { currencyId, groupId, categoryId, month, limit } = params || {};
 
     return this.prisma.operation.findMany({
       include: { currency: true, category: true, group: true },
@@ -25,6 +25,7 @@ export class OperationsService {
           dateTime: getMonthPeriod(month ? new Date(month) : undefined),
         },
       },
+      take: limit,
     });
   }
 

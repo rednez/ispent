@@ -57,13 +57,15 @@ export class OverviewPageService {
       this._isRecentOperationsError$.next(false);
     }),
     switchMap((month) =>
-      this.operationsGql.watch({ params: { month } }).valueChanges.pipe(
-        catchError((err: ApolloError) => {
-          this._isRecentOperationsLoading$.next(false);
-          this._isRecentOperationsError$.next(true);
-          return throwError(() => err);
-        })
-      )
+      this.operationsGql
+        .watch({ params: { month, limit: 10 } })
+        .valueChanges.pipe(
+          catchError((err: ApolloError) => {
+            this._isRecentOperationsLoading$.next(false);
+            this._isRecentOperationsError$.next(true);
+            return throwError(() => err);
+          })
+        )
     )
   );
 

@@ -99,9 +99,9 @@ const ls = {
     uk: 'Редагування бюджету',
     eng: 'Budget Edit',
   },
-  'Recent operations': {
-    uk: 'Останні операції',
-    eng: 'Recent operations',
+  'Recent 10 operations': {
+    uk: 'Останні 10 операцій',
+    eng: 'Recent 10 operations',
   },
   Save: {
     uk: 'Зберегти',

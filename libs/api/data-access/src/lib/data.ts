@@ -42,6 +42,7 @@ export class OperationsParams {
     groupId?: Nullable<number>;
     categoryId?: Nullable<number>;
     month?: Nullable<string>;
+    limit?: Nullable<number>;
 }
 
 export class OperationCreateInput {

@@ -19,7 +19,7 @@
 </button>
 
 <ispent-operations-list
-  [title]="'Recent operations' | translate"
+  [title]="'Recent 10 operations' | translate"
   [operations]="(recentOperations$ | async)!"
   [isLoading]="(isRecentOperationsLoading$ | async)!"
   [isError]="(isRecentOperationsError$ | async)!"

@@ -231,6 +231,7 @@ export type OperationsParams = {
   categoryId?: InputMaybe<Scalars['Int']>;
   currencyId?: InputMaybe<Scalars['Int']>;
   groupId?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
   /**
    * ISO 8601 string that represents the selected month.
    *
