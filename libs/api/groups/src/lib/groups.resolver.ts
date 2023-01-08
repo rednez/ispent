@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@ispent/api/auth';
 import {
   Group,
   GroupCreateInput,
@@ -18,8 +19,8 @@ export class GroupsResolver {
   constructor(private groupsService: GroupsService) {}
 
   @Query()
-  async groups() {
-    return this.groupsService.findAll();
+  async groups(@CurrentUserId() uid) {
+    return this.groupsService.findAll(uid);
   }
 
   @Query()
@@ -28,8 +29,11 @@ export class GroupsResolver {
   }
 
   @Mutation()
-  async createGroup(@Args('params') params: GroupCreateInput): Promise<Group> {
-    return this.groupsService.create(params);
+  async createGroup(
+    @Args('params') params: GroupCreateInput,
+    @CurrentUserId() uid
+  ): Promise<Group> {
+    return this.groupsService.create(params, uid);
   }
 
   @Mutation()

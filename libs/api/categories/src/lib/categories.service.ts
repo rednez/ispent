@@ -4,22 +4,35 @@ import {
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
 import { randomColorHex } from '@ispent/api/util';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Category as CategoryModel } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<CategoryModel[]> {
-    return this.prisma.category.findMany();
+  async findAll(userId: string): Promise<CategoryModel[]> {
+    return this.prisma.category.findMany({ where: { userId } });
   }
 
-  create(params: CategoryCreateInput) {
+  async create(params: CategoryCreateInput, userId: string) {
     const { color: inputColor, ...data } = params;
+
+    const existedCategory = await this.prisma.category.findFirst({
+      where: {
+        name: params.name,
+        groupId: params.groupId,
+        userId,
+      },
+    });
+
+    if (existedCategory?.id) {
+      throw new BadRequestException('The category already exists');
+    }
+
     const color = inputColor || randomColorHex();
     return this.prisma.category.create({
-      data: { ...data, color },
+      data: { ...data, color, userId },
     });
   }
 

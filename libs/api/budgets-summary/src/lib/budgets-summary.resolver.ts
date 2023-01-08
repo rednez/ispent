@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@ispent/api/auth';
 import { BudgetSummary, BudgetSummaryParams } from '@ispent/api/data-access';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { BudgetsSummaryService } from './budgets-summary.service';
@@ -9,8 +10,9 @@ export class BudgetsSummaryResolver {
 
   @Query()
   budgetsSummary(
-    @Args('params') query: BudgetSummaryParams
+    @Args('params') query: BudgetSummaryParams,
+    @CurrentUserId() uid
   ): Observable<BudgetSummary[]> {
-    return this.budgetsSummaryService.findMany(query);
+    return this.budgetsSummaryService.findMany(query, uid);
   }
 }

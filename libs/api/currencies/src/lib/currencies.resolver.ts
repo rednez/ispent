@@ -1,24 +1,30 @@
-import {Currency} from '@ispent/api/data-access';
-import {Resolver, Query, Args, Mutation} from '@nestjs/graphql';
-import {CurrenciesService} from './currencies.service';
+import { CurrentUserId } from '@ispent/api/auth';
+import { Currency } from '@ispent/api/data-access';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrenciesService } from './currencies.service';
 
 @Resolver('Currency')
 export class CurrenciesResolver {
-  constructor(private currenciesService: CurrenciesService) {
-  }
+  constructor(private currenciesService: CurrenciesService) {}
 
   @Query()
-  async currencies(): Promise<Currency[]> {
-    return this.currenciesService.findAll();
+  async currencies(@CurrentUserId() uid): Promise<Currency[]> {
+    return this.currenciesService.findAll(uid);
   }
 
   @Mutation()
-  async createCurrency(@Args('name') name: string): Promise<Currency> {
-    return this.currenciesService.create(name);
+  async createCurrency(
+    @Args('name') name: string,
+    @CurrentUserId() uid
+  ): Promise<Currency> {
+    return this.currenciesService.create(name, uid);
   }
 
   @Mutation()
-  async updateCurrency(@Args('id') id: number, @Args('name') name: string): Promise<Currency> {
+  async updateCurrency(
+    @Args('id') id: number,
+    @Args('name') name: string
+  ): Promise<Currency> {
     return this.currenciesService.update(id, name);
   }
 
@@ -26,5 +32,4 @@ export class CurrenciesResolver {
   async deleteCurrency(@Args('id') id: number): Promise<Currency> {
     return this.currenciesService.deleteCurrency(id);
   }
-
 }

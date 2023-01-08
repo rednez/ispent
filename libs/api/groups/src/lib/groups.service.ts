@@ -1,15 +1,18 @@
 import { GroupCreateInput, GroupUpdateInput } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
 import { randomColorHex } from '@ispent/api/util';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Group as GroupModel } from '@prisma/client';
 
 @Injectable()
 export class GroupsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<GroupModel[]> {
-    return this.prisma.group.findMany({ include: { Category: true } });
+  async findAll(userId: string): Promise<GroupModel[]> {
+    return this.prisma.group.findMany({
+      where: { userId },
+      include: { Category: true },
+    });
   }
 
   async findOne(id: number): Promise<GroupModel> {
@@ -19,11 +22,23 @@ export class GroupsService {
     });
   }
 
-  create(params: GroupCreateInput) {
+  async create(params: GroupCreateInput, userId: string) {
     const { color: inputColor, ...data } = params;
+
+    const existedGroup = await this.prisma.group.findFirst({
+      where: {
+        name: params.name,
+        userId,
+      },
+    });
+
+    if (existedGroup?.id) {
+      throw new BadRequestException('The group already existed');
+    }
+
     const color = inputColor || randomColorHex();
     return this.prisma.group.create({
-      data: { ...data, color },
+      data: { ...data, color, userId },
     });
   }
 

@@ -11,7 +11,7 @@ import { getCurrentAndPreviousMonths, getMonthPeriod } from '@ispent/api/util';
 export class BudgetsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(params: BudgetsParams) {
+  async findAll(params: BudgetsParams, userId: string) {
     const { currentMonth, previousMonth } = getCurrentAndPreviousMonths(
       params.date
     );
@@ -20,18 +20,21 @@ export class BudgetsService {
       include: { currency: true, category: true, group: true },
       where: {
         dateTime: getMonthPeriod(currentMonth),
+        userId,
       },
     });
 
     const prevBudgets = await this.prisma.budgetRecord.findMany({
       where: {
         dateTime: getMonthPeriod(previousMonth),
+        userId,
       },
     });
 
     const operations = await this.prisma.operation.findMany({
       where: {
         dateTime: getMonthPeriod(previousMonth),
+        userId,
       },
     });
 
@@ -50,24 +53,25 @@ export class BudgetsService {
     }));
   }
 
-  async recreateMany(inputs: CreateBudgetRecordInput[]) {
+  async recreateMany(inputs: CreateBudgetRecordInput[], userId: string) {
     const { currentMonth } = getCurrentAndPreviousMonths(inputs[0].dateTime);
 
     await this.prisma.budgetRecord.deleteMany({
-      where: { dateTime: getMonthPeriod(currentMonth) },
+      where: { dateTime: getMonthPeriod(currentMonth), userId },
     });
 
     await this.prisma.budgetRecord.createMany({
       data: inputs.map((i: CreateBudgetRecordInput) => ({
         ...i,
         dateTime: currentMonth,
+        userId,
       })),
     });
 
-    return this.findAll({ date: currentMonth.toISOString() });
+    return this.findAll({ date: currentMonth.toISOString() }, userId);
   }
 
-  computeTotalAmount(
+  private computeTotalAmount(
     operations: Array<{
       currencyId: number;
       categoryId: number;

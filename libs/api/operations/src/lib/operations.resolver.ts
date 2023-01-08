@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@ispent/api/auth';
 import {
   OperationCreateInput,
   OperationsParams,
@@ -18,8 +19,11 @@ export class OperationsResolver {
   constructor(private operationsService: OperationsService) {}
 
   @Query()
-  async operations(@Args('params') params: OperationsParams) {
-    return this.operationsService.findAll(params);
+  async operations(
+    @Args('params') params: OperationsParams,
+    @CurrentUserId() uid
+  ) {
+    return this.operationsService.findAll(params, uid);
   }
 
   @Query()
@@ -28,8 +32,11 @@ export class OperationsResolver {
   }
 
   @Mutation()
-  async createOperation(@Args('params') params: OperationCreateInput) {
-    return this.operationsService.create(params);
+  async createOperation(
+    @Args('params') params: OperationCreateInput,
+    @CurrentUserId() uid
+  ) {
+    return this.operationsService.create(params, uid);
   }
 
   @Mutation()

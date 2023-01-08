@@ -9,14 +9,16 @@ datasource db {
 
 model Currency {
   id           Int            @id @default(autoincrement())
-  name         String         @unique
+  userId       String
+  name         String         @db.VarChar(3)
   Operation    Operation[]
   BudgetRecord BudgetRecord[]
 }
 
 model Group {
   id           Int            @id @default(autoincrement())
-  name         String         @unique
+  userId       String
+  name         String
   color        String
   Category     Category[]
   Operation    Operation[]
@@ -25,6 +27,7 @@ model Group {
 
 model Category {
   id           Int            @id @default(autoincrement())
+  userId       String
   name         String
   color        String
   group        Group          @relation(fields: [groupId], references: [id])
@@ -35,6 +38,7 @@ model Category {
 
 model Operation {
   id                   Int      @id @default(autoincrement())
+  userId               String
   amount               Float
   dateTime             DateTime @default(now())
   currency             Currency @relation(fields: [currencyId], references: [id])
@@ -49,6 +53,7 @@ model Operation {
 
 model BudgetRecord {
   id         Int      @id @default(autoincrement())
+  userId     String
   amount     Float
   currency   Currency @relation(fields: [currencyId], references: [id])
   currencyId Int

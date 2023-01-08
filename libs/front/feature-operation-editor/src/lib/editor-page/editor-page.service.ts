@@ -7,6 +7,7 @@ import {
   CreateCurrencyService,
   CreateGroupService,
   CreateOperationGQL,
+  CurrenciesGQL,
   CurrenciesGroupsWithCategoriesGQL,
   DeleteOperationGQL,
   GroupsGQL,
@@ -21,7 +22,6 @@ import {
 } from '@ispent/front/ui';
 import { gql, MutationResult } from 'apollo-angular';
 import { omit } from 'lodash';
-import { isEqual, pipe, prop } from 'lodash/fp';
 import { map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { SubmitEventData } from '../editor-form/editor-form.component';
 
@@ -36,6 +36,7 @@ export class EditorPageService {
     private deleteOperationGQL: DeleteOperationGQL,
     private updateOperationGQL: UpdateOperationGQL,
     private createOperationGQL: CreateOperationGQL,
+    private currenciesGQL: CurrenciesGQL,
     private groupsGQL: GroupsGQL,
     private createCurrencyService: CreateCurrencyService,
     private createGroupService: CreateGroupService,
@@ -156,7 +157,14 @@ export class EditorPageService {
 
   onCreateCurrency$() {
     return this.actions.createCurrency$.pipe(
-      switchMap(() => of(this.dialog.open(DialogCreateCurrencyComponent))),
+      withLatestFrom(this.currenciesGQL.watch().valueChanges),
+      switchMap(([, currenciesQuery]) =>
+        of(
+          this.dialog.open(DialogCreateCurrencyComponent, {
+            data: { currencies: currenciesQuery.data.currencies },
+          })
+        )
+      ),
       switchMap((dialogRef) =>
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
@@ -178,7 +186,14 @@ export class EditorPageService {
 
   onCreateGroup$() {
     return this.actions.createGroup$.pipe(
-      switchMap(() => of(this.dialog.open(DialogCreateGroupComponent))),
+      withLatestFrom(this.groupsGQL.watch().valueChanges),
+      switchMap(([, groupsQuery]) =>
+        of(
+          this.dialog.open(DialogCreateGroupComponent, {
+            data: { groups: groupsQuery.data.groups },
+          })
+        )
+      ),
       switchMap((dialogRef) =>
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
@@ -203,12 +218,9 @@ export class EditorPageService {
   onCreateCategory$() {
     return this.actions.createCategory$.pipe(
       withLatestFrom(this.groupsGQL.watch().valueChanges),
-      map(([{ parentGroupId }, groupsQuery]) =>
-        groupsQuery.data.groups.find(pipe(prop('id'), isEqual(parentGroupId)))
-      ),
-      map((group) => ({
-        parentGroupId: group?.id,
-        parentGroupName: group?.name,
+      map(([{ parentGroupId }, groupsQuery]) => ({
+        parentGroupId: parentGroupId,
+        groups: groupsQuery.data.groups,
       })),
       switchMap((dialogData) =>
         of(

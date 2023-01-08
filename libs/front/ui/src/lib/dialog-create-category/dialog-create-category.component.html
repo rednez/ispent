@@ -14,16 +14,14 @@
         >{{ 'Parent Group' | translate }} :</span
       >
       <span *ngIf="data.parentGroupId" class="font-medium">{{
-        data.parentGroupName
+        parentGroupName
       }}</span>
     </div>
 
     <mat-form-field class="w-full">
       <mat-label>{{ 'Category name' | translate }}</mat-label>
       <input matInput [formControl]="category" />
-      <mat-error *ngIf="category.errors">{{
-        'Must be filled' | translate
-      }}</mat-error>
+      <mat-error *ngIf="category.errors">{{ errorText | translate }}</mat-error>
     </mat-form-field>
   </mat-card-content>
 

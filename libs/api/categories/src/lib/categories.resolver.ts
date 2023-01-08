@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@ispent/api/auth';
 import {
   Category,
   CategoryCreateInput,
@@ -11,15 +12,16 @@ export class CategoriesResolver {
   constructor(private categoriesService: CategoriesService) {}
 
   @Query()
-  async categories(): Promise<Category[]> {
-    return this.categoriesService.findAll();
+  async categories(@CurrentUserId() uid): Promise<Category[]> {
+    return this.categoriesService.findAll(uid);
   }
 
   @Mutation()
   async createCategory(
-    @Args('params') params: CategoryCreateInput
+    @Args('params') params: CategoryCreateInput,
+    @CurrentUserId() uid
   ): Promise<Category> {
-    return this.categoriesService.create(params);
+    return this.categoriesService.create(params, uid);
   }
 
   @Mutation()

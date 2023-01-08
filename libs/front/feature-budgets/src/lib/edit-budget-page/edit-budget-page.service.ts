@@ -9,6 +9,7 @@ import {
   CreateCategoryService,
   CreateCurrencyService,
   CreateGroupService,
+  CurrenciesGQL,
   CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
   GroupsGQL,
@@ -20,7 +21,6 @@ import {
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
 import { groupBy, map as _map } from 'lodash';
-import { isEqual, pipe, prop } from 'lodash/fp';
 import {
   BehaviorSubject,
   catchError,
@@ -46,6 +46,7 @@ export class EditBudgetPageService {
   constructor(
     private currentMonth: CurrentMonthService,
     private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
+    private currenciesGQL: CurrenciesGQL,
     private groupsGQL: GroupsGQL,
     private budgetsGql: BudgetsGQL,
     private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
@@ -134,7 +135,14 @@ export class EditBudgetPageService {
 
   onCreateCurrency$() {
     return this.actions.createCurrency$.pipe(
-      switchMap(() => of(this.dialog.open(DialogCreateCurrencyComponent))),
+      withLatestFrom(this.currenciesGQL.watch().valueChanges),
+      switchMap(([, currenciesQuery]) =>
+        of(
+          this.dialog.open(DialogCreateCurrencyComponent, {
+            data: { currencies: currenciesQuery.data.currencies },
+          })
+        )
+      ),
       switchMap((dialogRef) =>
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
@@ -156,7 +164,14 @@ export class EditBudgetPageService {
 
   onCreateGroup$() {
     return this.actions.createGroup$.pipe(
-      switchMap(() => of(this.dialog.open(DialogCreateGroupComponent))),
+      withLatestFrom(this.groupsGQL.watch().valueChanges),
+      switchMap(([, groupsQuery]) =>
+        of(
+          this.dialog.open(DialogCreateGroupComponent, {
+            data: { groups: groupsQuery.data.groups },
+          })
+        )
+      ),
       switchMap((dialogRef) =>
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
@@ -181,12 +196,9 @@ export class EditBudgetPageService {
   onCreateCategory$() {
     return this.actions.createCategory$.pipe(
       withLatestFrom(this.groupsGQL.watch().valueChanges),
-      map(([{ parentGroupId }, groupsQuery]) =>
-        groupsQuery.data.groups.find(pipe(prop('id'), isEqual(parentGroupId)))
-      ),
-      map((group) => ({
-        parentGroupId: group?.id,
-        parentGroupName: group?.name,
+      map(([{ parentGroupId }, groupsQuery]) => ({
+        parentGroupId: parentGroupId,
+        groups: groupsQuery.data.groups,
       })),
       switchMap((dialogData) =>
         of(

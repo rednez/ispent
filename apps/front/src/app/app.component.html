@@ -1,4 +1,8 @@
-<ispent-app-bar (changeLocale)="onChangeLocale($event)"></ispent-app-bar>
+<ispent-app-bar
+  *ngIf="user$ | async"
+  (changeLocale)="onChangeLocale($event)"
+  (signOut)="signOut()"
+></ispent-app-bar>
 <ispent-page-layout>
   <router-outlet></router-outlet>
 </ispent-page-layout>

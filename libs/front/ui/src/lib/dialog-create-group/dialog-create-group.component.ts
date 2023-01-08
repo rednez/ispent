@@ -1,6 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Group } from '@ispent/front/data-access';
+import { uniqNameValidator } from '../validators';
 
 @Component({
   template: ` <mat-card>
@@ -13,9 +22,7 @@ import { MatDialogRef } from '@angular/material/dialog';
       <mat-form-field>
         <mat-label>{{ 'Group name' | translate }}</mat-label>
         <input matInput [formControl]="group" />
-        <mat-error *ngIf="group.errors">{{
-          'Must be filled' | translate
-        }}</mat-error>
+        <mat-error *ngIf="group.errors">{{ errorText | translate }}</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions
@@ -33,13 +40,35 @@ import { MatDialogRef } from '@angular/material/dialog';
     </mat-card-footer>
   </mat-card>`,
 })
-export class DialogCreateGroupComponent {
+export class DialogCreateGroupComponent implements OnInit {
   @Input() loading = false;
   @Output() create = new EventEmitter<string>();
 
   group = new FormControl('', [Validators.required]);
 
-  constructor(private dialogRef: MatDialogRef<DialogCreateGroupComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<DialogCreateGroupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { groups: Group[] }
+  ) {}
+
+  ngOnInit(): void {
+    if (this.data?.groups?.length) {
+      this.group.addValidators([uniqNameValidator(this.data.groups)]);
+    }
+  }
+
+  get errorText(): string {
+    const errors = this.group.errors;
+    if (errors) {
+      return errors['required']
+        ? 'Must be filled'
+        : errors['uniqName']
+        ? 'The group already exists'
+        : '';
+    } else {
+      return '';
+    }
+  }
 
   close() {
     this.dialogRef.close();

@@ -11,13 +11,14 @@ import { Injectable } from '@nestjs/common';
 export class OperationsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(params?: OperationsParams) {
+  async findAll(params: OperationsParams, userId: string) {
     const { currencyId, groupId, categoryId, month } = params || {};
 
     return this.prisma.operation.findMany({
       include: { currency: true, category: true, group: true },
       where: {
         AND: {
+          userId,
           currencyId,
           groupId,
           categoryId,
@@ -34,11 +35,12 @@ export class OperationsService {
     });
   }
 
-  create(params: OperationCreateInput) {
+  create(params: OperationCreateInput, userId: string) {
     return this.prisma.operation.create({
       data: {
         ...params,
         dateTime: params.dateTime ? new Date(params.dateTime) : new Date(),
+        userId,
       },
       include: { currency: true, group: true, category: true },
     });

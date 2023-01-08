@@ -15,11 +15,15 @@ import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
 export class BudgetsSummaryService {
   constructor(private prisma: PrismaService) {}
 
-  findMany(query: BudgetSummaryParams): Observable<BudgetSummary[]> {
+  findMany(
+    query: BudgetSummaryParams,
+    userId: string
+  ): Observable<BudgetSummary[]> {
     const { type, currencyId, groupId, categoryId, month } = query;
 
     const where = {
       dateTime: getMonthPeriod(month ? new Date(month) : undefined),
+      userId,
     };
 
     if (currencyId) {
@@ -120,7 +124,7 @@ export class BudgetsSummaryService {
         | ['currencyId', 'groupId']
         | ['currencyId', 'groupId', 'categoryId'];
       _sum: { amount: true };
-      where: { dateTime?: { lte?: Date; gte?: Date } };
+      where: { dateTime?: { lte?: Date; gte?: Date }; userId: string };
       having?: {
         currencyId?: { equals: number };
         groupId?: { equals: number };
@@ -137,8 +141,8 @@ export class BudgetsSummaryService {
 
     const baseQueryWhere =
       params?.having && params.having[key]
-        ? { id: params.having[key].equals }
-        : {};
+        ? { id: params.having[key].equals, userId: params.where.userId }
+        : { userId: params.where.userId };
 
     const baseQuery: Promise<Array<Currency | Group | Category>> =
       type === BudgetSummaryType.CURRENCY

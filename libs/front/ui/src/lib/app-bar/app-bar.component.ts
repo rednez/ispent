@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'ispent-app-bar',
@@ -7,9 +7,10 @@ import {Component, EventEmitter, Output} from '@angular/core';
 })
 export class AppBarComponent {
   @Output() changeLocale = new EventEmitter<string>();
+  @Output() signOut = new EventEmitter();
 
   links = [
-    {name: 'Overview', to: '/overview'},
-    {name: 'Budgets', to: '/budgets'},
+    { name: 'Overview', to: '/overview' },
+    { name: 'Budgets', to: '/budgets' },
   ];
 }

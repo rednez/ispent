@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
 import {
   DateAdapter,
@@ -13,6 +15,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { uk } from 'date-fns/locale';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { GraphqlModule } from './graphql.module';
 import { RoutingModule } from './routing.module';
@@ -53,6 +56,8 @@ const DATE_FORMATS = {
         deps: [HttpClient],
       },
     }),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: uk },

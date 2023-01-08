@@ -30,6 +30,13 @@ query CurrenciesGroupsWithCategories {
   }
 }
 
+query Currencies {
+  currencies {
+    id
+    name
+  }
+}
+
 query Groups {
   groups {
     id

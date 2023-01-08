@@ -1,3 +1,4 @@
+import { CurrentUserId } from '@ispent/api/auth';
 import {
   BudgetsParams,
   CreateBudgetRecordInput,
@@ -17,8 +18,8 @@ export class BudgetsResolver {
   constructor(private budgetsService: BudgetsService) {}
 
   @Query()
-  async budgets(@Args('params') params: BudgetsParams) {
-    return this.budgetsService.findAll(params);
+  async budgets(@Args('params') params: BudgetsParams, @CurrentUserId() uid) {
+    return this.budgetsService.findAll(params, uid);
   }
 
   @ResolveField()
@@ -28,8 +29,9 @@ export class BudgetsResolver {
 
   @Mutation()
   async recreateManyBudgetsRecords(
-    @Args('inputs') inputs: CreateBudgetRecordInput[]
+    @Args('inputs') inputs: CreateBudgetRecordInput[],
+    @CurrentUserId() uid
   ) {
-    return this.budgetsService.recreateMany(inputs);
+    return this.budgetsService.recreateMany(inputs, uid);
   }
 }

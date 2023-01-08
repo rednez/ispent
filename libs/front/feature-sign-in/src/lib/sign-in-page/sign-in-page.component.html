@@ -1,0 +1,18 @@
+<div class="border rounded-md p-8 text-center space-y-6 bg-white shadow-lg">
+  <mat-icon color="primary" style="font-size: 48px; height: 48px; width: 48px"
+    >account_circle
+  </mat-icon>
+
+  <div>
+    <h1 class="mb-2 font-medium">{{ 'Sign-in' | translate }}</h1>
+    <div class="text-gray-500">
+      {{ 'To authorize use the follow methods' | translate }}
+    </div>
+  </div>
+  <button mat-stroked-button color="primary" (click)="signInWithGoogle()">
+    <div class="flex items-center space-x-2">
+      <div>{{ 'Continue with' | translate }}</div>
+      <mat-icon svgIcon="google-logo"></mat-icon>
+    </div>
+  </button>
+</div>

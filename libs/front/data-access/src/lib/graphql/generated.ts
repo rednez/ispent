@@ -311,6 +311,13 @@ export type CurrenciesGroupsWithCategoriesQuery = {
   }>;
 };
 
+export type CurrenciesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CurrenciesQuery = {
+  __typename?: 'Query';
+  currencies: Array<{ __typename?: 'Currency'; id: number; name: string }>;
+};
+
 export type GroupsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GroupsQuery = {
@@ -587,6 +594,28 @@ export class CurrenciesGroupsWithCategoriesGQL extends Apollo.Query<
   CurrenciesGroupsWithCategoriesQueryVariables
 > {
   document = CurrenciesGroupsWithCategoriesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CurrenciesDocument = gql`
+  query Currencies {
+    currencies {
+      id
+      name
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrenciesGQL extends Apollo.Query<
+  CurrenciesQuery,
+  CurrenciesQueryVariables
+> {
+  document = CurrenciesDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

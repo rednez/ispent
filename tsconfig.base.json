@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ispent/api/auth": ["libs/api/auth/src/index.ts"],
       "@ispent/api/budgets": ["libs/api/budgets/src/index.ts"],
       "@ispent/api/budgets-summary": ["libs/api/budgets-summary/src/index.ts"],
       "@ispent/api/categories": ["libs/api/categories/src/index.ts"],
@@ -36,6 +37,9 @@
       ],
       "@ispent/front/feature-overview": [
         "libs/front/feature-overview/src/index.ts"
+      ],
+      "@ispent/front/feature-sign-in": [
+        "libs/front/feature-sign-in/src/index.ts"
       ],
       "@ispent/front/ui": ["libs/front/ui/src/index.ts"],
       "@ispent/shared/data-access": ["libs/shared/data-access/src/index.ts"]

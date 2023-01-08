@@ -1,6 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Category } from '@ispent/front/data-access';
+import { uniqNameValidator } from '../validators';
 
 @Component({
   template: `
@@ -39,7 +48,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   `,
   styles: [],
 })
-export class DialogCreateCurrencyComponent {
+export class DialogCreateCurrencyComponent implements OnInit {
   @Input() loading = false;
   @Output() create = new EventEmitter<string>();
 
@@ -49,7 +58,16 @@ export class DialogCreateCurrencyComponent {
     Validators.maxLength(3),
   ]);
 
-  constructor(private dialogRef: MatDialogRef<DialogCreateCurrencyComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<DialogCreateCurrencyComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { currencies: Category[] }
+  ) {}
+
+  ngOnInit(): void {
+    if (this.data?.currencies?.length) {
+      this.currency.addValidators([uniqNameValidator(this.data.currencies)]);
+    }
+  }
 
   get errorText(): string {
     const errors = this.currency.errors;
@@ -58,6 +76,8 @@ export class DialogCreateCurrencyComponent {
         ? 'Must be filled'
         : errors['minlength'] || errors['maxlength']
         ? 'The length must be 3'
+        : errors['uniqName']
+        ? 'The currency already exists'
         : '';
     } else {
       return '';
