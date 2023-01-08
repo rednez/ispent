@@ -26,6 +26,7 @@ export class OperationsService {
         },
       },
       take: limit,
+      orderBy: { dateTime: 'desc' },
     });
   }
 
