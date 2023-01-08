@@ -1,12 +1,15 @@
-<div class="border rounded-md p-8 text-center space-y-6 bg-white shadow-lg">
+<div
+  class="border rounded-md p-8 text-center space-y-6 bg-white shadow-lg max-w-md"
+>
   <mat-icon color="primary" style="font-size: 48px; height: 48px; width: 48px"
     >account_circle
   </mat-icon>
 
   <div>
+    <div class="text-slate-500">iSpent</div>
     <h1 class="mb-2 font-medium">{{ 'Sign-in' | translate }}</h1>
-    <div class="text-gray-500">
-      {{ 'To authorize use the follow methods' | translate }}
+    <div class="text-gray-600">
+      {{ 'To authorize use the following methods' | translate }}
     </div>
   </div>
   <button mat-stroked-button color="primary" (click)="signInWithGoogle()">
@@ -15,4 +18,11 @@
       <mat-icon svgIcon="google-logo"></mat-icon>
     </div>
   </button>
+
+  <div class="text-sm text-gray-500">
+    {{
+      'The service is provided in terms of "as is". At this moment iSpent is in the alpha stage. So all your operations you will do at your own risk and response.'
+        | translate
+    }}
+  </div>
 </div>
