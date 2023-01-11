@@ -14,7 +14,7 @@ import { FrontUiModule } from '@ispent/front/ui';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { uk } from 'date-fns/locale';
-import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { IConfig, provideNgxMask } from 'ngx-mask';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { GraphqlModule } from './graphql.module';
@@ -47,7 +47,6 @@ const DATE_FORMATS = {
     BrowserAnimationsModule,
     RoutingModule,
     FrontUiModule,
-    NgxMaskModule.forRoot(maskConfig),
     GraphqlModule,
     TranslateModule.forRoot({
       loader: {
@@ -67,6 +66,7 @@ const DATE_FORMATS = {
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    provideNgxMask(maskConfig),
   ],
   bootstrap: [AppComponent],
 })

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FrontCustomMaterialModule } from '@ispent/front/custom-material';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BiValuedIndicatorComponent } from './bivalued-indicator/bivalued-indicator.component';
 import { BudgetChipComponent } from './budget-chip/budget-chip.component';
@@ -27,8 +27,9 @@ import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-c
     CommonModule,
     RouterModule,
     FrontCustomMaterialModule,
-    NgxMaskModule,
     TranslateModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
   declarations: [
     AmountPipe,
@@ -53,7 +54,8 @@ import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-c
     RouterModule,
     FrontCustomMaterialModule,
     AmountPipe,
-    NgxMaskModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     AppBarComponent,
     PageLayoutComponent,
     BudgetSummaryWidgetComponent,
