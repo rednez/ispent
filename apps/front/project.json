@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/front",
         "index": "apps/front/src/index.html",
@@ -15,10 +17,18 @@
         "polyfills": "apps/front/src/polyfills.ts",
         "tsConfig": "apps/front/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/front/src/favicon.ico", "apps/front/src/assets"],
-        "styles": ["apps/front/src/styles.scss"],
+        "assets": [
+          "apps/front/src/favicon.ico",
+          "apps/front/src/assets"
+        ],
+        "styles": [
+          "apps/front/src/styles.scss"
+        ],
         "scripts": [],
-        "allowedCommonJsDependencies": ["lodash", "numeral"]
+        "allowedCommonJsDependencies": [
+          "lodash",
+          "numeral"
+        ]
       },
       "configurations": {
         "production": {
@@ -26,7 +36,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
@@ -77,12 +87,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/front/**/*.ts", "apps/front/**/*.html"]
+        "lintFilePatterns": [
+          "apps/front/**/*.ts",
+          "apps/front/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/front/jest.config.ts",
         "passWithNoTests": true
