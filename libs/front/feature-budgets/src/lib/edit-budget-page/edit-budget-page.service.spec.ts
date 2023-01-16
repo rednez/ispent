@@ -9,6 +9,7 @@ import {
   CreateCategoryService,
   CreateCurrencyService,
   CreateGroupService,
+  CurrenciesGQL,
   CurrenciesGroupsWithCategoriesGQL,
   CurrentMonthService,
   GroupsGQL,
@@ -52,10 +53,10 @@ describe('EditBudgetPageService', () => {
         MockProvider(CreateCurrencyService),
         MockProvider(CreateGroupService),
         MockProvider(CreateCategoryService),
-        MockProvider(CreateCategoryService),
         MockProvider(MatSnackBar),
         MockProvider(ActionsService),
         MockProvider(MatDialog),
+        MockProvider(CurrenciesGQL),
       ],
     });
     service = TestBed.inject(EditBudgetPageService);

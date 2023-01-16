@@ -25,17 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    from(
-      this.auth.onIdTokenChanged(async (token) => {
-        if (token) {
-          sessionStorage.setItem('accessToken', await token.getIdToken());
-        } else {
-          sessionStorage.clear();
-        }
-      })
-    )
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe();
+    this.subscribeToTokenChanged();
   }
 
   ngOnDestroy(): void {
@@ -49,5 +39,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   signOut() {
     this.auth.signOut().then(() => this.router.navigate(['sign-in']));
+  }
+
+  private subscribeToTokenChanged() {
+    from(
+      this.auth.onIdTokenChanged(async (token) => {
+        if (token) {
+          sessionStorage.setItem('accessToken', await token.getIdToken());
+        } else {
+          sessionStorage.clear();
+        }
+      })
+    )
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
   }
 }

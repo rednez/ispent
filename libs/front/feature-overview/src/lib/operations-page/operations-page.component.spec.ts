@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MockBuilder, MockRender } from 'ng-mocks';
 import { EMPTY } from 'rxjs';
 import { FrontFeatureOverviewModule } from '../front-feature-overview.module';
