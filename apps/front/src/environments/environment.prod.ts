@@ -1,11 +1,11 @@
 export const environment = {
   firebase: {
-    projectId: 'ispent-f4f72',
-    appId: '1:242366794744:web:dbbe8590f9e8c583dca40d',
-    storageBucket: 'ispent-f4f72.appspot.com',
-    apiKey: 'AIzaSyActXC7uygpVQgtrJ2yayk9i3PrkZylN7o',
-    authDomain: 'ispent-f4f72.firebaseapp.com',
-    messagingSenderId: '242366794744',
+    projectId: 'ispent-18581',
+    appId: '1:125107033138:web:45d610b18f625bee75582b',
+    storageBucket: 'ispent-18581.appspot.com',
+    apiKey: 'AIzaSyCnv80ZaKXayB--heOXVDuezLOTpmk5BbU',
+    authDomain: 'ispent-18581.firebaseapp.com',
+    messagingSenderId: '125107033138',
   },
   apollo: {
     uri: 'http://localhost:3333/graphql',
