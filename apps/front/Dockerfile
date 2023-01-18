@@ -3,7 +3,6 @@ FROM node:lts AS bilder
 WORKDIR /app
 COPY . .
 
-RUN npm i
 RUN npx nx build front
 
 FROM nginx:alpine

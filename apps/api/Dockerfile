@@ -13,7 +13,6 @@ ENV FIREBASE_PROJECT_ID=${firebase_project_id}
 ENV FIREBASE_PRIVATE_KEY=${firebase_private_key}
 ENV FIREBASE_CLIENT_EMAIL=${firebase_client_email}
 
-RUN npm i
 RUN npm run prisma:generate
 RUN npm run build:api:production
 
