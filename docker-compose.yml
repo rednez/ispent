@@ -28,8 +28,8 @@ services:
     image: postgres:latest
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
+    #    ports:
+    #      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: ${ISPENT_POSTGRES_PASS}
       POSTGRES_DB: 'ispent'
