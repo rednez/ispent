@@ -8,7 +8,7 @@ export const environment = {
     appId: '1:433398024438:web:3da31e825e2679b4d7c4d7',
   },
   apollo: {
-    uri: 'http://localhost:3333/graphql',
+    uri: 'https://api.ispent.online/graphql',
   },
   production: true,
 };
