@@ -1,15 +1,6 @@
 version: '3.9'
 
 services:
-  #  web:
-  #    build:
-  #      context: ./
-  #      dockerfile: ./apps/front/Dockerfile
-  #    ports:
-  #      - '4200:80'
-  #    restart: on-failure
-  #    depends_on:
-  #      - api
   api:
     build:
       context: ./
@@ -17,7 +8,6 @@ services:
     ports:
       - '3333:3333'
     environment:
-      DATABASE_URL: ${ISPENT_POSTGRES_URL_DOCKER}
       FIREBASE_PROJECT_ID: ${ISPENT_FIREBASE_PROJECT_ID}
       FIREBASE_PRIVATE_KEY: ${ISPENT_FIREBASE_PRIVATE_KEY}
       FIREBASE_CLIENT_EMAIL: ${ISPENT_FIREBASE_CLIENT_EMAIL}
@@ -28,8 +18,6 @@ services:
     image: postgres:latest
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    #    ports:
-    #      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: ${ISPENT_POSTGRES_PASS}
       POSTGRES_DB: 'ispent'

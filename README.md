@@ -22,7 +22,8 @@ See [ispent.online](https://ispent.online)
 
 #### Develop the Api
 
-- Run Postgres (port 5432) (`docker compose start db` or in other way)
+- Run Postgres (port 5432) (`docker compose up db` - applying
+  the `docker-compose.override.yml` config)
 - `npm install`
 - `npm run prisma:generate`
 - `npm run start:api`
@@ -36,7 +37,7 @@ See [ispent.online](https://ispent.online)
 
 #### via Docker
 
-- `docker compose up`
+- `docker compose -f docker-compose.yml -f docker-compose.prod.yml up`
 
 #### Manually build and serve the bundles
 
