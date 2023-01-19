@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, TitleStrategy } from '@angular/router';
 import { AuthorizedGuard, UnauthorizedGuard } from '@ispent/front/data-access';
+import { AppTitleStrategy } from './app-title.strategy';
 
 const routes: Routes = [
   {
@@ -10,6 +11,7 @@ const routes: Routes = [
         (m) => m.FrontFeatureSignInModule
       ),
     canActivate: [UnauthorizedGuard],
+    title: 'Sign-in',
   },
   {
     path: 'overview',
@@ -18,6 +20,7 @@ const routes: Routes = [
         (m) => m.FrontFeatureOverviewModule
       ),
     canActivate: [AuthorizedGuard],
+    title: 'Overview',
   },
   {
     path: 'budgets',
@@ -26,6 +29,7 @@ const routes: Routes = [
         (m) => m.FrontFeatureBudgetsModule
       ),
     canActivate: [AuthorizedGuard],
+    title: 'Budgets',
   },
   {
     path: 'operations',
@@ -34,6 +38,7 @@ const routes: Routes = [
         (m) => m.FrontFeatureOperationEditorModule
       ),
     canActivate: [AuthorizedGuard],
+    title: 'Operations',
   },
   {
     path: '**',
@@ -44,5 +49,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  providers: [{ provide: TitleStrategy, useClass: AppTitleStrategy }],
 })
 export class RoutingModule {}

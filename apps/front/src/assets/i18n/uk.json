@@ -39,5 +39,7 @@
   "The length must be 3": "Довжина повинна бути 3",
   "Currency name": "Назва валюти",
   "Group name": "Назва групи",
-  "Category name": "Назва категорії"
+  "Category name": "Назва категорії",
+  "Sign-in": "Вхід",
+  "Operations": "Операції"
 }

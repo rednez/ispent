@@ -6,10 +6,12 @@ const routes: Routes = [
   {
     path: 'new',
     component: EditorPageComponent,
+    title: 'New Operation',
   },
   {
     path: ':id',
     component: EditorPageComponent,
+    title: 'Edit Operation',
   },
 ];
 
