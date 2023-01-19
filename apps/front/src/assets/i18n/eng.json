@@ -39,5 +39,7 @@
   "The length must be 3": "The length must be 3",
   "Currency name": "Currency name",
   "Group name": "Group name",
-  "Category name": "Category name"
+  "Category name": "Category name",
+  "Sign-in": "Sign-in",
+  "Operations": "Operations"
 }

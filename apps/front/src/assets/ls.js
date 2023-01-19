@@ -163,6 +163,14 @@ const ls = {
     uk: 'Назва категорії',
     eng: 'Category name',
   },
+  'Sign-in': {
+    uk: 'Вхід',
+    eng: 'Sign-in',
+  },
+  Operations: {
+    uk: 'Операції',
+    eng: 'Operations',
+  },
 };
 
 module.exports = ls;
