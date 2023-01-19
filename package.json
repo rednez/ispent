@@ -29,7 +29,8 @@
     "pretty:front-graphql": " prettier libs/front/data-access/src/lib/graphql/generated.ts --write",
     "prestart:conver-ls:front": "rimraf apps/front/src/assets/i18n && make-dir ./apps/front/src/assets/i18n",
     "start:conver-ls:front": "node ./apps/front/ls-converter.js",
-    "poststart:conver-ls:front": "prettier ./apps/front/src/assets/i18n/*.json --write ./apps/front/src/assets/i18n/*.json"
+    "poststart:conver-ls:front": "prettier ./apps/front/src/assets/i18n/*.json --write ./apps/front/src/assets/i18n/*.json",
+    "docker:build:base": "docker build --platform=linux/amd64 -t ispent-base . && docker tag ispent-base rednez/ispent-base"
   },
   "prisma": {
     "seed": "ts-node libs/api/db/prisma/seed.ts"
