@@ -204,6 +204,7 @@ export type Operation = {
   id: Scalars['Int'];
   withdrawalAmount?: Maybe<Scalars['Float']>;
   withdrawalCurrencyId?: Maybe<Scalars['Int']>;
+  withdrawalCurrencyName?: Maybe<Scalars['String']>;
 };
 
 export type OperationCreateInput = {
@@ -368,6 +369,7 @@ export type OperationsQuery = {
     dateTime: string;
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
+    withdrawalCurrencyName?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     category: {
       __typename?: 'Category';
@@ -692,6 +694,7 @@ export const OperationsDocument = gql`
       dateTime
       withdrawalAmount
       withdrawalCurrencyId
+      withdrawalCurrencyName
     }
   }
 `;

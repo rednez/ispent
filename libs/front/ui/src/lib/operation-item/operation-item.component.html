@@ -2,8 +2,31 @@
   class="flex items-center justify-between px-2 py-3 cursor-pointer"
   mat-ripple
 >
-  <div>
-    {{ amount | amount | currency : currency }}
+  <div class="space-y-1">
+    <div class="font-medium">
+      {{ amount | amount | currency : currency }}
+    </div>
+    <div
+      *ngIf="withdrawalCurrency"
+      class="flex items-start text-slate-500 text-sm"
+      [matTooltip]="
+        ('Withdrawn' | translate) +
+        ', ' +
+        ('rate' | translate) +
+        ' 1 ' +
+        currency +
+        ' = ' +
+        (exchangeRate | amount : '0000' | currency : withdrawalCurrency)
+      "
+      matTooltipClass="text-sm"
+    >
+      <mat-icon color="primary" style="font-size: 16px"
+        >currency_exchange
+      </mat-icon>
+      <span>{{
+        withdrawalAmount | amount | currency : withdrawalCurrency!
+      }}</span>
+    </div>
   </div>
   <div class="text-right space-y-1">
     <div class="flex space-x-2">

@@ -6,6 +6,7 @@ import {
 import { PrismaService } from '@ispent/api/db';
 import { getMonthPeriod } from '@ispent/api/util';
 import { Injectable } from '@nestjs/common';
+import { prop, isEqual, pipe } from 'lodash/fp';
 
 @Injectable()
 export class OperationsService {
@@ -14,7 +15,7 @@ export class OperationsService {
   async findAll(params: OperationsParams, userId: string) {
     const { currencyId, groupId, categoryId, month, limit } = params || {};
 
-    return this.prisma.operation.findMany({
+    const operations = await this.prisma.operation.findMany({
       include: { currency: true, category: true, group: true },
       where: {
         AND: {
@@ -28,6 +29,21 @@ export class OperationsService {
       take: limit,
       orderBy: { dateTime: 'desc' },
     });
+
+    const currencies = await this.prisma.currency.findMany({
+      where: { userId },
+    });
+
+    return operations.map((operation) =>
+      operation.withdrawalCurrencyId
+        ? {
+            ...operation,
+            withdrawalCurrencyName: currencies.find(
+              pipe(prop('id'), isEqual(operation.withdrawalCurrencyId))
+            ).name,
+          }
+        : operation
+    );
   }
 
   async findOne(id: number) {

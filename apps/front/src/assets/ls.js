@@ -171,6 +171,14 @@ const ls = {
     uk: 'Операції',
     eng: 'Operations',
   },
+  Withdrawn: {
+    uk: 'Списано',
+    eng: 'Withdrawn',
+  },
+  rate: {
+    uk: 'курс',
+    eng: 'rate',
+  },
 };
 
 module.exports = ls;

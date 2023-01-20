@@ -113,6 +113,7 @@ export class Operation {
     dateTime: string;
     withdrawalAmount?: Nullable<number>;
     withdrawalCurrencyId?: Nullable<number>;
+    withdrawalCurrencyName?: Nullable<string>;
 }
 
 export class BudgetRecord {
