@@ -1,16 +1,25 @@
 version: '3.9'
 
 services:
+  #  web:
+  #    build:
+  #      context: ./
+  #      dockerfile: ./apps/front/Dockerfile
+  #    ports:
+  #      - '4200:80'
+  #    restart: on-failure
+  #    depends_on:
+  #      - api
   api:
-    build:
-      context: ./
-      dockerfile: ./apps/api/Dockerfile
+    image: rednez/ispent-api
     ports:
       - '3333:3333'
     environment:
+      DATABASE_URL: ${ISPENT_POSTGRES_URL_DOCKER}
       FIREBASE_PROJECT_ID: ${ISPENT_FIREBASE_PROJECT_ID}
       FIREBASE_PRIVATE_KEY: ${ISPENT_FIREBASE_PRIVATE_KEY}
       FIREBASE_CLIENT_EMAIL: ${ISPENT_FIREBASE_CLIENT_EMAIL}
+    command: [ "npm", "run", "start:migrate:prod" ]
     depends_on:
       - db
     restart: on-failure

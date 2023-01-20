@@ -30,7 +30,8 @@
     "prestart:conver-ls:front": "rimraf apps/front/src/assets/i18n && make-dir ./apps/front/src/assets/i18n",
     "start:conver-ls:front": "node ./apps/front/ls-converter.js",
     "poststart:conver-ls:front": "prettier ./apps/front/src/assets/i18n/*.json --write ./apps/front/src/assets/i18n/*.json",
-    "docker:build:base": "docker build --platform=linux/amd64 -t ispent-base . && docker tag ispent-base rednez/ispent-base"
+    "docker:build:base": "docker build --platform=linux/amd64 -t ispent-base . && docker tag ispent-base rednez/ispent-base",
+    "docker:build:api": "docker build --platform=linux/amd64 -t ispent-api -f apps/api/Dockerfile . && docker tag ispent-api rednez/ispent-api"
   },
   "prisma": {
     "seed": "ts-node libs/api/db/prisma/seed.ts"

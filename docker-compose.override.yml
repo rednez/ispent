@@ -1,12 +1,7 @@
 version: '3.9'
 
 services:
-  api:
-    environment:
-      DATABASE_URL: ${ISPENT_POSTGRES_URL}
   db:
     ports:
       - '5432:5432'
 
-volumes:
-  postgres-data:
