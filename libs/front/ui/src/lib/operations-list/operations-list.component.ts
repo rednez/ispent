@@ -33,6 +33,8 @@ import { Operation } from '@ispent/front/data-access';
           [groupColor]="item.group.color!"
           [categoryName]="item.category.name"
           [categoryColor]="item.category.color!"
+          [withdrawalAmount]="item.withdrawalAmount!"
+          [withdrawalCurrency]="item.withdrawalCurrencyName!"
           [date]="item.dateTime"
           (click)="clickItem.emit(item.id)"
         ></ispent-operation-item>

@@ -61,6 +61,7 @@ type Operation {
   dateTime: String!
   withdrawalAmount: Float
   withdrawalCurrencyId: Int
+  withdrawalCurrencyName: String
 }
 
 input OperationCreateInput {

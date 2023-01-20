@@ -82,6 +82,7 @@ query Operations($params: OperationsParams!) {
     dateTime
     withdrawalAmount
     withdrawalCurrencyId
+    withdrawalCurrencyName
   }
 }
 
