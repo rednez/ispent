@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApolloError } from '@apollo/client';
+import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   ActionsService,
   CreateCategoryService,
@@ -22,7 +23,15 @@ import {
 } from '@ispent/front/ui';
 import { gql, MutationResult } from 'apollo-angular';
 import { omit } from 'lodash';
-import { map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
+import {
+  catchError,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import { SubmitEventData } from '../editor-form/editor-form.component';
 
 @Injectable({
@@ -41,8 +50,8 @@ export class EditorPageService {
     private createCurrencyService: CreateCurrencyService,
     private createGroupService: CreateGroupService,
     private createCategoryService: CreateCategoryService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private requestResultNotification: RequestResultNotificationService
   ) {}
 
   fetchCurrenciesGroupsWithCategories() {
@@ -77,10 +86,11 @@ export class EditorPageService {
       )
       .pipe(
         tap(() =>
-          this.snackBar.open('The operation has been deleted', undefined, {
-            duration: 2000,
-          })
-        )
+          this.requestResultNotification.success(
+            'The operation has been deleted'
+          )
+        ),
+        catchError(this.requestResultNotification.handleError)
       );
   }
 
@@ -99,10 +109,11 @@ export class EditorPageService {
         })
         .pipe(
           tap(() =>
-            this.snackBar.open('The operation has been updated', undefined, {
-              duration: 2000,
-            })
-          )
+            this.requestResultNotification.success(
+              'The operation has been updated'
+            )
+          ),
+          catchError(this.requestResultNotification.handleError)
         );
     } else {
       return this.createOperationGQL
@@ -135,10 +146,11 @@ export class EditorPageService {
         )
         .pipe(
           tap(() =>
-            this.snackBar.open('The operation has been created', undefined, {
-              duration: 2000,
-            })
-          )
+            this.requestResultNotification.success(
+              'The operation has been created'
+            )
+          ),
+          catchError(this.requestResultNotification.handleError)
         );
     }
   }
@@ -175,8 +187,16 @@ export class EditorPageService {
                 dialogRef.close();
               }),
               tap(() =>
-                this.showSnackBar(`The currency ${currency} has been created`)
-              )
+                this.requestResultNotification.success(
+                  `The currency ${currency} has been created`
+                )
+              ),
+              catchError((error: ApolloError) => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+                this.requestResultNotification.fail(error.message);
+                return of(() => error);
+              })
             )
           )
         )
@@ -202,13 +222,21 @@ export class EditorPageService {
               .create$(name)
               .pipe(
                 tap(() =>
-                  this.showSnackBar(`The group ${name}  has been created`)
+                  this.requestResultNotification.success(
+                    `The group ${name}  has been created`
+                  )
                 )
               )
           ),
           tap(() => {
             dialogRef.componentInstance.loading = false;
             dialogRef.close();
+          }),
+          catchError((error: ApolloError) => {
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+            this.requestResultNotification.fail(error.message);
+            return of(() => error);
           })
         )
       )
@@ -236,7 +264,7 @@ export class EditorPageService {
                   .create$(categoryParams)
                   .pipe(
                     tap(() =>
-                      this.showSnackBar(
+                      this.requestResultNotification.success(
                         `The category ${categoryParams.name}  has been created`
                       )
                     )
@@ -245,17 +273,17 @@ export class EditorPageService {
               tap(() => {
                 dialogRef.componentInstance.loading = false;
                 dialogRef.close();
+              }),
+              catchError((error: ApolloError) => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+                this.requestResultNotification.fail(error.message);
+                return of(() => error);
               })
             )
           )
         )
       )
     );
-  }
-
-  private showSnackBar(message: string, duration = 2000) {
-    this.snackBar.open(message, undefined, {
-      duration,
-    });
   }
 }

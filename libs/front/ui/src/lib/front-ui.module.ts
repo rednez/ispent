@@ -21,6 +21,7 @@ import { CurrencyPipe } from './pipes/currency.pipe';
 import { DialogCreateCurrencyComponent } from './dialog-create-currency/dialog-create-currency.component';
 import { DialogCreateGroupComponent } from './dialog-create-group/dialog-create-group.component';
 import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-create-category.component';
+import { RequestResultNotificationComponent } from './request-result-notification/request-result-notification.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-c
     DialogCreateCurrencyComponent,
     DialogCreateGroupComponent,
     DialogCreateCategoryComponent,
+    RequestResultNotificationComponent,
   ],
   exports: [
     RouterModule,

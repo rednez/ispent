@@ -78,7 +78,10 @@ export class BudgetCategoryComponent
     this.form.valueChanges
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((values) =>
-        fn({ ...values, amount: parseFloat(String(values.amount)) | 0 })
+        fn({
+          ...values,
+          amount: values.amount as number | 0,
+        })
       );
   }
 
