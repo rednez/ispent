@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApolloError } from '@apollo/client';
+import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   ActionsService,
   BudgetsGQL,
@@ -53,7 +54,7 @@ export class EditBudgetPageService {
     private createCurrencyService: CreateCurrencyService,
     private createGroupService: CreateGroupService,
     private createCategoryService: CreateCategoryService,
-    private snackBar: MatSnackBar,
+    private requestResultNotification: RequestResultNotificationService,
     private actions: ActionsService,
     private dialog: MatDialog
   ) {}
@@ -124,11 +125,13 @@ export class EditBudgetPageService {
     this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe({
       next: () => {
         this.isDataSaving$.next(false);
-        this.showSnackBar('The data has been saved successfully');
+        this.requestResultNotification.success(
+          'The data has been saved successfully'
+        );
       },
-      error: () => {
+      error: (error: ApolloError) => {
         this.isDataSaving$.next(false);
-        this.showSnackBar(`Fail. The data hasn't been saved`);
+        this.requestResultNotification.handleError(error);
       },
     });
   }
@@ -153,8 +156,16 @@ export class EditBudgetPageService {
                 dialogRef.close();
               }),
               tap(() =>
-                this.showSnackBar(`The currency ${currency} has been created`)
-              )
+                this.requestResultNotification.success(
+                  `The currency ${currency} has been created`
+                )
+              ),
+              catchError((error: ApolloError) => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+                this.requestResultNotification.fail(error.message);
+                return of(() => error);
+              })
             )
           )
         )
@@ -180,13 +191,21 @@ export class EditBudgetPageService {
               .create$(name)
               .pipe(
                 tap(() =>
-                  this.showSnackBar(`The group ${name}  has been created`)
+                  this.requestResultNotification.success(
+                    `The group ${name}  has been created`
+                  )
                 )
               )
           ),
           tap(() => {
             dialogRef.componentInstance.loading = false;
             dialogRef.close();
+          }),
+          catchError((error: ApolloError) => {
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+            this.requestResultNotification.fail(error.message);
+            return of(() => error);
           })
         )
       )
@@ -214,7 +233,7 @@ export class EditBudgetPageService {
                   .create$(categoryParams)
                   .pipe(
                     tap(() =>
-                      this.showSnackBar(
+                      this.requestResultNotification.success(
                         `The category ${categoryParams.name}  has been created`
                       )
                     )
@@ -223,6 +242,12 @@ export class EditBudgetPageService {
               tap(() => {
                 dialogRef.componentInstance.loading = false;
                 dialogRef.close();
+              }),
+              catchError((error: ApolloError) => {
+                dialogRef.componentInstance.loading = false;
+                dialogRef.close();
+                this.requestResultNotification.fail(error.message);
+                return of(() => error);
               })
             )
           )
@@ -269,11 +294,5 @@ export class EditBudgetPageService {
     );
 
     return result;
-  }
-
-  private showSnackBar(message: string, duration = 2000) {
-    this.snackBar.open(message, undefined, {
-      duration,
-    });
   }
 }
