@@ -6,17 +6,20 @@
   [errorText]="'Failed data' | translate"
 ></ispent-loadable-widget>
 
+<button
+  *ngIf="form?.dirty && !isSaving"
+  mat-fab
+  color="primary"
+  style="position: fixed; bottom: 30px; right: 30px"
+  (click)="onSaveForm()"
+  [matTooltip]="'Save' | translate"
+  matTooltipClass="text-sm"
+>
+  <mat-icon>save</mat-icon>
+</button>
+
 <ng-template #contentState>
   <ng-container *ngIf="form">
-    <button
-      mat-flat-button
-      color="primary"
-      [disabled]="form.pristine || isSaving"
-      (click)="onSaveForm()"
-    >
-      {{ 'Save' | translate }}
-    </button>
-
     <ng-container
       *ngIf="currencies.controls.length; else emptyState"
       [formGroup]="form"
