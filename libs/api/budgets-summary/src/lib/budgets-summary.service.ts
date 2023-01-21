@@ -9,6 +9,7 @@ import {
 import { PrismaService } from '@ispent/api/db';
 import { getMonthPeriod } from '@ispent/api/util';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { get } from 'lodash';
 import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable()
@@ -198,19 +199,20 @@ export class BudgetsSummaryService {
     (mainQueryItem: { id: number; name: string; color?: string }) => {
       const { key, type, groupedOperations, groupedBudgetsRecords } = params;
 
-      const planned =
-        groupedBudgetsRecords.find((i) => i[key] === mainQueryItem.id)?._sum
-          .amount | 0;
-      const spent =
-        groupedOperations.find((i) => i[key] === mainQueryItem.id)?._sum
-          .amount | 0;
+      const groupedBudgetRecord = groupedBudgetsRecords.find(
+        (i) => i[key] === mainQueryItem.id
+      );
+
+      const groupedOperation = groupedOperations.find(
+        (i) => i[key] === mainQueryItem.id
+      );
 
       return {
         parentId: mainQueryItem.id,
         type,
         title: mainQueryItem.name,
-        planned,
-        spent,
+        planned: get(groupedBudgetRecord, '_sum.amount', 0),
+        spent: get(groupedOperation, '_sum.amount', 0),
         color: mainQueryItem.color || null,
       };
     };
