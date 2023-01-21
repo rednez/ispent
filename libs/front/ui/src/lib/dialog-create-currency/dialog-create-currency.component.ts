@@ -20,13 +20,15 @@ import { uniqNameValidator } from '../validators';
         </mat-card-title>
       </mat-card-header>
       <mat-card-content class="mb-4">
-        <mat-form-field>
-          <mat-label>{{ 'Currency name' | translate }}</mat-label>
-          <input matInput [formControl]="currency" />
-          <mat-error *ngIf="currency.errors">{{
-            errorText | translate
-          }}</mat-error>
-        </mat-form-field>
+        <form (ngSubmit)="onClickCreate()">
+          <mat-form-field>
+            <mat-label>{{ 'Currency name' | translate }}</mat-label>
+            <input matInput [formControl]="currency" />
+            <mat-error *ngIf="currency.errors">{{
+              errorText | translate
+            }}</mat-error>
+          </mat-form-field>
+        </form>
       </mat-card-content>
       <mat-card-actions
         class="space-x-2"
