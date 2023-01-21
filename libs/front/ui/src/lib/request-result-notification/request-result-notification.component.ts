@@ -9,7 +9,7 @@ interface RequestResultNotificationData {
 @Component({
   selector: 'ispent-request-result-notification',
   template: ` <mat-icon>{{ icon }}</mat-icon>
-    <div class="">{{ data.message }}</div>`,
+    <div *ngIf="data">{{ data.message }}</div>`,
   styles: [
     `
       mat-icon {
