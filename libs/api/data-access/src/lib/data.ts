@@ -53,6 +53,7 @@ export class OperationCreateInput {
     dateTime?: Nullable<string>;
     withdrawalAmount?: Nullable<number>;
     withdrawalCurrencyId?: Nullable<number>;
+    comment?: Nullable<string>;
 }
 
 export class OperationUpdateInput {
@@ -64,6 +65,7 @@ export class OperationUpdateInput {
     dateTime?: Nullable<string>;
     withdrawalAmount?: Nullable<number>;
     withdrawalCurrencyId?: Nullable<number>;
+    comment?: Nullable<string>;
 }
 
 export class BudgetSummaryParams {
@@ -114,6 +116,7 @@ export class Operation {
     withdrawalAmount?: Nullable<number>;
     withdrawalCurrencyId?: Nullable<number>;
     withdrawalCurrencyName?: Nullable<string>;
+    comment?: Nullable<string>;
 }
 
 export class BudgetRecord {

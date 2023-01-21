@@ -49,6 +49,7 @@ model Operation {
   groupId              Int
   withdrawalAmount     Float?
   withdrawalCurrencyId Int?
+  comment              String?  @db.VarChar(128)
 }
 
 model BudgetRecord {
