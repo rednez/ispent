@@ -61,13 +61,21 @@
     </mat-form-field>
   </div>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" style="width: 50%">
     <mat-label>{{ 'Date' | translate }}</mat-label>
     <input matInput readonly formControlName="date" [matDatepicker]="picker" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
     <mat-error *ngIf="hasErrorIn('date')">{{
       'Select date' | translate
+    }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" style="width: 100%">
+    <mat-label>{{ 'Comment' | translate }}</mat-label>
+    <input matInput [maxLength]="maxCommentLength" formControlName="comment" />
+    <mat-error *ngIf="hasErrorIn('comment')">{{
+      'Max Length is 128 chars' | translate
     }}</mat-error>
   </mat-form-field>
 

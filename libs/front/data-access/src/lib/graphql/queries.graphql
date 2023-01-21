@@ -83,6 +83,7 @@ query Operations($params: OperationsParams!) {
     withdrawalAmount
     withdrawalCurrencyId
     withdrawalCurrencyName
+    comment
   }
 }
 
@@ -105,6 +106,7 @@ query Operation($operationId: Int!) {
     dateTime
     withdrawalAmount
     withdrawalCurrencyId
+    comment
   }
 }
 
@@ -186,6 +188,7 @@ mutation UpdateOperation($params: OperationUpdateInput!) {
     dateTime
     withdrawalAmount
     withdrawalCurrencyId
+    comment
   }
 }
 
@@ -208,6 +211,7 @@ mutation CreateOperation($params: OperationCreateInput!) {
     dateTime
     withdrawalAmount
     withdrawalCurrencyId
+    comment
   }
 }
 

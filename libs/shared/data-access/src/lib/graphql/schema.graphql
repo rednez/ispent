@@ -62,6 +62,7 @@ type Operation {
   withdrawalAmount: Float
   withdrawalCurrencyId: Int
   withdrawalCurrencyName: String
+  comment: String
 }
 
 input OperationCreateInput {
@@ -72,6 +73,7 @@ input OperationCreateInput {
   dateTime: String
   withdrawalAmount: Float
   withdrawalCurrencyId: Int
+  comment: String
 }
 
 input OperationUpdateInput {
@@ -83,6 +85,7 @@ input OperationUpdateInput {
   dateTime: String
   withdrawalAmount: Float
   withdrawalCurrencyId: Int
+  comment: String
 }
 
 enum BudgetSummaryType {

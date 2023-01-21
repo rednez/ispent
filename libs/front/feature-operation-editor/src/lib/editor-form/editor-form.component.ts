@@ -29,6 +29,7 @@ export interface SubmitEventData {
   isOtherWithdrawalCurrency: boolean;
   withdrawalAmount?: number;
   withdrawalCurrencyId?: number;
+  comment?: string;
 }
 
 @Component({
@@ -53,6 +54,8 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() createCurrency = new EventEmitter();
   @Output() createGroup = new EventEmitter();
   @Output() createCategory = new EventEmitter<{ parentGroupId: number }>();
+
+  readonly maxCommentLength = 128;
 
   operationForm!: FormGroup;
   rate = 0;
@@ -99,6 +102,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
         dateTime,
         withdrawalAmount,
         withdrawalCurrencyId,
+        comment,
       } = operation.currentValue as Operation;
       this.operationForm?.setValue({
         amount: amount,
@@ -109,6 +113,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
         withdrawalAmount: withdrawalAmount,
         withdrawalCurrencyId: withdrawalCurrencyId,
         isOtherWithdrawalCurrency: !!withdrawalCurrencyId,
+        comment,
       });
     }
 
@@ -168,6 +173,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       isOtherWithdrawalCurrency: false,
       withdrawalAmount: null,
       withdrawalCurrencyId: null,
+      comment: ['', [Validators.maxLength(this.maxCommentLength)]],
     });
   }
 

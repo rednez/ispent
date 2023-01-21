@@ -198,6 +198,7 @@ export type Operation = {
   __typename?: 'Operation';
   amount: Scalars['Float'];
   category: Category;
+  comment?: Maybe<Scalars['String']>;
   currency: Currency;
   dateTime: Scalars['String'];
   group: Group;
@@ -210,6 +211,7 @@ export type Operation = {
 export type OperationCreateInput = {
   amount: Scalars['Float'];
   categoryId: Scalars['Int'];
+  comment?: InputMaybe<Scalars['String']>;
   currencyId: Scalars['Int'];
   dateTime?: InputMaybe<Scalars['String']>;
   groupId: Scalars['Int'];
@@ -220,6 +222,7 @@ export type OperationCreateInput = {
 export type OperationUpdateInput = {
   amount?: InputMaybe<Scalars['Float']>;
   categoryId?: InputMaybe<Scalars['Int']>;
+  comment?: InputMaybe<Scalars['String']>;
   currencyId?: InputMaybe<Scalars['Int']>;
   dateTime?: InputMaybe<Scalars['String']>;
   groupId?: InputMaybe<Scalars['Int']>;
@@ -370,6 +373,7 @@ export type OperationsQuery = {
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
     withdrawalCurrencyName?: string | null;
+    comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     category: {
       __typename?: 'Category';
@@ -399,6 +403,7 @@ export type OperationQuery = {
     dateTime: string;
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
+    comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     group: { __typename?: 'Group'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
@@ -478,6 +483,7 @@ export type UpdateOperationMutation = {
     dateTime: string;
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
+    comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     group: { __typename?: 'Group'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
@@ -497,6 +503,7 @@ export type CreateOperationMutation = {
     dateTime: string;
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
+    comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     group: { __typename?: 'Group'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
@@ -695,6 +702,7 @@ export const OperationsDocument = gql`
       withdrawalAmount
       withdrawalCurrencyId
       withdrawalCurrencyName
+      comment
     }
   }
 `;
@@ -732,6 +740,7 @@ export const OperationDocument = gql`
       dateTime
       withdrawalAmount
       withdrawalCurrencyId
+      comment
     }
   }
 `;
@@ -886,6 +895,7 @@ export const UpdateOperationDocument = gql`
       dateTime
       withdrawalAmount
       withdrawalCurrencyId
+      comment
     }
   }
 `;
@@ -923,6 +933,7 @@ export const CreateOperationDocument = gql`
       dateTime
       withdrawalAmount
       withdrawalCurrencyId
+      comment
     }
   }
 `;

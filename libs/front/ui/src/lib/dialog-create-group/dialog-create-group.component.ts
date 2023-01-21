@@ -19,11 +19,15 @@ import { uniqNameValidator } from '../validators';
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="mb-4">
-      <mat-form-field>
-        <mat-label>{{ 'Group name' | translate }}</mat-label>
-        <input matInput [formControl]="group" />
-        <mat-error *ngIf="group.errors">{{ errorText | translate }}</mat-error>
-      </mat-form-field>
+      <form (ngSubmit)="onClickCreate()">
+        <mat-form-field>
+          <mat-label>{{ 'Group name' | translate }}</mat-label>
+          <input matInput [formControl]="group" />
+          <mat-error *ngIf="group.errors">{{
+            errorText | translate
+          }}</mat-error>
+        </mat-form-field>
+      </form>
     </mat-card-content>
     <mat-card-actions
       class="space-x-2"
