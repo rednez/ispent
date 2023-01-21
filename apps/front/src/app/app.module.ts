@@ -1,4 +1,4 @@
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -14,7 +14,7 @@ import { FrontUiModule } from '@ispent/front/ui';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { uk } from 'date-fns/locale';
-import { IConfig, provideNgxMask } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { GraphqlModule } from './graphql.module';
@@ -23,10 +23,6 @@ import { RoutingModule } from './routing.module';
 function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-
-const maskConfig: Partial<IConfig> = {
-  decimalMarker: '.',
-};
 
 const DATE_FORMATS = {
   parse: {
@@ -66,7 +62,7 @@ const DATE_FORMATS = {
       deps: [MAT_DATE_LOCALE],
     },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-    provideNgxMask(maskConfig),
+    provideNgxMask(),
   ],
   bootstrap: [AppComponent],
 })
