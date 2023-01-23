@@ -43,5 +43,7 @@
   "Sign-in": "Вхід",
   "Operations": "Операції",
   "Withdrawn": "Списано",
-  "rate": "курс"
+  "rate": "курс",
+  "Today": "Сьогодні",
+  "Yesterday": "Вчора"
 }

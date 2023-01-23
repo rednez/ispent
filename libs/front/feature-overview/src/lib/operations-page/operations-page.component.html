@@ -26,6 +26,7 @@
 </button>
 
 <ispent-operations-list
+  [title]="'Operations' | translate"
   [operations]="(operations$ | async)!"
   [isLoading]="(isOperationsLoading$ | async)!"
   [isError]="(isOneBudgetSummaryError$ | async)!"
