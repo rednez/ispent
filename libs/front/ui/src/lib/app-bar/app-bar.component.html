@@ -28,8 +28,11 @@
       (changeLocale)="changeLocale.emit($event)"
     ></ispent-language-switcher>
 
-    <button mat-icon-button color="primary" (click)="signOut.emit()">
-      <mat-icon style="font-size: 22px">logout</mat-icon>
-    </button>
+    <ispent-avatar
+      [name]="userName"
+      [email]="userEmail"
+      [photoUrl]="userPhotoUrl"
+      (logout)="signOut.emit()"
+    ></ispent-avatar>
   </div>
 </nav>

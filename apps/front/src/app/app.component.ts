@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from, Subject, takeUntil } from 'rxjs';
+import { from, map, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'ispent-root',

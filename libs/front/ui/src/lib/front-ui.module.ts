@@ -24,6 +24,7 @@ import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-c
 import { RequestResultNotificationComponent } from './request-result-notification/request-result-notification.component';
 import { OperationsListGroupHeaderComponent } from './operations-list-group-header/operations-list-group-header.component';
 import { ShortDatePipe } from './pipes/short-date.pipe';
+import { AvatarComponent } from './avatar/avatar.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { ShortDatePipe } from './pipes/short-date.pipe';
     RequestResultNotificationComponent,
     OperationsListGroupHeaderComponent,
     ShortDatePipe,
+    AvatarComponent,
   ],
   exports: [
     RouterModule,
