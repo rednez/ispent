@@ -43,5 +43,7 @@
   "Sign-in": "Sign-in",
   "Operations": "Operations",
   "Withdrawn": "Withdrawn",
-  "rate": "rate"
+  "rate": "rate",
+  "Today": "Today",
+  "Yesterday": "Yesterday"
 }

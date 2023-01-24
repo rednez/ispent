@@ -179,6 +179,14 @@ const ls = {
     uk: 'курс',
     eng: 'rate',
   },
+  Today: {
+    uk: 'Сьогодні',
+    eng: 'Today',
+  },
+  Yesterday: {
+    uk: 'Вчора',
+    eng: 'Yesterday',
+  },
 };
 
 module.exports = ls;

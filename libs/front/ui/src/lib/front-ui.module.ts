@@ -22,6 +22,8 @@ import { DialogCreateCurrencyComponent } from './dialog-create-currency/dialog-c
 import { DialogCreateGroupComponent } from './dialog-create-group/dialog-create-group.component';
 import { DialogCreateCategoryComponent } from './dialog-create-category/dialog-create-category.component';
 import { RequestResultNotificationComponent } from './request-result-notification/request-result-notification.component';
+import { OperationsListGroupHeaderComponent } from './operations-list-group-header/operations-list-group-header.component';
+import { ShortDatePipe } from './pipes/short-date.pipe';
 
 @NgModule({
   imports: [
@@ -51,6 +53,8 @@ import { RequestResultNotificationComponent } from './request-result-notificatio
     DialogCreateGroupComponent,
     DialogCreateCategoryComponent,
     RequestResultNotificationComponent,
+    OperationsListGroupHeaderComponent,
+    ShortDatePipe,
   ],
   exports: [
     RouterModule,
