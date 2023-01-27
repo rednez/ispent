@@ -14,5 +14,7 @@
   [currenciesList]="currencies"
   [groupsList]="groups"
   [formData]="budgetsData"
+  [errorMessage]="errorMessage"
   (saveForm)="onSaveForm($event)"
+  (generateBudget)="onGenerateBudget()"
 ></ispent-budget-form>

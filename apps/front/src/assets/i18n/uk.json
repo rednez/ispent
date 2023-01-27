@@ -3,7 +3,12 @@
   "Budgets": "Бюджети",
   "Failed data": "Помилкові дані",
   "Budget month": "Бюджетний місяць",
-  "There are no budgets summaries for this period": "Ще немає бюджетних підсумків за цей період",
+  "There is no budget for this month yet.": "Бюджет на цей місяць ще відсутній.",
+  "You might create it manually by": "Ви можете створити його вручну,",
+  "setting the currency": "встановивши валюту",
+  "or": "або",
+  "generating": "згенерувати",
+  "based on the previous month.": "на основі попереднього місяця.",
   "Select group": "Виберіть групу",
   "Add Category": "Додайте категорію",
   "Add Currency": "Додайте валюту",
@@ -43,5 +48,8 @@
   "Sign-in": "Вхід",
   "Operations": "Операції",
   "Withdrawn": "Списано",
-  "rate": "курс"
+  "rate": "курс",
+  "Today": "Сьогодні",
+  "Yesterday": "Вчора",
+  "ApolloError: Inputs params are empty": "Бюджет на цей місяць не може бути згенеровано через те, що операції або бюджет за попередній місяць не знайдено."
 }

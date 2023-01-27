@@ -41,6 +41,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.auth.signOut().then(() => this.router.navigate(['sign-in']));
   }
 
+  gotoOverview() {
+    this.router.navigate(['overview']);
+  }
+
   private subscribeToTokenChanged() {
     from(
       this.auth.onIdTokenChanged(async (token) => {

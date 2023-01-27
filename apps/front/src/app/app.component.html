@@ -1,8 +1,14 @@
-<ispent-app-bar
-  *ngIf="user$ | async"
-  (changeLocale)="onChangeLocale($event)"
-  (signOut)="signOut()"
-/>
+<ng-container *ngIf="user$ | async as user">
+  <ispent-app-bar
+    (changeLocale)="onChangeLocale($event)"
+    (clickLogo)="gotoOverview()"
+    (signOut)="signOut()"
+    [userName]="user.displayName!"
+    [userEmail]="user.email!"
+    [userPhotoUrl]="user.photoURL!"
+  />
+
+</ng-container>
 <ispent-page-layout>
   <router-outlet/>
 </ispent-page-layout>

@@ -4,6 +4,7 @@ import { ApolloError } from '@apollo/client';
 import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   ActionsService,
+  BudgetsDocument,
   BudgetsGQL,
   BudgetsQuery,
   CreateBudgetRecordInput,
@@ -11,8 +12,10 @@ import {
   CreateCurrencyService,
   CreateGroupService,
   CurrenciesGQL,
-  CurrenciesGroupsWithCategoriesGQL,
+  CurrenciesGroupsBudgetsGQL,
+  CurrenciesGroupsGQL,
   CurrentMonthService,
+  GenerateBudgetsRecordsGQL,
   GroupsGQL,
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
@@ -21,11 +24,11 @@ import {
   DialogCreateCurrencyComponent,
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
+import { format } from 'date-fns';
 import { groupBy, map as _map } from 'lodash';
 import {
   BehaviorSubject,
   catchError,
-  combineLatest,
   map,
   Observable,
   of,
@@ -46,11 +49,13 @@ export class EditBudgetPageService {
 
   constructor(
     private currentMonth: CurrentMonthService,
-    private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
+    private CurrenciesGroupsGQL: CurrenciesGroupsGQL,
+    private currenciesGroupsBudgetsGQL: CurrenciesGroupsBudgetsGQL,
     private currenciesGQL: CurrenciesGQL,
     private groupsGQL: GroupsGQL,
     private budgetsGql: BudgetsGQL,
     private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
+    private generateBudgetsRecordsGQL: GenerateBudgetsRecordsGQL,
     private createCurrencyService: CreateCurrencyService,
     private createGroupService: CreateGroupService,
     private createCategoryService: CreateCategoryService,
@@ -75,32 +80,24 @@ export class EditBudgetPageService {
     return this._isDataError$;
   }
 
-  get data$() {
+  loadInitData() {
     return this.currentMonth.dateISO$.pipe(
       tap(() => {
         this._isDataLoading$.next(true);
         this._isDataError$.next(false);
       }),
       switchMap((date) =>
-        combineLatest([
-          this.currenciesGroupsWithCategoriesGQL.watch().valueChanges.pipe(
+        this.currenciesGroupsBudgetsGQL
+          .watch({ params: { date } })
+          .valueChanges.pipe(
             map((v) => v.data),
-            map(({ currencies, groups }) => ({
-              currencies,
-              groups,
+            map((date) => ({
+              currencies: date.currencies,
+              groups: date.groups,
+              budgetsData: this.deserializeServerData(date),
             }))
-          ),
-          this.budgetsGql
-            .watch({ params: { date } })
-            .valueChanges.pipe(map((v) => this.deserializeServerData(v.data))),
-        ]).pipe(
-          map(([{ currencies, groups }, budgetsData]) => ({
-            currencies,
-            groups,
-            budgetsData,
-          })),
-          tap(() => this._isDataLoading$.next(false))
-        )
+          )
+          .pipe(tap(() => this._isDataLoading$.next(false)))
       ),
       catchError((err) => {
         this._isDataLoading$.next(false);
@@ -108,6 +105,25 @@ export class EditBudgetPageService {
         return throwError(() => of(err));
       })
     );
+  }
+
+  loadBudgets(date: Date) {
+    this._isDataLoading$.next(true);
+    this._isDataError$.next(false);
+
+    return this.budgetsGql
+      .watch({
+        params: { date: format(date, 'yyyy-MM-dd') },
+      })
+      .valueChanges.pipe(
+        map((v) => this.deserializeServerData(v.data)),
+        tap(() => this._isDataLoading$.next(false)),
+        catchError((err) => {
+          this._isDataLoading$.next(false);
+          this._isDataError$.next(true);
+          return throwError(() => of(err));
+        })
+      );
   }
 
   setDate(date: Date) {
@@ -134,6 +150,41 @@ export class EditBudgetPageService {
         this.requestResultNotification.handleError(error);
       },
     });
+  }
+
+  generateBudget() {
+    this._isDataLoading$.next(true);
+    this._isDataError$.next(false);
+
+    return this.currentMonth.dateISO$.pipe(
+      switchMap((date) =>
+        this.generateBudgetsRecordsGQL
+          .mutate(
+            { date },
+            {
+              refetchQueries: [
+                {
+                  query: BudgetsDocument,
+                  variables: { params: { date } },
+                },
+              ],
+            }
+          )
+          .pipe(
+            map((v) =>
+              this.deserializeServerData({
+                budgets: v.data?.generateManyBudgetsRecords as any,
+              })
+            ),
+            tap(() => this._isDataLoading$.next(false)),
+            catchError((err) => {
+              this._isDataLoading$.next(false);
+              this._isDataError$.next(true);
+              throw new Error(err);
+            })
+          )
+      )
+    );
   }
 
   onCreateCurrency$() {

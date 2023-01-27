@@ -10,8 +10,9 @@ import {
   CreateCurrencyService,
   CreateGroupService,
   CurrenciesGQL,
-  CurrenciesGroupsWithCategoriesGQL,
+  CurrenciesGroupsGQL,
   CurrentMonthService,
+  GenerateBudgetsRecordsGQL,
   GroupsGQL,
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
@@ -46,10 +47,11 @@ describe('EditBudgetPageService', () => {
     TestBed.configureTestingModule({
       providers: [
         MockProvider(CurrentMonthService),
-        MockProvider(CurrenciesGroupsWithCategoriesGQL),
+        MockProvider(CurrenciesGroupsGQL),
         MockProvider(GroupsGQL),
         MockProvider(BudgetsGQL),
         MockProvider(RecreateBudgetsRecordsGQL),
+        MockProvider(GenerateBudgetsRecordsGQL),
         MockProvider(CreateCurrencyService),
         MockProvider(CreateGroupService),
         MockProvider(CreateCategoryService),

@@ -8,7 +8,7 @@ import {
   CreateGroupService,
   CreateOperationGQL,
   CurrenciesGQL,
-  CurrenciesGroupsWithCategoriesGQL,
+  CurrenciesGroupsGQL,
   DeleteOperationGQL,
   GroupsGQL,
   OperationGQL,
@@ -25,7 +25,7 @@ describe('EditorPageService', () => {
     TestBed.configureTestingModule({
       providers: [
         MockProvider(ActionsService),
-        MockProvider(CurrenciesGroupsWithCategoriesGQL),
+        MockProvider(CurrenciesGroupsGQL),
         MockProvider(OperationGQL),
         MockProvider(DeleteOperationGQL),
         MockProvider(UpdateOperationGQL),

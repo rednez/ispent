@@ -1,61 +1,101 @@
+fragment CurrencyBase on Currency {
+  id
+  name
+}
+
+fragment CategoryBase on Category {
+  id
+  name
+}
+
+fragment GroupBase on Group {
+  id
+  name
+}
+
+fragment GroupWithCategories on Group {
+  id
+  name
+  categories {
+    ...CategoryBase
+  }
+}
+
+fragment BudgetRecordBase on BudgetRecord {
+  amount
+  currency {
+    ...CurrencyBase
+  }
+  category {
+    ...CategoryBase
+  }
+  group {
+    ...GroupBase
+  }
+  date
+}
+
+fragment OperationBase on Operation {
+  id
+  amount
+  currency {
+    ...CurrencyBase
+  }
+  category {
+    ...CategoryBase
+    color
+  }
+  group {
+    ...GroupBase
+    color
+  }
+  dateTime
+  withdrawalAmount
+  withdrawalCurrencyId
+  comment
+}
+
 query CurrenciesGroupsCategories {
   currencies {
-    id
-    name
+    ...CurrencyBase
   }
   groups {
-    id
-    name
+    ...GroupBase
     color
   }
   categories {
-    id
-    name
+    ...CategoryBase
     color
   }
 }
 
-query CurrenciesGroupsWithCategories {
+query CurrenciesGroups {
   currencies {
-    id
-    name
+    ...CurrencyBase
   }
   groups {
-    id
-    name
-    categories {
-      id
-      name
-    }
+    ...GroupWithCategories
   }
 }
 
 query Currencies {
   currencies {
-    id
-    name
+    ...CurrencyBase
   }
 }
 
 query Groups {
   groups {
-    id
-    name
-    categories {
-      id
-      name
-    }
+    ...GroupWithCategories
   }
 }
 
 query Group($id: Int!) {
   group(id: $id) {
-    id
-    name
+    ...GroupBase
     color
     categories {
-      id
-      name
+      ...CategoryBase
       color
     }
   }
@@ -63,50 +103,14 @@ query Group($id: Int!) {
 
 query Operations($params: OperationsParams!) {
   operations(params: $params) {
-    id
-    amount
-    currency {
-      id
-      name
-    }
-    category {
-      id
-      name
-      color
-    }
-    group {
-      id
-      name
-      color
-    }
-    dateTime
-    withdrawalAmount
-    withdrawalCurrencyId
+    ...OperationBase
     withdrawalCurrencyName
-    comment
   }
 }
 
 query Operation($operationId: Int!) {
   operation(id: $operationId) {
-    id
-    amount
-    currency {
-      id
-      name
-    }
-    group {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    dateTime
-    withdrawalAmount
-    withdrawalCurrencyId
-    comment
+    ...OperationBase
   }
 }
 
@@ -125,41 +129,37 @@ query BudgetsSummaries($params: BudgetSummaryParams!) {
 
 query Budgets($params: BudgetsParams!) {
   budgets(params: $params) {
-    amount
+    ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
-    currency {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    group {
-      id
-      name
-    }
-    date
+  }
+}
+
+query CurrenciesGroupsBudgets($params: BudgetsParams!) {
+  currencies {
+    ...CurrencyBase
+  }
+  groups {
+    ...GroupWithCategories
+  }
+  budgets(params: $params) {
+    ...BudgetRecordBase
+    prevPlannedAmount
+    prevSpentAmount
   }
 }
 
 mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
   recreateManyBudgetsRecords(inputs: $inputs) {
-    amount
-    currency {
-      id
-      name
-    }
-    group {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    date
+    ...BudgetRecordBase
+  }
+}
+
+mutation GenerateBudgetsRecords($date: String!) {
+  generateManyBudgetsRecords(date: $date) {
+    ...BudgetRecordBase
+    prevPlannedAmount
+    prevSpentAmount
   }
 }
 
@@ -171,69 +171,32 @@ mutation DeleteOperation($id: Int!) {
 
 mutation UpdateOperation($params: OperationUpdateInput!) {
   updateOperation(params: $params) {
-    id
-    amount
-    currency {
-      id
-      name
-    }
-    group {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    dateTime
-    withdrawalAmount
-    withdrawalCurrencyId
-    comment
+    ...OperationBase
   }
 }
 
 mutation CreateOperation($params: OperationCreateInput!) {
   createOperation(params: $params) {
-    id
-    amount
-    currency {
-      id
-      name
-    }
-    group {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    dateTime
-    withdrawalAmount
-    withdrawalCurrencyId
-    comment
+    ...OperationBase
   }
 }
 
 mutation CreateCurrency($name: String!) {
   createCurrency(name: $name) {
-    id
-    name
+    ...CurrencyBase
   }
 }
 
 mutation CreateGroup($params: GroupCreateInput!) {
   createGroup(params: $params) {
-    id
-    name
+    ...GroupBase
     color
   }
 }
 
 mutation CreateCategory($params: CategoryCreateInput!) {
   createCategory(params: $params) {
-    id
-    name
+    ...CategoryBase
     color
   }
 }

@@ -159,6 +159,8 @@ export abstract class IQuery {
 export abstract class IMutation {
     abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
 
+    abstract generateManyBudgetsRecords(date: string): BudgetRecord[] | Promise<BudgetRecord[]>;
+
     abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
 
     abstract createCurrency(name: string): Currency | Promise<Currency>;

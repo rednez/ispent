@@ -156,6 +156,7 @@ type Query {
 
 type Mutation {
   recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
+  generateManyBudgetsRecords(date: String!): [BudgetRecord!]!
   createOperation(params: OperationCreateInput!): Operation!
   createCurrency(name: String!): Currency!
   createGroup(params: GroupCreateInput!): Group!
