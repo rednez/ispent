@@ -2,8 +2,7 @@
   *ngIf="!isSuccessLoaded; else contentState"
   [isLoading]="isLoading"
   [isError]="isError"
-  [emptyText]="'Content is empty' | translate"
-  [errorText]="'Failed data' | translate"
+  [errorText]="errorMessage | translate"
 ></ispent-loadable-widget>
 
 <button
@@ -37,15 +36,10 @@
     </ng-container>
 
     <ng-template #emptyState>
-      <div>
-        <ispent-empty-state
-          [msgText]="
-            'There is no currencies. To add a currency click on ' | translate
-          "
-          [actionText]="'Add Currency' | translate"
-          (actionClick)="onAddCurrency()"
-        ></ispent-empty-state>
-      </div>
+      <ispent-budgets-empty-state
+        (setCurrency)="onAddCurrency()"
+        (generateBudget)="generateBudget.emit()"
+      />
     </ng-template>
   </ng-container>
 </ng-template>

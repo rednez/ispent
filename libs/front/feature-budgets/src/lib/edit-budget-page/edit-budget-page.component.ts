@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Currency, Group } from '@ispent/front/data-access';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, switchMap, take, takeUntil, timer } from 'rxjs';
 import { FormData } from '../data';
 import { EditBudgetPageService } from './edit-budget-page.service';
 
@@ -16,6 +16,7 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   currencies: Currency[] = [];
   groups: Group[] = [];
   budgetsData!: FormData;
+  errorMessage = '';
   private onDestroy$ = new Subject();
 
   constructor(private service: EditBudgetPageService) {}
@@ -26,19 +27,7 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
     this.isDataError$ = this.service.isDataError$;
     this.isDataSaving$ = this.service.isDataSaving$;
 
-    this.service
-      .onCreateCurrency$()
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe();
-
-    this.service.onCreateGroup$().pipe(takeUntil(this.onDestroy$)).subscribe();
-
-    this.service
-      .onCreateCategory$()
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe();
-
-    this.loadData();
+    this.loadInitData();
   }
 
   ngOnDestroy(): void {
@@ -48,19 +37,59 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
 
   onChangeDate(date: Date) {
     this.service.setDate(date);
+
+    this.budgetsData = { currencies: [] };
+    timer(1)
+      .pipe(
+        switchMap(() => this.service.loadBudgets(date)),
+        take(1)
+      )
+      .subscribe((budgetsData) => {
+        this.budgetsData = budgetsData;
+      });
   }
 
   onSaveForm(formData: FormData) {
     this.service.saveFormData(formData);
   }
 
-  private loadData() {
-    this.service.data$
-      .pipe(takeUntil(this.onDestroy$))
+  onGenerateBudget() {
+    this.service
+      .generateBudget()
+      .pipe(take(1))
+      .subscribe({
+        next: (budgetsData) => {
+          this.budgetsData = budgetsData;
+        },
+        error: (err) => {
+          this.errorMessage = err.message;
+        },
+      });
+  }
+
+  private loadInitData() {
+    this.service
+      .loadInitData()
+      .pipe(take(1))
       .subscribe(({ currencies, groups, budgetsData }) => {
         this.currencies = currencies;
         this.groups = groups;
         this.budgetsData = budgetsData;
+
+        this.service
+          .onCreateCurrency$()
+          .pipe(takeUntil(this.onDestroy$))
+          .subscribe();
+
+        this.service
+          .onCreateGroup$()
+          .pipe(takeUntil(this.onDestroy$))
+          .subscribe();
+
+        this.service
+          .onCreateCategory$()
+          .pipe(takeUntil(this.onDestroy$))
+          .subscribe();
       });
   }
 }

@@ -10,6 +10,7 @@ import { BudgetGroupHeaderComponent } from './budget-group-header/budget-group-h
 import { BudgetGroupComponent } from './budget-group/budget-group.component';
 import { EditBudgetPageComponent } from './edit-budget-page/edit-budget-page.component';
 import { RoutingModule } from './routing.module';
+import { BudgetsEmptyStateComponent } from './budgets-empty-state/budgets-empty-state.component';
 
 @NgModule({
   imports: [CommonModule, FrontUiModule, RoutingModule],
@@ -22,6 +23,7 @@ import { RoutingModule } from './routing.module';
     BudgetCurrencyComponent,
     BudgetCategoryPreviousDataComponent,
     EditBudgetPageComponent,
+    BudgetsEmptyStateComponent,
   ],
   exports: [BudgetFormComponent],
 })

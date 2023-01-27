@@ -34,4 +34,12 @@ export class BudgetsResolver {
   ) {
     return this.budgetsService.recreateMany(inputs, uid);
   }
+
+  @Mutation()
+  async generateManyBudgetsRecords(
+    @Args('date') date: string,
+    @CurrentUserId() uid
+  ) {
+    return this.budgetsService.generateMany(date, uid);
+  }
 }

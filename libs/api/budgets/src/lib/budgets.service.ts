@@ -3,9 +3,11 @@ import {
   CreateBudgetRecordInput,
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { add, get, isEqual, pipe } from 'lodash/fp';
+import { unionWith } from 'lodash';
 import { getCurrentAndPreviousMonths, getMonthPeriod } from '@ispent/api/util';
+import { subMonths, parseISO, isValid } from 'date-fns';
 
 @Injectable()
 export class BudgetsService {
@@ -54,6 +56,10 @@ export class BudgetsService {
   }
 
   async recreateMany(inputs: CreateBudgetRecordInput[], userId: string) {
+    if (!inputs.length) {
+      throw new BadRequestException('Inputs params are empty');
+    }
+
     const { currentMonth } = getCurrentAndPreviousMonths(inputs[0].dateTime);
 
     await this.prisma.budgetRecord.deleteMany({
@@ -69,6 +75,60 @@ export class BudgetsService {
     });
 
     return this.findAll({ date: currentMonth.toISOString() }, userId);
+  }
+
+  async generateMany(targetDateISO: string, uid: string) {
+    const targetDate = parseISO(targetDateISO);
+    if (!isValid(targetDate)) {
+      throw new BadRequestException('Bad date format');
+    }
+
+    const prevDate = subMonths(targetDate, 1);
+
+    const prevOperations = await this.prisma.operation.groupBy({
+      where: {
+        userId: uid,
+        dateTime: getMonthPeriod(prevDate),
+      },
+      by: ['groupId', 'categoryId', 'currencyId'],
+      _sum: { amount: true },
+    });
+
+    const prevBudgets = await this.findAll(
+      {
+        date: prevDate.toISOString(),
+      },
+      uid
+    );
+
+    const pevBudgetsMapped = prevBudgets.map(
+      ({ amount, currencyId, categoryId, groupId }) => ({
+        amount,
+        currencyId,
+        categoryId,
+        groupId,
+      })
+    );
+
+    const prevOperationsMapped = prevOperations.map(
+      ({ _sum: { amount }, currencyId, groupId, categoryId }) => ({
+        amount,
+        currencyId,
+        groupId,
+        categoryId,
+      })
+    );
+
+    const budgetsInputs: CreateBudgetRecordInput[] = unionWith(
+      prevOperationsMapped,
+      pevBudgetsMapped,
+      (a, b) =>
+        a.currencyId === b.currencyId &&
+        a.groupId === b.groupId &&
+        a.categoryId === b.categoryId
+    ).map((i) => ({ ...i, dateTime: targetDateISO }));
+
+    return this.recreateMany(budgetsInputs, uid);
   }
 
   private computeTotalAmount(

@@ -134,6 +134,7 @@ export type Mutation = {
   deleteCurrency: Currency;
   deleteGroup: Group;
   deleteOperation: Operation;
+  generateManyBudgetsRecords: Array<BudgetRecord>;
   recreateManyBudgetsRecords: Array<BudgetRecord>;
   updateCategory: Category;
   updateCurrency: Currency;
@@ -171,6 +172,10 @@ export type MutationDeleteGroupArgs = {
 
 export type MutationDeleteOperationArgs = {
   id: Scalars['Int'];
+};
+
+export type MutationGenerateManyBudgetsRecordsArgs = {
+  date: Scalars['String'];
 };
 
 export type MutationRecreateManyBudgetsRecordsArgs = {
@@ -276,6 +281,67 @@ export type QueryOperationsArgs = {
   params?: InputMaybe<OperationsParams>;
 };
 
+export type CurrencyBaseFragment = {
+  __typename?: 'Currency';
+  id: number;
+  name: string;
+};
+
+export type CategoryBaseFragment = {
+  __typename?: 'Category';
+  id: number;
+  name: string;
+};
+
+export type GroupBaseFragment = {
+  __typename?: 'Group';
+  id: number;
+  name: string;
+};
+
+export type GroupWithCategoriesFragment = {
+  __typename?: 'Group';
+  id: number;
+  name: string;
+  categories?: Array<{
+    __typename?: 'Category';
+    id: number;
+    name: string;
+  }> | null;
+};
+
+export type BudgetRecordBaseFragment = {
+  __typename?: 'BudgetRecord';
+  amount: number;
+  date: string;
+  currency: { __typename?: 'Currency'; id: number; name: string };
+  category: { __typename?: 'Category'; id: number; name: string };
+  group: { __typename?: 'Group'; id: number; name: string };
+};
+
+export type OperationBaseFragment = {
+  __typename?: 'Operation';
+  id: number;
+  amount: number;
+  dateTime: string;
+  withdrawalAmount?: number | null;
+  withdrawalCurrencyId?: number | null;
+  comment?: string | null;
+  currency: { __typename?: 'Currency'; id: number; name: string };
+  category: {
+    __typename?: 'Category';
+    color?: string | null;
+    id: number;
+    name: string;
+  };
+  group: {
+    __typename?: 'Group';
+    color?: string | null;
+    id: number;
+    name: string;
+  };
+};
+
 export type CurrenciesGroupsCategoriesQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -285,23 +351,21 @@ export type CurrenciesGroupsCategoriesQuery = {
   currencies: Array<{ __typename?: 'Currency'; id: number; name: string }>;
   groups: Array<{
     __typename?: 'Group';
+    color?: string | null;
     id: number;
     name: string;
-    color?: string | null;
   }>;
   categories: Array<{
     __typename?: 'Category';
+    color?: string | null;
     id: number;
     name: string;
-    color?: string | null;
   }>;
 };
 
-export type CurrenciesGroupsWithCategoriesQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export type CurrenciesGroupsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type CurrenciesGroupsWithCategoriesQuery = {
+export type CurrenciesGroupsQuery = {
   __typename?: 'Query';
   currencies: Array<{ __typename?: 'Currency'; id: number; name: string }>;
   groups: Array<{
@@ -347,14 +411,14 @@ export type GroupQuery = {
   __typename?: 'Query';
   group?: {
     __typename?: 'Group';
+    color?: string | null;
     id: number;
     name: string;
-    color?: string | null;
     categories?: Array<{
       __typename?: 'Category';
+      color?: string | null;
       id: number;
       name: string;
-      color?: string | null;
     }> | null;
   } | null;
 };
@@ -367,25 +431,25 @@ export type OperationsQuery = {
   __typename?: 'Query';
   operations: Array<{
     __typename?: 'Operation';
+    withdrawalCurrencyName?: string | null;
     id: number;
     amount: number;
     dateTime: string;
     withdrawalAmount?: number | null;
     withdrawalCurrencyId?: number | null;
-    withdrawalCurrencyName?: string | null;
     comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
     category: {
       __typename?: 'Category';
+      color?: string | null;
       id: number;
       name: string;
-      color?: string | null;
     };
     group: {
       __typename?: 'Group';
+      color?: string | null;
       id: number;
       name: string;
-      color?: string | null;
     };
   }>;
 };
@@ -405,8 +469,18 @@ export type OperationQuery = {
     withdrawalCurrencyId?: number | null;
     comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    group: { __typename?: 'Group'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
+    group: {
+      __typename?: 'Group';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
   } | null;
 };
 
@@ -435,9 +509,38 @@ export type BudgetsQuery = {
   __typename?: 'Query';
   budgets: Array<{
     __typename?: 'BudgetRecord';
-    amount: number;
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    amount: number;
+    date: string;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+  }>;
+};
+
+export type CurrenciesGroupsBudgetsQueryVariables = Exact<{
+  params: BudgetsParams;
+}>;
+
+export type CurrenciesGroupsBudgetsQuery = {
+  __typename?: 'Query';
+  currencies: Array<{ __typename?: 'Currency'; id: number; name: string }>;
+  groups: Array<{
+    __typename?: 'Group';
+    id: number;
+    name: string;
+    categories?: Array<{
+      __typename?: 'Category';
+      id: number;
+      name: string;
+    }> | null;
+  }>;
+  budgets: Array<{
+    __typename?: 'BudgetRecord';
+    prevPlannedAmount: number;
+    prevSpentAmount: number;
+    amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
@@ -456,8 +559,26 @@ export type RecreateBudgetsRecordsMutation = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    group: { __typename?: 'Group'; id: number; name: string };
     category: { __typename?: 'Category'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
+  }>;
+};
+
+export type GenerateBudgetsRecordsMutationVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+export type GenerateBudgetsRecordsMutation = {
+  __typename?: 'Mutation';
+  generateManyBudgetsRecords: Array<{
+    __typename?: 'BudgetRecord';
+    prevPlannedAmount: number;
+    prevSpentAmount: number;
+    amount: number;
+    date: string;
+    currency: { __typename?: 'Currency'; id: number; name: string };
+    category: { __typename?: 'Category'; id: number; name: string };
+    group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
 
@@ -485,8 +606,18 @@ export type UpdateOperationMutation = {
     withdrawalCurrencyId?: number | null;
     comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    group: { __typename?: 'Group'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
+    group: {
+      __typename?: 'Group';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
   };
 };
 
@@ -505,8 +636,18 @@ export type CreateOperationMutation = {
     withdrawalCurrencyId?: number | null;
     comment?: string | null;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    group: { __typename?: 'Group'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
+    group: {
+      __typename?: 'Group';
+      color?: string | null;
+      id: number;
+      name: string;
+    };
   };
 };
 
@@ -527,9 +668,9 @@ export type CreateGroupMutation = {
   __typename?: 'Mutation';
   createGroup: {
     __typename?: 'Group';
+    color?: string | null;
     id: number;
     name: string;
-    color?: string | null;
   };
 };
 
@@ -541,29 +682,99 @@ export type CreateCategoryMutation = {
   __typename?: 'Mutation';
   createCategory: {
     __typename?: 'Category';
+    color?: string | null;
     id: number;
     name: string;
-    color?: string | null;
   };
 };
 
+export const CategoryBaseFragmentDoc = gql`
+  fragment CategoryBase on Category {
+    id
+    name
+  }
+`;
+export const GroupWithCategoriesFragmentDoc = gql`
+  fragment GroupWithCategories on Group {
+    id
+    name
+    categories {
+      ...CategoryBase
+    }
+  }
+  ${CategoryBaseFragmentDoc}
+`;
+export const CurrencyBaseFragmentDoc = gql`
+  fragment CurrencyBase on Currency {
+    id
+    name
+  }
+`;
+export const GroupBaseFragmentDoc = gql`
+  fragment GroupBase on Group {
+    id
+    name
+  }
+`;
+export const BudgetRecordBaseFragmentDoc = gql`
+  fragment BudgetRecordBase on BudgetRecord {
+    amount
+    currency {
+      ...CurrencyBase
+    }
+    category {
+      ...CategoryBase
+    }
+    group {
+      ...GroupBase
+    }
+    date
+  }
+  ${CurrencyBaseFragmentDoc}
+  ${CategoryBaseFragmentDoc}
+  ${GroupBaseFragmentDoc}
+`;
+export const OperationBaseFragmentDoc = gql`
+  fragment OperationBase on Operation {
+    id
+    amount
+    currency {
+      ...CurrencyBase
+    }
+    category {
+      ...CategoryBase
+      color
+    }
+    group {
+      ...GroupBase
+      color
+    }
+    dateTime
+    withdrawalAmount
+    withdrawalCurrencyId
+    comment
+  }
+  ${CurrencyBaseFragmentDoc}
+  ${CategoryBaseFragmentDoc}
+  ${GroupBaseFragmentDoc}
+`;
 export const CurrenciesGroupsCategoriesDocument = gql`
   query CurrenciesGroupsCategories {
     currencies {
-      id
-      name
+      ...CurrencyBase
     }
     groups {
-      id
-      name
+      ...GroupBase
       color
     }
     categories {
-      id
-      name
+      ...CategoryBase
       color
     }
   }
+  ${CurrencyBaseFragmentDoc}
+  ${GroupBaseFragmentDoc}
+  ${CategoryBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -579,31 +790,27 @@ export class CurrenciesGroupsCategoriesGQL extends Apollo.Query<
     super(apollo);
   }
 }
-export const CurrenciesGroupsWithCategoriesDocument = gql`
-  query CurrenciesGroupsWithCategories {
+export const CurrenciesGroupsDocument = gql`
+  query CurrenciesGroups {
     currencies {
-      id
-      name
+      ...CurrencyBase
     }
     groups {
-      id
-      name
-      categories {
-        id
-        name
-      }
+      ...GroupWithCategories
     }
   }
+  ${CurrencyBaseFragmentDoc}
+  ${GroupWithCategoriesFragmentDoc}
 `;
 
 @Injectable({
   providedIn: 'root',
 })
-export class CurrenciesGroupsWithCategoriesGQL extends Apollo.Query<
-  CurrenciesGroupsWithCategoriesQuery,
-  CurrenciesGroupsWithCategoriesQueryVariables
+export class CurrenciesGroupsGQL extends Apollo.Query<
+  CurrenciesGroupsQuery,
+  CurrenciesGroupsQueryVariables
 > {
-  document = CurrenciesGroupsWithCategoriesDocument;
+  document = CurrenciesGroupsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -612,10 +819,10 @@ export class CurrenciesGroupsWithCategoriesGQL extends Apollo.Query<
 export const CurrenciesDocument = gql`
   query Currencies {
     currencies {
-      id
-      name
+      ...CurrencyBase
     }
   }
+  ${CurrencyBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -634,14 +841,10 @@ export class CurrenciesGQL extends Apollo.Query<
 export const GroupsDocument = gql`
   query Groups {
     groups {
-      id
-      name
-      categories {
-        id
-        name
-      }
+      ...GroupWithCategories
     }
   }
+  ${GroupWithCategoriesFragmentDoc}
 `;
 
 @Injectable({
@@ -657,16 +860,16 @@ export class GroupsGQL extends Apollo.Query<GroupsQuery, GroupsQueryVariables> {
 export const GroupDocument = gql`
   query Group($id: Int!) {
     group(id: $id) {
-      id
-      name
+      ...GroupBase
       color
       categories {
-        id
-        name
+        ...CategoryBase
         color
       }
     }
   }
+  ${GroupBaseFragmentDoc}
+  ${CategoryBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -682,29 +885,11 @@ export class GroupGQL extends Apollo.Query<GroupQuery, GroupQueryVariables> {
 export const OperationsDocument = gql`
   query Operations($params: OperationsParams!) {
     operations(params: $params) {
-      id
-      amount
-      currency {
-        id
-        name
-      }
-      category {
-        id
-        name
-        color
-      }
-      group {
-        id
-        name
-        color
-      }
-      dateTime
-      withdrawalAmount
-      withdrawalCurrencyId
+      ...OperationBase
       withdrawalCurrencyName
-      comment
     }
   }
+  ${OperationBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -723,26 +908,10 @@ export class OperationsGQL extends Apollo.Query<
 export const OperationDocument = gql`
   query Operation($operationId: Int!) {
     operation(id: $operationId) {
-      id
-      amount
-      currency {
-        id
-        name
-      }
-      group {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-      dateTime
-      withdrawalAmount
-      withdrawalCurrencyId
-      comment
+      ...OperationBase
     }
   }
+  ${OperationBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -787,24 +956,12 @@ export class BudgetsSummariesGQL extends Apollo.Query<
 export const BudgetsDocument = gql`
   query Budgets($params: BudgetsParams!) {
     budgets(params: $params) {
-      amount
+      ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
-      currency {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-      group {
-        id
-        name
-      }
-      date
     }
   }
+  ${BudgetRecordBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -820,25 +977,45 @@ export class BudgetsGQL extends Apollo.Query<
     super(apollo);
   }
 }
+export const CurrenciesGroupsBudgetsDocument = gql`
+  query CurrenciesGroupsBudgets($params: BudgetsParams!) {
+    currencies {
+      ...CurrencyBase
+    }
+    groups {
+      ...GroupWithCategories
+    }
+    budgets(params: $params) {
+      ...BudgetRecordBase
+      prevPlannedAmount
+      prevSpentAmount
+    }
+  }
+  ${CurrencyBaseFragmentDoc}
+  ${GroupWithCategoriesFragmentDoc}
+  ${BudgetRecordBaseFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrenciesGroupsBudgetsGQL extends Apollo.Query<
+  CurrenciesGroupsBudgetsQuery,
+  CurrenciesGroupsBudgetsQueryVariables
+> {
+  document = CurrenciesGroupsBudgetsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const RecreateBudgetsRecordsDocument = gql`
   mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
     recreateManyBudgetsRecords(inputs: $inputs) {
-      amount
-      currency {
-        id
-        name
-      }
-      group {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-      date
+      ...BudgetRecordBase
     }
   }
+  ${BudgetRecordBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -849,6 +1026,30 @@ export class RecreateBudgetsRecordsGQL extends Apollo.Mutation<
   RecreateBudgetsRecordsMutationVariables
 > {
   document = RecreateBudgetsRecordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GenerateBudgetsRecordsDocument = gql`
+  mutation GenerateBudgetsRecords($date: String!) {
+    generateManyBudgetsRecords(date: $date) {
+      ...BudgetRecordBase
+      prevPlannedAmount
+      prevSpentAmount
+    }
+  }
+  ${BudgetRecordBaseFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GenerateBudgetsRecordsGQL extends Apollo.Mutation<
+  GenerateBudgetsRecordsMutation,
+  GenerateBudgetsRecordsMutationVariables
+> {
+  document = GenerateBudgetsRecordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -878,26 +1079,10 @@ export class DeleteOperationGQL extends Apollo.Mutation<
 export const UpdateOperationDocument = gql`
   mutation UpdateOperation($params: OperationUpdateInput!) {
     updateOperation(params: $params) {
-      id
-      amount
-      currency {
-        id
-        name
-      }
-      group {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-      dateTime
-      withdrawalAmount
-      withdrawalCurrencyId
-      comment
+      ...OperationBase
     }
   }
+  ${OperationBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -916,26 +1101,10 @@ export class UpdateOperationGQL extends Apollo.Mutation<
 export const CreateOperationDocument = gql`
   mutation CreateOperation($params: OperationCreateInput!) {
     createOperation(params: $params) {
-      id
-      amount
-      currency {
-        id
-        name
-      }
-      group {
-        id
-        name
-      }
-      category {
-        id
-        name
-      }
-      dateTime
-      withdrawalAmount
-      withdrawalCurrencyId
-      comment
+      ...OperationBase
     }
   }
+  ${OperationBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -954,10 +1123,10 @@ export class CreateOperationGQL extends Apollo.Mutation<
 export const CreateCurrencyDocument = gql`
   mutation CreateCurrency($name: String!) {
     createCurrency(name: $name) {
-      id
-      name
+      ...CurrencyBase
     }
   }
+  ${CurrencyBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -976,11 +1145,11 @@ export class CreateCurrencyGQL extends Apollo.Mutation<
 export const CreateGroupDocument = gql`
   mutation CreateGroup($params: GroupCreateInput!) {
     createGroup(params: $params) {
-      id
-      name
+      ...GroupBase
       color
     }
   }
+  ${GroupBaseFragmentDoc}
 `;
 
 @Injectable({
@@ -999,11 +1168,11 @@ export class CreateGroupGQL extends Apollo.Mutation<
 export const CreateCategoryDocument = gql`
   mutation CreateCategory($params: CategoryCreateInput!) {
     createCategory(params: $params) {
-      id
-      name
+      ...CategoryBase
       color
     }
   }
+  ${CategoryBaseFragmentDoc}
 `;
 
 @Injectable({

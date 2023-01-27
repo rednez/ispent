@@ -10,8 +10,8 @@ import {
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Currency, Group } from '@ispent/front/data-access';
 import { timer } from 'rxjs';
-import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 import { FormData } from '../data';
+import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
 
 @Component({
   selector: 'ispent-budget-form',
@@ -25,7 +25,9 @@ export class BudgetFormComponent implements OnChanges {
   @Input() isLoading = true;
   @Input() isError = false;
   @Input() isSaving = false;
+  @Input() errorMessage = '';
   @Output() saveForm = new EventEmitter<FormData>();
+  @Output() generateBudget = new EventEmitter();
 
   form!: FormGroup;
 
@@ -50,9 +52,9 @@ export class BudgetFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const { isLoading, currenciesList, formData } = changes;
+    const { currenciesList, formData } = changes;
 
-    if (isLoading && !isLoading.currentValue) {
+    if (formData) {
       this.buildForm(formData?.currentValue);
       this.parentBudgetEntities.reset();
     }

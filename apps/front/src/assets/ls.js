@@ -15,9 +15,29 @@ const ls = {
     uk: 'Бюджетний місяць',
     eng: 'Budget month',
   },
-  'There are no budgets summaries for this period': {
-    uk: 'Ще немає бюджетних підсумків за цей період',
-    eng: 'There are no budgets summaries for this period',
+  'There is no budget for this month yet.': {
+    uk: 'Бюджет на цей місяць ще відсутній.',
+    eng: 'There is no budget for this month yet.',
+  },
+  'You might create it manually by': {
+    uk: 'Ви можете створити його вручну,',
+    eng: 'You might create it manually by',
+  },
+  'setting the currency': {
+    uk: 'встановивши валюту',
+    eng: 'setting the currency',
+  },
+  or: {
+    uk: 'або',
+    eng: 'or',
+  },
+  generating: {
+    uk: 'згенерувати',
+    eng: 'generating',
+  },
+  'based on the previous month.': {
+    uk: 'на основі попереднього місяця.',
+    eng: 'based on the previous month.',
   },
   'Select group': {
     uk: 'Виберіть групу',
@@ -186,6 +206,10 @@ const ls = {
   Yesterday: {
     uk: 'Вчора',
     eng: 'Yesterday',
+  },
+  'ApolloError: Inputs params are empty': {
+    uk: 'Бюджет на цей місяць не може бути згенеровано через те, що операції або бюджет за попередній місяць не знайдено.',
+    eng: `The budget for this month can't be generated in reason of either operations or the budget for the previous month are didn't found.`,
   },
 };
 

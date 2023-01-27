@@ -1,10 +1,10 @@
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Currency, Group, Operation } from '@ispent/front/data-access';
-import { Subject, takeUntil } from 'rxjs';
-import { SubmitEventData } from '../editor-form/editor-form.component';
-import { EditorPageService } from './editor-page.service';
+import {Location} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Currency, Group, Operation} from '@ispent/front/data-access';
+import {Subject, takeUntil} from 'rxjs';
+import {SubmitEventData} from '../editor-form/editor-form.component';
+import {EditorPageService} from './editor-page.service';
 
 @Component({
   templateUrl: './editor-page.component.html',
@@ -20,7 +20,8 @@ export class EditorPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private service: EditorPageService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.paramMap.get('id');
@@ -47,9 +48,9 @@ export class EditorPageComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.service
-      .fetchCurrenciesGroupsWithCategories()
+      .fetchCurrenciesGroups()
       .pipe(takeUntil(this.onDestroy$))
-      .subscribe(({ groups, currencies }) => {
+      .subscribe(({groups, currencies}) => {
         this.groups = groups;
         this.currencies = currencies;
       });

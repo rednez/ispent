@@ -146,10 +146,10 @@ export class BudgetCurrencyComponent
   validate(control: AbstractControl): ValidationErrors | null {
     let result: Record<string, boolean> | null = null;
 
-    if (!control.value.id) {
+    if (!control.value?.id) {
       result = { requiredCurrencyId: true };
     }
-    if (!control.value.groups?.length) {
+    if (!control.value?.groups?.length) {
       result = { ...result, requireAtLeastOneGroup: true };
     }
     if (this.form.invalid) {

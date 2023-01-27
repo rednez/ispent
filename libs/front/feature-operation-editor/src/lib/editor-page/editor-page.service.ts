@@ -9,7 +9,7 @@ import {
   CreateGroupService,
   CreateOperationGQL,
   CurrenciesGQL,
-  CurrenciesGroupsWithCategoriesGQL,
+  CurrenciesGroupsGQL,
   DeleteOperationGQL,
   GroupsGQL,
   Operation,
@@ -40,7 +40,7 @@ import { SubmitEventData } from '../editor-form/editor-form.component';
 export class EditorPageService {
   constructor(
     private actions: ActionsService,
-    private currenciesGroupsWithCategoriesGQL: CurrenciesGroupsWithCategoriesGQL,
+    private CurrenciesGroupsGQL: CurrenciesGroupsGQL,
     private operationGQL: OperationGQL,
     private deleteOperationGQL: DeleteOperationGQL,
     private updateOperationGQL: UpdateOperationGQL,
@@ -54,10 +54,10 @@ export class EditorPageService {
     private requestResultNotification: RequestResultNotificationService
   ) {}
 
-  fetchCurrenciesGroupsWithCategories() {
-    return this.currenciesGroupsWithCategoriesGQL
-      .watch()
-      .valueChanges.pipe(map((queryResult) => queryResult.data));
+  fetchCurrenciesGroups() {
+    return this.CurrenciesGroupsGQL.watch().valueChanges.pipe(
+      map((queryResult) => queryResult.data)
+    );
   }
 
   fetchOperation(id: number): Observable<Operation> {

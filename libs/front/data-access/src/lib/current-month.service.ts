@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { getFirstDay } from '@ispent/api/util';
 import { format, subMonths } from 'date-fns';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
@@ -8,7 +9,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 export class CurrentMonthService {
   private readonly formatISO = 'yyyy-MM-dd';
   private readonly formatShort = 'MM.yyyy';
-  private _date$ = new BehaviorSubject(new Date());
+  private _date$ = new BehaviorSubject(getFirstDay(new Date()));
 
   get date$(): BehaviorSubject<Date> {
     return this._date$;
