@@ -1,7 +1,7 @@
 {
   "name": "ispent",
   "description": "The web app for spending accounting",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "license": "MIT",
   "author": {
     "name": "Vasyl Yefimenko",
@@ -61,7 +61,7 @@
     "@nestjs/platform-express": "^9.2.1",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
-    "@nrwl/angular": "15.6.0",
+    "@nrwl/angular": "15.6.3",
     "@prisma/client": "^4.8.1",
     "apollo-angular": "^4.2.0",
     "apollo-server-express": "^3.11.1",
@@ -96,14 +96,14 @@
     "@graphql-codegen/typescript-operations": "^2.5.12",
     "@nestjs/schematics": "^9.0.4",
     "@nestjs/testing": "^9.2.1",
-    "@nrwl/cli": "15.6.0",
-    "@nrwl/cypress": "15.6.0",
-    "@nrwl/eslint-plugin-nx": "15.6.0",
-    "@nrwl/jest": "15.6.0",
-    "@nrwl/linter": "15.6.0",
-    "@nrwl/nest": "15.6.0",
-    "@nrwl/node": "15.6.0",
-    "@nrwl/workspace": "15.6.0",
+    "@nrwl/cli": "15.6.3",
+    "@nrwl/cypress": "15.6.3",
+    "@nrwl/eslint-plugin-nx": "15.6.3",
+    "@nrwl/jest": "15.6.3",
+    "@nrwl/linter": "15.6.3",
+    "@nrwl/nest": "15.6.3",
+    "@nrwl/node": "15.6.3",
+    "@nrwl/workspace": "15.6.3",
     "@types/jest": "28.1.1",
     "@types/lodash": "^4.14.191",
     "@types/node": "16.11.7",
@@ -121,7 +121,7 @@
     "jest-preset-angular": "12.2.3",
     "make-dir": "^3.1.0",
     "make-dir-cli": "^3.0.0",
-    "nx": "15.6.0",
+    "nx": "15.6.3",
     "postcss": "^8.4.18",
     "prettier": "^2.8.3",
     "prisma": "^4.8.1",
@@ -133,3 +133,4 @@
     "typescript": "~4.9.0"
   }
 }
+
