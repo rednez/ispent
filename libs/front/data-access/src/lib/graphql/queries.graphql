@@ -84,9 +84,28 @@ query Currencies {
   }
 }
 
+query Currency($currencyId: Int!) {
+  currency(id: $currencyId) {
+    ...CurrencyBase
+  }
+}
+
+query Category($categoryId: Int!) {
+  category(id: $categoryId) {
+    ...CategoryBase
+    color
+  }
+}
+
+
 query Groups {
   groups {
-    ...GroupWithCategories
+    ...GroupBase
+    color
+    categories {
+      ...CategoryBase
+      color
+    }
   }
 }
 
@@ -169,9 +188,47 @@ mutation DeleteOperation($id: Int!) {
   }
 }
 
+mutation DeleteCurrency($deleteCurrencyId: Int!) {
+  deleteCurrency(id: $deleteCurrencyId) {
+    id
+  }
+}
+
+mutation DeleteGroup($deleteGroupId: Int!) {
+  deleteGroup(id: $deleteGroupId) {
+    id
+  }
+}
+
+mutation DeleteCategory($deleteCategoryId: Int!) {
+  deleteCategory(id: $deleteCategoryId) {
+    id
+  }
+}
+
 mutation UpdateOperation($params: OperationUpdateInput!) {
   updateOperation(params: $params) {
     ...OperationBase
+  }
+}
+
+mutation UpdateCurrency($updateCurrencyId: Int!, $name: String!) {
+  updateCurrency(id: $updateCurrencyId, name: $name) {
+    ...CurrencyBase
+  }
+}
+
+mutation UpdateGroup($params: GroupUpdateInput!) {
+  updateGroup(params: $params) {
+    ...GroupBase
+    color
+  }
+}
+
+mutation UpdateCategory($params: CategoryUpdateInput!) {
+  updateCategory(params: $params) {
+    ...CategoryBase
+    color
   }
 }
 

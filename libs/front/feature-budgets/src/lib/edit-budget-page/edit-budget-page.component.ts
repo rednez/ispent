@@ -13,8 +13,8 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   isDataLoading$!: Observable<boolean>;
   isDataError$!: Observable<boolean>;
   isDataSaving$!: Observable<boolean>;
-  currencies: Currency[] = [];
-  groups: Group[] = [];
+  currencies$!: Observable<Currency[]>;
+  groups$!: Observable<Group[]>;
   budgetsData!: FormData;
   errorMessage = '';
   private onDestroy$ = new Subject();
@@ -26,7 +26,8 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
     this.isDataLoading$ = this.service.isDataLoading$;
     this.isDataError$ = this.service.isDataError$;
     this.isDataSaving$ = this.service.isDataSaving$;
-
+    this.currencies$ = this.service.currencies$;
+    this.groups$ = this.service.groups$;
     this.loadInitData();
   }
 
@@ -71,25 +72,20 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
     this.service
       .loadInitData()
       .pipe(take(1))
-      .subscribe(({ currencies, groups, budgetsData }) => {
-        this.currencies = currencies;
-        this.groups = groups;
+      .subscribe(({ budgetsData }) => {
         this.budgetsData = budgetsData;
-
-        this.service
-          .onCreateCurrency$()
-          .pipe(takeUntil(this.onDestroy$))
-          .subscribe();
-
-        this.service
-          .onCreateGroup$()
-          .pipe(takeUntil(this.onDestroy$))
-          .subscribe();
-
-        this.service
-          .onCreateCategory$()
-          .pipe(takeUntil(this.onDestroy$))
-          .subscribe();
       });
+
+    this.service
+      .onCreateCurrency$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
+
+    this.service.onCreateGroup$().pipe(takeUntil(this.onDestroy$)).subscribe();
+
+    this.service
+      .onCreateCategory$()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe();
   }
 }

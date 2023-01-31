@@ -1,18 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   ActionsService,
   BudgetsGQL,
   BudgetsQuery,
+  CategoryService,
   CreateBudgetRecordInput,
-  CreateCategoryService,
-  CreateCurrencyService,
-  CreateGroupService,
   CurrenciesGQL,
+  CurrenciesGroupsBudgetsGQL,
   CurrenciesGroupsGQL,
+  CurrencyService,
   CurrentMonthService,
   GenerateBudgetsRecordsGQL,
+  GroupService,
   GroupsGQL,
   RecreateBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
@@ -48,17 +49,18 @@ describe('EditBudgetPageService', () => {
       providers: [
         MockProvider(CurrentMonthService),
         MockProvider(CurrenciesGroupsGQL),
+        MockProvider(CurrenciesGroupsBudgetsGQL),
+        MockProvider(CurrenciesGQL),
         MockProvider(GroupsGQL),
         MockProvider(BudgetsGQL),
         MockProvider(RecreateBudgetsRecordsGQL),
         MockProvider(GenerateBudgetsRecordsGQL),
-        MockProvider(CreateCurrencyService),
-        MockProvider(CreateGroupService),
-        MockProvider(CreateCategoryService),
-        MockProvider(MatSnackBar),
+        MockProvider(CurrencyService),
+        MockProvider(GroupService),
+        MockProvider(CategoryService),
+        MockProvider(RequestResultNotificationService),
         MockProvider(ActionsService),
         MockProvider(MatDialog),
-        MockProvider(CurrenciesGQL),
       ],
     });
     service = TestBed.inject(EditBudgetPageService);

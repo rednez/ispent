@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'ispent-budget-summary-widget',
@@ -10,6 +10,8 @@ export class BudgetSummaryWidgetComponent implements OnInit {
   @Input() planed = 0;
   @Input() spent = 0;
   @Input() isClickable = true;
+  @Input() isEditable = false;
+  @Output() edit = new EventEmitter();
 
   remains = 0;
 

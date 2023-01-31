@@ -141,11 +141,15 @@ export class BudgetSummary {
 export abstract class IQuery {
     abstract currencies(): Currency[] | Promise<Currency[]>;
 
+    abstract currency(id: number): Nullable<Currency> | Promise<Nullable<Currency>>;
+
     abstract groups(): Group[] | Promise<Group[]>;
 
     abstract group(id: number): Nullable<Group> | Promise<Nullable<Group>>;
 
     abstract categories(): Category[] | Promise<Category[]>;
+
+    abstract category(id: number): Nullable<Category> | Promise<Nullable<Category>>;
 
     abstract operations(params?: Nullable<OperationsParams>): Operation[] | Promise<Operation[]>;
 

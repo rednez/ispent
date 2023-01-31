@@ -11,7 +11,7 @@ services:
   #    depends_on:
   #      - api
   api:
-    image: rednez/ispent-api:1.3.0
+    image: rednez/ispent-api:1.4.0
     ports:
       - '3333:3333'
     environment:

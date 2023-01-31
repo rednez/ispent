@@ -10,53 +10,26 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ispent/api/auth": [
-        "libs/api/auth/src/index.ts"
-      ],
-      "@ispent/api/budgets": [
-        "libs/api/budgets/src/index.ts"
-      ],
-      "@ispent/api/budgets-summary": [
-        "libs/api/budgets-summary/src/index.ts"
-      ],
-      "@ispent/api/categories": [
-        "libs/api/categories/src/index.ts"
-      ],
-      "@ispent/api/currencies": [
-        "libs/api/currencies/src/index.ts"
-      ],
-      "@ispent/api/data-access": [
-        "libs/api/data-access/src/index.ts"
-      ],
-      "@ispent/api/db": [
-        "libs/api/db/src/index.ts"
-      ],
-      "@ispent/api/groups": [
-        "libs/api/groups/src/index.ts"
-      ],
-      "@ispent/api/operations": [
-        "libs/api/operations/src/index.ts"
-      ],
-      "@ispent/api/util": [
-        "libs/api/util/src/index.ts"
-      ],
-      "@ispent/front/core": [
-        "libs/front/core/src/index.ts"
-      ],
+      "@ispent/api/auth": ["libs/api/auth/src/index.ts"],
+      "@ispent/api/budgets": ["libs/api/budgets/src/index.ts"],
+      "@ispent/api/budgets-summary": ["libs/api/budgets-summary/src/index.ts"],
+      "@ispent/api/categories": ["libs/api/categories/src/index.ts"],
+      "@ispent/api/currencies": ["libs/api/currencies/src/index.ts"],
+      "@ispent/api/data-access": ["libs/api/data-access/src/index.ts"],
+      "@ispent/api/db": ["libs/api/db/src/index.ts"],
+      "@ispent/api/groups": ["libs/api/groups/src/index.ts"],
+      "@ispent/api/operations": ["libs/api/operations/src/index.ts"],
+      "@ispent/api/util": ["libs/api/util/src/index.ts"],
+      "@ispent/front/core": ["libs/front/core/src/index.ts"],
       "@ispent/front/custom-material": [
         "libs/front/custom-material/src/index.ts"
       ],
-      "@ispent/front/data-access": [
-        "libs/front/data-access/src/index.ts"
-      ],
+      "@ispent/front/data-access": ["libs/front/data-access/src/index.ts"],
       "@ispent/front/feature-budgets": [
         "libs/front/feature-budgets/src/index.ts"
       ],
@@ -69,12 +42,9 @@
       "@ispent/front/feature-sign-in": [
         "libs/front/feature-sign-in/src/index.ts"
       ],
-      "@ispent/front/ui": [
-        "libs/front/ui/src/index.ts"
-      ],
-      "@ispent/shared/data-access": [
-        "libs/shared/data-access/src/index.ts"
-      ]
+      "@ispent/front/ui": ["libs/front/ui/src/index.ts"],
+      "@ispent/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@ispent/shared/utils": ["libs/shared/utils/src/index.ts"]
     }
   },
   "ts-node": {
@@ -82,8 +52,5 @@
       "module": "CommonJS"
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

@@ -73,4 +73,20 @@ export class OperationsPageComponent implements OnInit {
   gotoNewOperation() {
     this.router.navigate(['operations', 'new']);
   }
+
+  onEditBudgetSummaryItem(budgetSummary: BudgetSummary) {
+    switch (budgetSummary.type) {
+      case 'CURRENCY':
+        this.service.editCurrency(budgetSummary.parentId);
+        break;
+      case 'GROUP':
+        this.service.editGroup(budgetSummary.parentId);
+        break;
+      case 'CATEGORY':
+        this.service.editCategory(budgetSummary.parentId);
+        break;
+      default:
+        break;
+    }
+  }
 }

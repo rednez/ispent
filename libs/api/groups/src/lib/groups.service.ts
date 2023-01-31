@@ -1,6 +1,6 @@
 import { GroupCreateInput, GroupUpdateInput } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
-import { randomColorHex } from '@ispent/api/util';
+import { randomColorHex } from '@ispent/shared/utils';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Group as GroupModel } from '@prisma/client';
 

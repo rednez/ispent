@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Category } from '@ispent/front/data-access';
+import { Currency } from '@ispent/front/data-access';
+import { isEqual, pipe, prop } from 'lodash/fp';
 import { uniqNameValidator } from '../validators';
 
 @Component({
@@ -16,11 +17,11 @@ import { uniqNameValidator } from '../validators';
     <mat-card>
       <mat-card-header class="mb-4">
         <mat-card-title>
-          <h1>{{ 'Create currency' | translate }}</h1>
+          <h1>{{ title | translate }}</h1>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content class="mb-4">
-        <form (ngSubmit)="onClickCreate()">
+        <form (ngSubmit)="onSubmit()">
           <mat-form-field>
             <mat-label>{{ 'Currency name' | translate }}</mat-label>
             <input matInput [formControl]="currency" />
@@ -36,8 +37,8 @@ import { uniqNameValidator } from '../validators';
         [class.mb-2]="loading"
       >
         <button mat-button (click)="close()">{{ 'Cancel' | translate }}</button>
-        <button mat-flat-button color="primary" (click)="onClickCreate()">
-          {{ 'Create' | translate }}
+        <button mat-flat-button color="primary" (click)="onSubmit()">
+          {{ submitButtonTitle | translate }}
         </button>
       </mat-card-actions>
       <mat-card-footer>
@@ -53,6 +54,10 @@ import { uniqNameValidator } from '../validators';
 export class DialogCreateCurrencyComponent implements OnInit {
   @Input() loading = false;
   @Output() create = new EventEmitter<string>();
+  @Output() update = new EventEmitter<{ id: number; name: string }>();
+
+  title = 'Create currency';
+  submitButtonTitle = 'Create';
 
   currency = new FormControl('', [
     Validators.required,
@@ -62,13 +67,23 @@ export class DialogCreateCurrencyComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<DialogCreateCurrencyComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { currencies: Category[] }
+    @Inject(MAT_DIALOG_DATA)
+    public data: { currencies: Currency[]; id: number }
   ) {}
 
   ngOnInit(): void {
     if (this.data?.currencies?.length) {
       this.currency.addValidators([uniqNameValidator(this.data.currencies)]);
     }
+    if (this.isEdit) {
+      this.title = 'Edit currency';
+      this.submitButtonTitle = 'Update';
+      this.currency.setValue(this.currencyName);
+    }
+  }
+
+  get isEdit(): boolean {
+    return !!this.data?.id;
   }
 
   get errorText(): string {
@@ -86,13 +101,31 @@ export class DialogCreateCurrencyComponent implements OnInit {
     }
   }
 
+  get currencyName(): string {
+    if (!this.data?.currencies?.length || !this.data?.id) {
+      return '';
+    }
+
+    const currency = this.data.currencies.find(
+      pipe(prop('id'), isEqual(this.data.id))
+    );
+    return currency ? currency.name : '';
+  }
+
   close() {
     this.dialogRef.close();
   }
 
-  onClickCreate() {
+  onSubmit() {
     if (this.currency.valid) {
-      this.create.emit(this.currency.value as string);
+      if (this.isEdit) {
+        this.update.emit({
+          id: this.data.id,
+          name: this.currency.value as string,
+        });
+      } else {
+        this.create.emit(this.currency.value as string);
+      }
     }
   }
 }

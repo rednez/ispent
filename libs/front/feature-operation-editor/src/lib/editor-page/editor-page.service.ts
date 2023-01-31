@@ -4,9 +4,9 @@ import { ApolloError } from '@apollo/client';
 import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   ActionsService,
-  CreateCategoryService,
-  CreateCurrencyService,
-  CreateGroupService,
+  CategoryService,
+  CurrencyService,
+  GroupService,
   CreateOperationGQL,
   CurrenciesGQL,
   CurrenciesGroupsGQL,
@@ -47,9 +47,9 @@ export class EditorPageService {
     private createOperationGQL: CreateOperationGQL,
     private currenciesGQL: CurrenciesGQL,
     private groupsGQL: GroupsGQL,
-    private createCurrencyService: CreateCurrencyService,
-    private createGroupService: CreateGroupService,
-    private createCategoryService: CreateCategoryService,
+    private currencyService: CurrencyService,
+    private groupService: GroupService,
+    private categoryService: CategoryService,
     private dialog: MatDialog,
     private requestResultNotification: RequestResultNotificationService
   ) {}
@@ -181,7 +181,7 @@ export class EditorPageService {
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
           switchMap((currency) =>
-            this.createCurrencyService.create$(currency).pipe(
+            this.currencyService.create$(currency).pipe(
               tap(() => {
                 dialogRef.componentInstance.loading = false;
                 dialogRef.close();
@@ -217,13 +217,13 @@ export class EditorPageService {
       switchMap((dialogRef) =>
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
-          switchMap((name) =>
-            this.createGroupService
-              .create$(name)
+          switchMap((groupParams) =>
+            this.groupService
+              .create$(groupParams)
               .pipe(
                 tap(() =>
                   this.requestResultNotification.success(
-                    `The group ${name}  has been created`
+                    `The group ${groupParams.name}  has been created`
                   )
                 )
               )
@@ -260,7 +260,7 @@ export class EditorPageService {
             dialogRef.componentInstance.create.pipe(
               tap(() => (dialogRef.componentInstance.loading = true)),
               switchMap((categoryParams) =>
-                this.createCategoryService
+                this.categoryService
                   .create$(categoryParams)
                   .pipe(
                     tap(() =>

@@ -7,6 +7,7 @@
   [budget]="(oneBudgetSummary$ | async)!"
   [isLoading]="(isOneBudgetSummaryLoading$ | async)!"
   [isError]="(isOneBudgetSummaryError$ | async)!"
+  (edit)="onEditBudgetSummaryItem($event)"
 >
 </ispent-one-budget-summary-block>
 

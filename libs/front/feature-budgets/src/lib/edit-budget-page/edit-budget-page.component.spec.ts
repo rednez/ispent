@@ -17,6 +17,7 @@ describe('EditBudgetPageComponent', () => {
         onCreateCurrency$: () => EMPTY,
         onCreateGroup$: () => EMPTY,
         onCreateCategory$: () => EMPTY,
+        loadInitData: () => EMPTY,
       },
     })
   );

@@ -1,22 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockBuilder, MockRender } from 'ng-mocks';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
 
 import { BudgetsEmptyStateComponent } from './budgets-empty-state.component';
 
 describe('BudgetsEmptyStateComponent', () => {
-  let component: BudgetsEmptyStateComponent;
-  let fixture: ComponentFixture<BudgetsEmptyStateComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [BudgetsEmptyStateComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(BudgetsEmptyStateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(() =>
+    MockBuilder(BudgetsEmptyStateComponent, FrontFeatureBudgetsModule)
+  );
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = MockRender(BudgetsEmptyStateComponent);
+    expect(fixture.point.componentInstance).toBeTruthy();
   });
 });
