@@ -1,14 +1,13 @@
-import {PrismaService} from '@ispent/api/db';
-import {BadRequestException, Injectable} from '@nestjs/common';
-import {Currency} from '@prisma/client';
+import { PrismaService } from '@ispent/api/db';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Currency } from '@prisma/client';
 
 @Injectable()
 export class CurrenciesService {
-  constructor(private prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
   async findAll(userId: string): Promise<Currency[]> {
-    return this.prisma.currency.findMany({where: {userId}});
+    return this.prisma.currency.findMany({ where: { userId } });
   }
 
   async create(name: string, userId: string) {
@@ -23,14 +22,20 @@ export class CurrenciesService {
       throw new BadRequestException('The currency already exists  ');
     }
 
-    return this.prisma.currency.create({data: {name, userId}});
+    return this.prisma.currency.create({ data: { name, userId } });
   }
 
   update(id: number, name: string) {
-    return this.prisma.currency.update({where: {id}, data: {name}});
+    return this.prisma.currency.update({ where: { id }, data: { name } });
   }
 
   deleteCurrency(id: number) {
-    return this.prisma.currency.delete({where: {id}});
+    return this.prisma.currency.delete({ where: { id } });
+  }
+
+  async findOne(id: number) {
+    return this.prisma.currency.findUnique({
+      where: { id },
+    });
   }
 }

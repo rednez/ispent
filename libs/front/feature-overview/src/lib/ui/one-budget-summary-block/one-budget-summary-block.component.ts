@@ -1,4 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
 import { BudgetSummary } from '@ispent/front/data-access';
 
 @Component({
@@ -19,6 +25,8 @@ import { BudgetSummary } from '@ispent/front/data-access';
         [planed]="budget.planned"
         [spent]="budget.spent"
         [isClickable]="false"
+        [isEditable]="true"
+        (edit)="edit.emit(budget)"
       ></ispent-budget-summary-widget>
     </ng-template>
   `,
@@ -27,6 +35,7 @@ export class OneBudgetSummaryBlockComponent {
   @Input() budget!: BudgetSummary;
   @Input() isLoading = false;
   @Input() isError = false;
+  @Output() edit = new EventEmitter<BudgetSummary>();
 
   get isEmpty(): boolean {
     return !this.budget;

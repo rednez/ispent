@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Data } from '@angular/router';
+import { ApolloError } from '@apollo/client';
+import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   BudgetsSummariesGQL,
   BudgetSummary,
   BudgetSummaryType,
   Category,
+  CategoryService,
+  CurrenciesGQL,
   CurrenciesGroupsCategoriesGQL,
   Currency,
+  CurrencyService,
   CurrentMonthService,
   Group,
+  GroupService,
+  GroupsGQL,
   Operation,
   OperationsGQL,
 } from '@ispent/front/data-access';
+import {
+  DialogCreateCategoryComponent,
+  DialogCreateCurrencyComponent,
+  DialogCreateGroupComponent,
+} from '@ispent/front/ui';
 import { eq, flow, get, mapKeys, mapValues, toString } from 'lodash/fp';
 import {
   BehaviorSubject,
@@ -21,12 +34,12 @@ import {
   Observable,
   of,
   switchMap,
+  take,
   tap,
   throwError,
   withLatestFrom,
 } from 'rxjs';
 import { BreadcrumbsItem } from '../ui/breadcrumbs/breadcrumbs.component';
-import { ApolloError } from '@apollo/client';
 
 type RouteParams = Partial<{
   currency: string;
@@ -49,7 +62,14 @@ export class OperationsPageService {
     private currentMonth: CurrentMonthService,
     private currenciesGroupsCategoriesGql: CurrenciesGroupsCategoriesGQL,
     private budgetsSummariesGql: BudgetsSummariesGQL,
-    private operationsGql: OperationsGQL
+    private operationsGql: OperationsGQL,
+    private currenciesGQL: CurrenciesGQL,
+    private groupsGQL: GroupsGQL,
+    private currencyService: CurrencyService,
+    private groupService: GroupService,
+    private categoryService: CategoryService,
+    private dialog: MatDialog,
+    private requestResultNotification: RequestResultNotificationService
   ) {}
 
   get isOneBudgetSummaryLoading$(): BehaviorSubject<boolean> {
@@ -187,6 +207,145 @@ export class OperationsPageService {
           )
       )
     );
+  }
+
+  editCurrency(id: number) {
+    this.currenciesGQL
+      .watch()
+      .valueChanges.pipe(
+        take(1),
+        map((query) => query.data.currencies),
+        switchMap((currencies) =>
+          of(
+            this.dialog.open(DialogCreateCurrencyComponent, {
+              data: { currencies, id },
+            })
+          )
+        ),
+        switchMap((dialogRef) =>
+          dialogRef.componentInstance.update.pipe(
+            tap(() => (dialogRef.componentInstance.loading = true)),
+            switchMap((updatedCurrency) =>
+              this.currencyService
+                .update$({ id, name: updatedCurrency.name })
+                .pipe(
+                  tap(() => {
+                    dialogRef.componentInstance.loading = false;
+                    dialogRef.close();
+                  }),
+                  tap(() =>
+                    this.requestResultNotification.success(
+                      `The currency has been updated`
+                    )
+                  ),
+                  catchError((error: ApolloError) => {
+                    dialogRef.componentInstance.loading = false;
+                    dialogRef.close();
+                    this.requestResultNotification.fail(error.message);
+                    return of(() => error);
+                  })
+                )
+            )
+          )
+        )
+      )
+      .subscribe();
+  }
+
+  editGroup(id: number) {
+    this.groupsGQL
+      .watch()
+      .valueChanges.pipe(
+        take(1),
+        map((query) => query.data.groups),
+        switchMap((groups) =>
+          of(
+            this.dialog.open(DialogCreateGroupComponent, {
+              data: { groups, id },
+            })
+          )
+        ),
+        switchMap((dialogRef) =>
+          dialogRef.componentInstance.update.pipe(
+            tap(() => (dialogRef.componentInstance.loading = true)),
+            switchMap((updatedGroup) =>
+              this.groupService
+                .update$({
+                  id,
+                  name: updatedGroup.name,
+                  color: updatedGroup.color,
+                })
+                .pipe(
+                  tap(() => {
+                    dialogRef.componentInstance.loading = false;
+                    dialogRef.close();
+                  }),
+                  tap(() =>
+                    this.requestResultNotification.success(
+                      `The group has been updated`
+                    )
+                  ),
+                  catchError((error: ApolloError) => {
+                    dialogRef.componentInstance.loading = false;
+                    dialogRef.close();
+                    this.requestResultNotification.fail(error.message);
+                    return of(() => error);
+                  })
+                )
+            )
+          )
+        )
+      )
+      .subscribe();
+  }
+
+  editCategory(categoryId: number) {
+    this.groupsGQL
+      .watch()
+      .valueChanges.pipe(
+        take(1),
+        map((query) => ({
+          groups: query.data.groups,
+          id: categoryId,
+          parentGroupId: this.categoryService.findParentGroupId(
+            categoryId,
+            query.data.groups
+          ),
+        })),
+        switchMap((dialogData) =>
+          of(
+            this.dialog.open(DialogCreateCategoryComponent, {
+              data: dialogData,
+            })
+          ).pipe(
+            switchMap((dialogRef) =>
+              dialogRef.componentInstance.update.pipe(
+                tap(() => (dialogRef.componentInstance.loading = true)),
+                switchMap((categoryParams) =>
+                  this.categoryService.update$(categoryParams).pipe(
+                    tap(() => {
+                      dialogRef.componentInstance.loading = false;
+                      dialogRef.close();
+                    }),
+                    tap(() =>
+                      this.requestResultNotification.success(
+                        `The category has been updated`
+                      )
+                    ),
+                    catchError((error: ApolloError) => {
+                      dialogRef.componentInstance.loading = false;
+                      dialogRef.close();
+                      this.requestResultNotification.fail(error.message);
+                      return of(() => error);
+                    })
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      .subscribe();
   }
 
   private getItemName(

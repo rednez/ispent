@@ -4,6 +4,16 @@
   class="border rounded-lg p-4 bg-white"
   [class.clickable]="isClickable"
 >
+  <button
+    *ngIf="isEditable"
+    mat-icon-button
+    color="primary"
+    class="edit-button"
+    (click)="edit.emit()"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+
   <div class="text-center">{{ title }}</div>
 
   <ispent-bivalued-indicator

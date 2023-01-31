@@ -12,6 +12,11 @@ export class CurrenciesResolver {
     return this.currenciesService.findAll(uid);
   }
 
+  @Query()
+  async currency(@Args('id') id: number) {
+    return this.currenciesService.findOne(id);
+  }
+
   @Mutation()
   async createCurrency(
     @Args('name') name: string,

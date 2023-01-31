@@ -8,9 +8,9 @@ import {
   BudgetsGQL,
   BudgetsQuery,
   CreateBudgetRecordInput,
-  CreateCategoryService,
-  CreateCurrencyService,
-  CreateGroupService,
+  CategoryService,
+  CurrencyService,
+  GroupService,
   CurrenciesGQL,
   CurrenciesGroupsBudgetsGQL,
   CurrenciesGroupsGQL,
@@ -56,9 +56,9 @@ export class EditBudgetPageService {
     private budgetsGql: BudgetsGQL,
     private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
     private generateBudgetsRecordsGQL: GenerateBudgetsRecordsGQL,
-    private createCurrencyService: CreateCurrencyService,
-    private createGroupService: CreateGroupService,
-    private createCategoryService: CreateCategoryService,
+    private currencyService: CurrencyService,
+    private groupService: GroupService,
+    private categoryService: CategoryService,
     private requestResultNotification: RequestResultNotificationService,
     private actions: ActionsService,
     private dialog: MatDialog
@@ -201,7 +201,7 @@ export class EditBudgetPageService {
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
           switchMap((currency) =>
-            this.createCurrencyService.create$(currency).pipe(
+            this.currencyService.create$(currency).pipe(
               tap(() => {
                 dialogRef.componentInstance.loading = false;
                 dialogRef.close();
@@ -238,7 +238,7 @@ export class EditBudgetPageService {
         dialogRef.componentInstance.create.pipe(
           tap(() => (dialogRef.componentInstance.loading = true)),
           switchMap((name) =>
-            this.createGroupService
+            this.groupService
               .create$(name)
               .pipe(
                 tap(() =>
@@ -280,7 +280,7 @@ export class EditBudgetPageService {
             dialogRef.componentInstance.create.pipe(
               tap(() => (dialogRef.componentInstance.loading = true)),
               switchMap((categoryParams) =>
-                this.createCategoryService
+                this.categoryService
                   .create$(categoryParams)
                   .pipe(
                     tap(() =>

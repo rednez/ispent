@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header class="mb-4">
     <mat-card-title>
-      <h1>{{ 'Create category' | translate }}</h1>
+      <h1>{{ title | translate }}</h1>
     </mat-card-title>
   </mat-card-header>
 
@@ -18,14 +18,22 @@
       }}</span>
     </div>
 
-    <form (ngSubmit)="onClickCreate()">
-      <mat-form-field class="w-full">
-        <mat-label>{{ 'Category name' | translate }}</mat-label>
-        <input matInput [formControl]="category" />
-        <mat-error *ngIf="category.errors">
-          {{ errorText | translate }}
-        </mat-error>
-      </mat-form-field>
+    <form (ngSubmit)="onSubmit()">
+      <div class="flex items-start space-x-3">
+        <mat-form-field>
+          <mat-label>{{ 'Category name' | translate }}</mat-label>
+          <input matInput [formControl]="category" />
+          <mat-error *ngIf="category.errors">
+            {{ errorText | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <input
+          class="color-picker-input"
+          [(colorPicker)]="color"
+          [style.background]="color"
+        />
+      </div>
     </form>
   </mat-card-content>
 
@@ -35,8 +43,8 @@
     [class.mb-2]="loading"
   >
     <button mat-button (click)="close()">{{ 'Cancel' | translate }}</button>
-    <button mat-flat-button color="primary" (click)="onClickCreate()">
-      {{ 'Create' | translate }}
+    <button mat-flat-button color="primary" (click)="onSubmit()">
+      {{ submitButtonTitle | translate }}
     </button>
   </mat-card-actions>
 

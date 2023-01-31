@@ -3,7 +3,7 @@ import {
   CategoryUpdateInput,
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
-import { randomColorHex } from '@ispent/api/util';
+import { randomColorHex } from '@ispent/shared/utils';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Category as CategoryModel } from '@prisma/client';
 
@@ -36,7 +36,7 @@ export class CategoriesService {
     });
   }
 
-  update(params: CategoryUpdateInput) {
+  async update(params: CategoryUpdateInput) {
     const { id, ...data } = params;
     return this.prisma.category.update({
       where: { id },
@@ -44,7 +44,13 @@ export class CategoriesService {
     });
   }
 
-  deleteCategory(id: number) {
+  async deleteCategory(id: number) {
     return this.prisma.category.delete({ where: { id } });
+  }
+
+  async findOne(id: number) {
+    return this.prisma.category.findUnique({
+      where: { id },
+    });
   }
 }

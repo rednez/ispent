@@ -1,7 +1,21 @@
 :host {
   @apply block w-full;
+  position: relative;
 }
 
 .row {
   @apply flex justify-between;
+}
+
+.edit-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 0;
+  height: 38px;
+  width: 38px;
+
+  .mat-icon {
+    @apply text-xl;
+  }
 }

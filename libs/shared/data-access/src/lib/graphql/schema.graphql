@@ -145,9 +145,11 @@ type BudgetSummary {
 
 type Query {
   currencies: [Currency!]!
+  currency(id: Int!): Currency
   groups: [Group!]!
   group(id: Int!): Group
   categories: [Category!]!
+  category(id: Int!): Category
   operations(params: OperationsParams): [Operation!]!
   operation(id: Int!): Operation
   budgetsSummary(params: BudgetSummaryParams!): [BudgetSummary!]!

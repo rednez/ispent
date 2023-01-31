@@ -1,8 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
+import { RequestResultNotificationService } from '@ispent/front/core';
 import {
   BudgetsSummariesGQL,
+  CategoryService,
+  CurrenciesGQL,
   CurrenciesGroupsCategoriesGQL,
+  CurrencyService,
   CurrentMonthService,
+  GroupService,
+  GroupsGQL,
   OperationsGQL,
 } from '@ispent/front/data-access';
 import { MockProvider } from 'ng-mocks';
@@ -64,6 +71,13 @@ describe('OperationsPageService', () => {
         }),
         MockProvider(BudgetsSummariesGQL),
         MockProvider(OperationsGQL),
+        MockProvider(CurrenciesGQL),
+        MockProvider(GroupsGQL),
+        MockProvider(CurrencyService),
+        MockProvider(GroupService),
+        MockProvider(CategoryService),
+        MockProvider(MatDialog),
+        MockProvider(RequestResultNotificationService),
       ],
     });
     service = TestBed.inject(OperationsPageService);

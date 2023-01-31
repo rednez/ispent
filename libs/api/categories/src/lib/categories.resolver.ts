@@ -16,6 +16,11 @@ export class CategoriesResolver {
     return this.categoriesService.findAll(uid);
   }
 
+  @Query()
+  async category(@Args('id') id: number) {
+    return this.categoriesService.findOne(id);
+  }
+
   @Mutation()
   async createCategory(
     @Args('params') params: CategoryCreateInput,
