@@ -18,6 +18,8 @@ import {
   GenerateBudgetsRecordsGQL,
   GroupsGQL,
   RecreateBudgetsRecordsGQL,
+  Currency,
+  Group,
 } from '@ispent/front/data-access';
 import {
   DialogCreateCategoryComponent,
@@ -80,6 +82,18 @@ export class EditBudgetPageService {
     return this._isDataError$;
   }
 
+  get currencies$(): Observable<Currency[]> {
+    return this.currenciesGQL
+      .watch()
+      .valueChanges.pipe(map((query) => query.data.currencies));
+  }
+
+  get groups$(): Observable<Group[]> {
+    return this.groupsGQL
+      .watch()
+      .valueChanges.pipe(map((query) => query.data.groups));
+  }
+
   loadInitData() {
     return this.currentMonth.dateISO$.pipe(
       tap(() => {
@@ -92,8 +106,6 @@ export class EditBudgetPageService {
           .valueChanges.pipe(
             map((v) => v.data),
             map((date) => ({
-              currencies: date.currencies,
-              groups: date.groups,
               budgetsData: this.deserializeServerData(date),
             }))
           )
