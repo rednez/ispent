@@ -1,4 +1,10 @@
-import { format, lastDayOfMonth, parseISO, subMonths } from 'date-fns';
+import {
+  format,
+  lastDayOfMonth,
+  parseISO,
+  setHours,
+  subMonths,
+} from 'date-fns';
 
 export function getFirstDay(date: Date): Date {
   return parseISO(format(date, 'yyyy-MM-01'));
@@ -6,7 +12,7 @@ export function getFirstDay(date: Date): Date {
 
 export function getMonthPeriod(date?: Date): { lte?: Date; gte?: Date } {
   return {
-    lte: date ? lastDayOfMonth(date) : undefined,
+    lte: date ? setHours(lastDayOfMonth(date), 24) : undefined,
     gte: date ? getFirstDay(date) : undefined,
   };
 }

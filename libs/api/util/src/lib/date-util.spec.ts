@@ -14,13 +14,12 @@ describe('date-util', () => {
 
     it('should return start and end Dates', () => {
       const { lte, gte } = getMonthPeriod(new Date('2022-12-01'));
-      expect(isSameDay(lte, result.lte)).toBeTruthy();
+      expect(isSameDay(lte, new Date('2022-12-31T24:00'))).toBeTruthy();
       expect(isSameDay(gte, result.gte)).toBeTruthy();
     });
 
     it('should always return first day in dates', () => {
-      const { lte, gte } = getMonthPeriod(new Date('2022-12-07'));
-      expect(isSameDay(lte, result.lte)).toBeTruthy();
+      const { gte } = getMonthPeriod(new Date('2022-12-07'));
       expect(isSameDay(gte, result.gte)).toBeTruthy();
     });
   });
