@@ -89,7 +89,13 @@ export class DialogCreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data?.groups?.length) {
-      this.group.addValidators([uniqNameValidator(this.data.groups)]);
+      this.group.addValidators([
+        uniqNameValidator(
+          this.isEdit
+            ? this.data.groups.filter((i) => i.id !== this.data.id)
+            : this.data.groups
+        ),
+      ]);
     }
     if (this.isEdit) {
       this.title = 'Edit group';

@@ -85,7 +85,11 @@ export class DialogCreateCategoryComponent implements OnInit {
         this.parentGroupName = parentGroup.name;
         if (parentGroup.categories?.length) {
           this.category.addValidators([
-            uniqNameValidator(parentGroup.categories),
+            uniqNameValidator(
+              this.isEdit
+                ? parentGroup.categories.filter((i) => i.id !== this.data.id)
+                : parentGroup.categories
+            ),
           ]);
           if (this.isEdit) {
             this.title = 'Edit category';
