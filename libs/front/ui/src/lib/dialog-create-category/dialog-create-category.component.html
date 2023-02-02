@@ -18,23 +18,35 @@
       }}</span>
     </div>
 
-    <form (ngSubmit)="onSubmit()">
-      <div class="flex items-start space-x-3">
-        <mat-form-field>
-          <mat-label>{{ 'Category name' | translate }}</mat-label>
-          <input matInput [formControl]="category" />
-          <mat-error *ngIf="category.errors">
-            {{ errorText | translate }}
-          </mat-error>
-        </mat-form-field>
+    <div class="flex space-x-2">
+      <button
+        mat-icon-button
+        class="mt-1"
+        [color]="favorite ? 'accent' : null"
+        [style]="{ opacity: favorite ? 1 : 0.5 }"
+        (click)="toggleFavorite()"
+      >
+        <mat-icon>favorite</mat-icon>
+      </button>
 
-        <input
-          class="color-picker-input"
-          [(colorPicker)]="color"
-          [style.background]="color"
-        />
-      </div>
-    </form>
+      <form (ngSubmit)="onSubmit()">
+        <div class="flex items-start space-x-3">
+          <mat-form-field>
+            <mat-label>{{ 'Category name' | translate }}</mat-label>
+            <input matInput [formControl]="category" />
+            <mat-error *ngIf="category.errors">
+              {{ errorText | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <input
+            class="color-picker-input"
+            [(colorPicker)]="color"
+            [style.background]="color"
+          />
+        </div>
+      </form>
+    </div>
   </mat-card-content>
 
   <mat-card-actions

@@ -363,6 +363,7 @@ export class EditBudgetPageService {
             plannedPrevious: i.prevPlannedAmount,
             spentPrevious: i.prevSpentAmount,
             spentCurrent: i.currentSpentAmount,
+            favorite: i.category.favorite,
           })),
         })),
       })),

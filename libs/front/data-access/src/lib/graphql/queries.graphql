@@ -6,6 +6,7 @@ fragment CurrencyBase on Currency {
 fragment CategoryBase on Category {
   id
   name
+  favorite
 }
 
 fragment GroupBase on Group {

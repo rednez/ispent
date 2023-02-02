@@ -19,6 +19,7 @@ export interface FormBudgetCategory {
   plannedPrevious: number;
   spentPrevious: number;
   spentCurrent: number;
+  favorite: boolean;
 }
 
 export interface FormData {

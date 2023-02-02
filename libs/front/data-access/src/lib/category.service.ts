@@ -16,7 +16,12 @@ export class CategoryService {
     private updateCategoryGQL: UpdateCategoryGQL
   ) {}
 
-  create$(params: { groupId: number; name: string; color: string }) {
+  create$(params: {
+    groupId: number;
+    name: string;
+    color: string;
+    favorite: boolean;
+  }) {
     return this.createCategoryGQL.mutate(
       { params },
       {
@@ -47,7 +52,12 @@ export class CategoryService {
     );
   }
 
-  update$(params: { id: number; name: string; color: string }) {
+  update$(params: {
+    id: number;
+    name: string;
+    color: string;
+    favorite: boolean;
+  }) {
     return this.updateCategoryGQL.mutate(
       { params },
       {

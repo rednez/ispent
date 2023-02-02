@@ -76,18 +76,21 @@ export type BudgetsParams = {
 export type Category = {
   __typename?: 'Category';
   color?: Maybe<Scalars['String']>;
+  favorite: Scalars['Boolean'];
   id: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CategoryCreateInput = {
   color?: InputMaybe<Scalars['String']>;
+  favorite: Scalars['Boolean'];
   groupId: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CategoryUpdateInput = {
   color?: InputMaybe<Scalars['String']>;
+  favorite?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['Int'];
   name?: InputMaybe<Scalars['String']>;
 };
@@ -312,6 +315,7 @@ export type CategoryBaseFragment = {
   __typename?: 'Category';
   id: number;
   name: string;
+  favorite: boolean;
 };
 
 export type GroupBaseFragment = {
@@ -328,6 +332,7 @@ export type GroupWithCategoriesFragment = {
     __typename?: 'Category';
     id: number;
     name: string;
+    favorite: boolean;
   }> | null;
 };
 
@@ -336,7 +341,12 @@ export type BudgetRecordBaseFragment = {
   amount: number;
   date: string;
   currency: { __typename?: 'Currency'; id: number; name: string };
-  category: { __typename?: 'Category'; id: number; name: string };
+  category: {
+    __typename?: 'Category';
+    id: number;
+    name: string;
+    favorite: boolean;
+  };
   group: { __typename?: 'Group'; id: number; name: string };
 };
 
@@ -354,6 +364,7 @@ export type OperationBaseFragment = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
   group: {
     __typename?: 'Group';
@@ -381,6 +392,7 @@ export type CurrenciesGroupsCategoriesQuery = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   }>;
 };
 
@@ -397,6 +409,7 @@ export type CurrenciesGroupsQuery = {
       __typename?: 'Category';
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
 };
@@ -428,6 +441,7 @@ export type CategoryQuery = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   } | null;
 };
 
@@ -445,6 +459,7 @@ export type GroupsQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
 };
@@ -465,6 +480,7 @@ export type GroupQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   } | null;
 };
@@ -490,6 +506,7 @@ export type OperationsQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -520,6 +537,7 @@ export type OperationQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -561,7 +579,12 @@ export type BudgetsQuery = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -581,6 +604,7 @@ export type CurrenciesGroupsBudgetsQuery = {
       __typename?: 'Category';
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
   budgets: Array<{
@@ -591,7 +615,12 @@ export type CurrenciesGroupsBudgetsQuery = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -607,7 +636,12 @@ export type RecreateBudgetsRecordsMutation = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -626,7 +660,12 @@ export type GenerateBudgetsRecordsMutation = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -699,6 +738,7 @@ export type UpdateOperationMutation = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -744,6 +784,7 @@ export type UpdateCategoryMutation = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
 };
 
@@ -767,6 +808,7 @@ export type CreateOperationMutation = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -811,6 +853,7 @@ export type CreateCategoryMutation = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
 };
 
@@ -818,6 +861,7 @@ export const CategoryBaseFragmentDoc = gql`
   fragment CategoryBase on Category {
     id
     name
+    favorite
   }
 `;
 export const GroupWithCategoriesFragmentDoc = gql`

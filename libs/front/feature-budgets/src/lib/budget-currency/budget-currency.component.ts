@@ -169,7 +169,7 @@ export class BudgetCurrencyComponent
   }
 
   getCategoriesList(groupId: number): Category[] {
-    const group = this.groupsList.find(pipe(get('id'), isEqual(groupId)));
+    const group = this.groupsList?.find(pipe(get('id'), isEqual(groupId)));
     return (group && group.categories) || [];
   }
 

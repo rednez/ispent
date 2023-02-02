@@ -55,6 +55,7 @@ export class BudgetCategoryComponent
     plannedPrevious: FormControl<number>;
     spentPrevious: FormControl<number>;
     spentCurrent: FormControl<number>;
+    favorite: FormControl<boolean>;
   }>;
 
   private onTouched: VoidFunction | undefined;
@@ -136,6 +137,7 @@ export class BudgetCategoryComponent
       plannedPrevious: [0],
       spentPrevious: [0],
       spentCurrent: [0],
+      favorite: [false],
     });
 
     this.form

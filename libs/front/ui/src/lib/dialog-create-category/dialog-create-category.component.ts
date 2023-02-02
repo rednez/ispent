@@ -13,10 +13,10 @@ import { randomColorHex } from '@ispent/shared/utils';
 import { isEqual, pipe, prop } from 'lodash/fp';
 import { uniqNameValidator } from '../validators';
 
-interface CreateCategoryEvent {
-  groupId: number;
+interface BaseCategoryData {
   name: string;
   color: string;
+  favorite: boolean;
 }
 
 @Component({
@@ -35,16 +35,13 @@ interface CreateCategoryEvent {
 })
 export class DialogCreateCategoryComponent implements OnInit {
   @Input() loading = false;
-  @Output() create = new EventEmitter<CreateCategoryEvent>();
-  @Output() update = new EventEmitter<{
-    id: number;
-    name: string;
-    color: string;
-  }>();
+  @Output() create = new EventEmitter<BaseCategoryData & { groupId: number }>();
+  @Output() update = new EventEmitter<BaseCategoryData & { id: number }>();
 
   category = new FormControl(null as null | string, [Validators.required]);
   parentGroupName?: string;
   color = randomColorHex();
+  favorite = false;
   title = 'Create category';
   submitButtonTitle = 'Create';
 
@@ -100,6 +97,7 @@ export class DialogCreateCategoryComponent implements OnInit {
             if (editableCategory) {
               this.category.setValue(editableCategory.name);
               this.color = editableCategory.color as string;
+              this.favorite = editableCategory.favorite;
             }
           }
         }
@@ -112,20 +110,22 @@ export class DialogCreateCategoryComponent implements OnInit {
   }
 
   onSubmit() {
+    const baseParams = {
+      name: this.category.value as string,
+      color: this.color,
+      favorite: this.favorite,
+    };
+
     if (this.category.valid && this.data.parentGroupId) {
       if (this.isEdit) {
-        this.update.emit({
-          id: this.data.id,
-          name: this.category.value as string,
-          color: this.color,
-        });
+        this.update.emit({ id: this.data.id, ...baseParams });
       } else {
-        this.create.emit({
-          name: this.category.value as string,
-          groupId: this.data.parentGroupId,
-          color: this.color,
-        });
+        this.create.emit({ groupId: this.data.parentGroupId, ...baseParams });
       }
     }
+  }
+
+  toggleFavorite() {
+    this.favorite = !this.favorite;
   }
 }

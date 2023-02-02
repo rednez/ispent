@@ -31,6 +31,10 @@
     [spentPrevious]="form.value.spentPrevious!"
     [spentCurrent]="form.value.spentCurrent!"
   ></ispent-budget-category-previous-data>
+
+  <mat-icon *ngIf="form.value.favorite" color="accent" class="favorite">
+    favorite
+  </mat-icon>
 </div>
 
 <div class="flex">

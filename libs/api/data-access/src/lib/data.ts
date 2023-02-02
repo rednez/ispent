@@ -28,12 +28,14 @@ export class GroupUpdateInput {
 export class CategoryCreateInput {
     name: string;
     groupId: number;
+    favorite: boolean;
     color?: Nullable<string>;
 }
 
 export class CategoryUpdateInput {
     id: number;
     name?: Nullable<string>;
+    favorite?: Nullable<boolean>;
     color?: Nullable<string>;
 }
 
@@ -103,6 +105,7 @@ export class Group {
 export class Category {
     id: number;
     name: string;
+    favorite: boolean;
     color?: Nullable<string>;
 }
 

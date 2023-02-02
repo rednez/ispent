@@ -24,18 +24,21 @@ input GroupUpdateInput {
 type Category {
   id: Int!
   name: String!
+  favorite: Boolean!
   color: String
 }
 
 input CategoryCreateInput {
   name: String!
   groupId: Int!
+  favorite: Boolean!
   color: String
 }
 
 input CategoryUpdateInput {
   id: Int!
   name: String
+  favorite: Boolean
   color: String
 }
 

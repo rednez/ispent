@@ -171,6 +171,7 @@ export class BudgetGroupComponent
       plannedPrevious: 0,
       spentPrevious: 0,
       spentCurrent: 0,
+      favorite: false,
     });
     this.categories.push(categoryControl);
 
