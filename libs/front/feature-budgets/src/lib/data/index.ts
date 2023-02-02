@@ -16,8 +16,9 @@ export interface FormBudgetGroup {
 export interface FormBudgetCategory {
   id: number;
   amount: number;
-  planned: number;
-  spent: number;
+  plannedPrevious: number;
+  spentPrevious: number;
+  spentCurrent: number;
 }
 
 export interface FormData {

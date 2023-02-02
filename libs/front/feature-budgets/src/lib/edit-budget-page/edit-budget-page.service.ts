@@ -360,8 +360,9 @@ export class EditBudgetPageService {
           categories: gValue.map((i) => ({
             id: i.category.id,
             amount: i.amount,
-            planned: i.prevPlannedAmount,
-            spent: i.prevSpentAmount,
+            plannedPrevious: i.prevPlannedAmount,
+            spentPrevious: i.prevSpentAmount,
+            spentCurrent: i.currentSpentAmount,
           })),
         })),
       })),

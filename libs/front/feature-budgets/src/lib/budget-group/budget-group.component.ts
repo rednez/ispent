@@ -168,8 +168,9 @@ export class BudgetGroupComponent
     const categoryControl = this.fb.nonNullable.control({
       id: null,
       amount: 0,
-      planned: 0,
-      spent: 0,
+      plannedPrevious: 0,
+      spentPrevious: 0,
+      spentCurrent: 0,
     });
     this.categories.push(categoryControl);
 
@@ -235,8 +236,8 @@ export class BudgetGroupComponent
       .subscribe((budgetSummary) =>
         control.setValue({
           ...control.value,
-          planned: budgetSummary?.planned | 0,
-          spent: budgetSummary?.spent | 0,
+          plannedPrevious: budgetSummary?.planned | 0,
+          spentPrevious: budgetSummary?.spent | 0,
         })
       );
   }

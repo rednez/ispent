@@ -151,6 +151,7 @@ query Budgets($params: BudgetsParams!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
   }
 }
 
@@ -165,6 +166,7 @@ query CurrenciesGroupsBudgets($params: BudgetsParams!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
   }
 }
 
@@ -179,6 +181,7 @@ mutation GenerateBudgetsRecords($date: String!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
   }
 }
 

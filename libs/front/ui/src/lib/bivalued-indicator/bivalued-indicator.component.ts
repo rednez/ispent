@@ -9,7 +9,7 @@ export class BiValuedIndicatorComponent implements OnInit {
   @Input() primaryAmount = 0;
   @Input() secondaryAmount = 0;
   @Input() primaryColor = '#4dd22f';
-  @Input() secondaryColor = '#f61212';
+  @Input() secondaryColor = '#f59e0b';
 
   primaryLineWidth = 0;
   secondaryLineWidth = 0;

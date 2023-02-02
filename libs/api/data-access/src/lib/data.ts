@@ -123,6 +123,7 @@ export class BudgetRecord {
     amount: number;
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     currency: Currency;
     category: Category;
     group: Group;

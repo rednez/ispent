@@ -52,8 +52,9 @@ export class BudgetCategoryComponent
   form!: FormGroup<{
     id: FormControl<number>;
     amount: FormControl<number>;
-    planned: FormControl<number>;
-    spent: FormControl<number>;
+    plannedPrevious: FormControl<number>;
+    spentPrevious: FormControl<number>;
+    spentCurrent: FormControl<number>;
   }>;
 
   private onTouched: VoidFunction | undefined;
@@ -132,8 +133,9 @@ export class BudgetCategoryComponent
     this.form = this.fb.nonNullable.group({
       id: [0, [Validators.required]],
       amount: [0, [Validators.required]],
-      planned: [0],
-      spent: [0],
+      plannedPrevious: [0],
+      spentPrevious: [0],
+      spentCurrent: [0],
     });
 
     this.form

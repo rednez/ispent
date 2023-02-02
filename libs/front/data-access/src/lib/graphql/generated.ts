@@ -28,6 +28,7 @@ export type BudgetRecord = {
   amount: Scalars['Float'];
   category: Category;
   currency: Currency;
+  currentSpentAmount: Scalars['Float'];
   date: Scalars['String'];
   group: Group;
   prevPlannedAmount: Scalars['Float'];
@@ -556,6 +557,7 @@ export type BudgetsQuery = {
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
@@ -585,6 +587,7 @@ export type CurrenciesGroupsBudgetsQuery = {
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
@@ -619,6 +622,7 @@ export type GenerateBudgetsRecordsMutation = {
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
@@ -1132,6 +1136,7 @@ export const BudgetsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${BudgetRecordBaseFragmentDoc}
@@ -1162,6 +1167,7 @@ export const CurrenciesGroupsBudgetsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${CurrencyBaseFragmentDoc}
@@ -1210,6 +1216,7 @@ export const GenerateBudgetsRecordsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${BudgetRecordBaseFragmentDoc}

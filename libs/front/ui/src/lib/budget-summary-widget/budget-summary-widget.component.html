@@ -19,19 +19,19 @@
   <ispent-bivalued-indicator
     [primaryAmount]="planed"
     [secondaryAmount]="spent"
-  ></ispent-bivalued-indicator>
+  />
 
   <div class="text-sm">
     <div class="row">
-      <div>Заплановано:</div>
+      <div>{{ 'Planned' | translate }}:</div>
       <div class="text-green-500">{{ planed | amount }}</div>
     </div>
     <div class="row">
-      <div>Витрачено:</div>
-      <div class="text-red-500">{{ spent | amount }}</div>
+      <div>{{ 'Spent' | translate }}:</div>
+      <div class="text-amber-500">{{ spent | amount }}</div>
     </div>
     <div class="row">
-      <div>Залишилось:</div>
+      <div>{{ 'Remains' | translate }}:</div>
       <div>{{ remains | amount }}</div>
     </div>
   </div>

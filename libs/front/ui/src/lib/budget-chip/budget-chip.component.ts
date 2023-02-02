@@ -8,11 +8,27 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
       mat-ripple
       [matRippleDisabled]="!isClickable"
       [ngClass]="setContainerClass()"
+      [matTooltip]="
+        ('Planned' | translate) +
+        ': ' +
+        (plan | amount) +
+        ', ' +
+        ('Spent' | translate) +
+        ': ' +
+        (spent | amount) +
+        ', ' +
+        ('Remains' | translate) +
+        ': ' +
+        (plan - spent | amount)
+      "
+      matTooltipClass="text-sm"
     >
       <span class="font-medium" [ngStyle]="setTitleColor()">{{ title }}</span>
       <span class="text-green-500">{{ planAmount | amount }}</span>
-      <span class="text-red-500">{{ spentAmount | amount }}</span>
-      <span>{{ remainsAmount | amount }}</span>
+      <span class="text-amber-500">{{ spentAmount | amount }}</span>
+      <span [ngClass]="setRemainsAmountClasses()">{{
+        remainsAmount | amount
+      }}</span>
     </div>
   `,
   styles: [
@@ -57,6 +73,12 @@ export class BudgetChipComponent implements OnInit {
   setContainerClass() {
     return {
       clickable: this.isClickable,
+    };
+  }
+
+  setRemainsAmountClasses() {
+    return {
+      'text-red-500': this.remainsAmount <= 0,
     };
   }
 }

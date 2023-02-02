@@ -29,13 +29,33 @@ const formData = {
         {
           id: 1,
           categories: [
-            { id: 1, amount: 12000, planned: 0, spent: 0 },
-            { id: 2, amount: 23000, planned: 0, spent: 0 },
+            {
+              id: 1,
+              amount: 12000,
+              plannedPrevious: 0,
+              spentPrevious: 0,
+              spentCurrent: 0,
+            },
+            {
+              id: 2,
+              amount: 23000,
+              plannedPrevious: 0,
+              spentPrevious: 0,
+              spentCurrent: 0,
+            },
           ],
         },
         {
           id: 2,
-          categories: [{ id: 3, amount: 1800, planned: 0, spent: 0 }],
+          categories: [
+            {
+              id: 3,
+              amount: 1800,
+              plannedPrevious: 0,
+              spentPrevious: 0,
+              spentCurrent: 0,
+            },
+          ],
         },
       ],
     },
@@ -79,6 +99,7 @@ describe('EditBudgetPageService', () => {
           amount: 12000,
           prevPlannedAmount: 0,
           prevSpentAmount: 0,
+          currentSpentAmount: 0,
           currency: {
             id: 1,
             name: 'UAH',
@@ -97,6 +118,7 @@ describe('EditBudgetPageService', () => {
           amount: 23000,
           prevPlannedAmount: 0,
           prevSpentAmount: 0,
+          currentSpentAmount: 0,
           currency: {
             id: 1,
             name: 'UAH',
@@ -115,6 +137,7 @@ describe('EditBudgetPageService', () => {
           amount: 1800,
           prevPlannedAmount: 0,
           prevSpentAmount: 0,
+          currentSpentAmount: 0,
           currency: {
             id: 1,
             name: 'UAH',

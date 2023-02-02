@@ -33,9 +33,16 @@ export class BudgetsService {
       },
     });
 
-    const operations = await this.prisma.operation.findMany({
+    const operationsPrev = await this.prisma.operation.findMany({
       where: {
         dateTime: getMonthPeriod(previousMonth),
+        userId,
+      },
+    });
+
+    const operationsCurrent = await this.prisma.operation.findMany({
+      where: {
+        dateTime: getMonthPeriod(currentMonth),
         userId,
       },
     });
@@ -48,7 +55,12 @@ export class BudgetsService {
         budget.categoryId
       ),
       prevSpentAmount: this.computeTotalAmount(
-        operations,
+        operationsPrev,
+        budget.currencyId,
+        budget.categoryId
+      ),
+      currentSpentAmount: this.computeTotalAmount(
+        operationsCurrent,
         budget.currencyId,
         budget.categoryId
       ),
