@@ -25,7 +25,11 @@
     >
       <ng-container formArrayName="currencies">
         <div class="w-full flex justify-end">
-          <button mat-stroked-button color="warn" (click)="deleteBudget.emit()">
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="deleteBudget.emit()"
+          >
             <mat-icon>delete</mat-icon>
             <div>{{ 'Delete' | translate }}</div>
           </button>

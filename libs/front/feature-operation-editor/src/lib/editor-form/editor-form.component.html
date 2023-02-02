@@ -10,7 +10,7 @@
         </mat-option>
         <mat-option (click)="onCreateGroup()">
           <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-indigo-800">{{ 'Create group' | translate }}</div>
+          <div class="text-blue-500">{{ 'Create group' | translate }}</div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('groupId')">{{
@@ -26,7 +26,7 @@
         </mat-option>
         <mat-option (click)="onCreateCategory()">
           <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-indigo-800">{{ 'Create category' | translate }}</div>
+          <div class="text-blue-500">{{ 'Create category' | translate }}</div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('categoryId')">{{
@@ -52,7 +52,7 @@
         </mat-option>
         <mat-option (click)="onCreateCurrency()">
           <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-indigo-800">{{ 'Create currency' | translate }}</div>
+          <div class="text-blue-500">{{ 'Create currency' | translate }}</div>
         </mat-option>
       </mat-select>
       <mat-error *ngIf="hasErrorIn('currencyId')">{{
