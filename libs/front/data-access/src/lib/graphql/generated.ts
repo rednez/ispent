@@ -105,6 +105,11 @@ export type Currency = {
   name: Scalars['String'];
 };
 
+export type DeleteManyResponse = {
+  __typename?: 'DeleteManyResponse';
+  count: Scalars['Int'];
+};
+
 export type Group = {
   __typename?: 'Group';
   categories?: Maybe<Array<Category>>;
@@ -133,6 +138,7 @@ export type Mutation = {
   deleteCategory: Category;
   deleteCurrency: Currency;
   deleteGroup: Group;
+  deleteManyBudgetsRecords: DeleteManyResponse;
   deleteOperation: Operation;
   generateManyBudgetsRecords: Array<BudgetRecord>;
   recreateManyBudgetsRecords: Array<BudgetRecord>;
@@ -168,6 +174,10 @@ export type MutationDeleteCurrencyArgs = {
 
 export type MutationDeleteGroupArgs = {
   id: Scalars['Int'];
+};
+
+export type MutationDeleteManyBudgetsRecordsArgs = {
+  date: Scalars['String'];
 };
 
 export type MutationDeleteOperationArgs = {
@@ -615,6 +625,18 @@ export type GenerateBudgetsRecordsMutation = {
     category: { __typename?: 'Category'; id: number; name: string };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
+};
+
+export type DeleteManyBudgetsRecordsMutationVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+export type DeleteManyBudgetsRecordsMutation = {
+  __typename?: 'Mutation';
+  deleteManyBudgetsRecords: {
+    __typename?: 'DeleteManyResponse';
+    count: number;
+  };
 };
 
 export type DeleteOperationMutationVariables = Exact<{
@@ -1201,6 +1223,27 @@ export class GenerateBudgetsRecordsGQL extends Apollo.Mutation<
   GenerateBudgetsRecordsMutationVariables
 > {
   document = GenerateBudgetsRecordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteManyBudgetsRecordsDocument = gql`
+  mutation DeleteManyBudgetsRecords($date: String!) {
+    deleteManyBudgetsRecords(date: $date) {
+      count
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteManyBudgetsRecordsGQL extends Apollo.Mutation<
+  DeleteManyBudgetsRecordsMutation,
+  DeleteManyBudgetsRecordsMutationVariables
+> {
+  document = DeleteManyBudgetsRecordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

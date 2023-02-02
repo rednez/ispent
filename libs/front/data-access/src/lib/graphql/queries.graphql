@@ -182,6 +182,12 @@ mutation GenerateBudgetsRecords($date: String!) {
   }
 }
 
+mutation DeleteManyBudgetsRecords($date: String!) {
+  deleteManyBudgetsRecords(date: $date) {
+    count
+  }
+}
+
 mutation DeleteOperation($id: Int!) {
   deleteOperation(id: $id) {
     id

@@ -156,9 +156,16 @@ type Query {
   budgets(params: BudgetsParams!): [BudgetRecord!]!
 }
 
+type DeleteManyResponse {
+  count: Int!
+}
+
 type Mutation {
-  recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
+  recreateManyBudgetsRecords(
+    inputs: [CreateBudgetRecordInput!]!
+  ): [BudgetRecord!]!
   generateManyBudgetsRecords(date: String!): [BudgetRecord!]!
+  deleteManyBudgetsRecords(date: String!): DeleteManyResponse!
   createOperation(params: OperationCreateInput!): Operation!
   createCurrency(name: String!): Currency!
   createGroup(params: GroupCreateInput!): Group!

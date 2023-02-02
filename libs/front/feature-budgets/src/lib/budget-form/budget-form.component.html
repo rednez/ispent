@@ -24,6 +24,13 @@
       [formGroup]="form"
     >
       <ng-container formArrayName="currencies">
+        <div class="w-full flex justify-end">
+          <button mat-stroked-button color="warn" (click)="deleteBudget.emit()">
+            <mat-icon>delete</mat-icon>
+            <div>{{ 'Delete' | translate }}</div>
+          </button>
+        </div>
+
         <ispent-budget-currency
           *ngFor="let currency of currencies.controls; index as i; last as last"
           [formControlName]="i"

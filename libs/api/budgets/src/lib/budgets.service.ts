@@ -55,16 +55,23 @@ export class BudgetsService {
     }));
   }
 
+  async deleteMany(dateTime: string, userId: string) {
+    const { currentMonth } = getCurrentAndPreviousMonths(dateTime);
+
+    return this.prisma.budgetRecord.deleteMany({
+      where: { dateTime: getMonthPeriod(currentMonth), userId },
+    });
+  }
+
   async recreateMany(inputs: CreateBudgetRecordInput[], userId: string) {
     if (!inputs.length) {
       throw new BadRequestException('Inputs params are empty');
     }
 
-    const { currentMonth } = getCurrentAndPreviousMonths(inputs[0].dateTime);
+    const dateTimeIso = inputs[0].dateTime;
+    const { currentMonth } = getCurrentAndPreviousMonths(dateTimeIso);
 
-    await this.prisma.budgetRecord.deleteMany({
-      where: { dateTime: getMonthPeriod(currentMonth), userId },
-    });
+    await this.deleteMany(dateTimeIso, userId);
 
     await this.prisma.budgetRecord.createMany({
       data: inputs.map((i: CreateBudgetRecordInput) => ({

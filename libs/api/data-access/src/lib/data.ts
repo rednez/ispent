@@ -160,10 +160,16 @@ export abstract class IQuery {
     abstract budgets(params: BudgetsParams): BudgetRecord[] | Promise<BudgetRecord[]>;
 }
 
+export class DeleteManyResponse {
+    count: number;
+}
+
 export abstract class IMutation {
     abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
 
     abstract generateManyBudgetsRecords(date: string): BudgetRecord[] | Promise<BudgetRecord[]>;
+
+    abstract deleteManyBudgetsRecords(date: string): DeleteManyResponse | Promise<DeleteManyResponse>;
 
     abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
 
