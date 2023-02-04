@@ -1,14 +1,8 @@
 :host {
-  @apply flex items-center justify-between border rounded-md px-2 sm:px-4
-  pb-2 pt-4 bg-white;
-}
-
-.mat-mdc-form-field {
-  @media (max-width: 620px) {
-    width: 16vw;
-  }
+  @apply block border rounded-md px-3 sm:px-4 pb-4 sm:pb-2 pt-4 bg-white;
 }
 
 .favorite {
-  margin-top: -20px
+  font-size: 18px;
+  height: 20px;
 }
