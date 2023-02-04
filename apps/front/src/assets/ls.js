@@ -211,6 +211,22 @@ const ls = {
     uk: 'Бюджет на цей місяць не може бути згенеровано через те, що операції або бюджет за попередній місяць не знайдено.',
     eng: `The budget for this month can't be generated in reason of either operations or the budget for the previous month are didn't found.`,
   },
+  Remains: {
+    uk: 'Залишилось',
+    eng: 'Remains',
+  },
+  'Planned in the previous month': {
+    uk: 'Заплановано в попередньому місяці',
+    eng: 'Planned in the previous month',
+  },
+  'Spent in the previous month': {
+    uk: 'Витрачено в попередньому місяці',
+    eng: 'Spent in the previous month',
+  },
+  'Spent in this month': {
+    uk: 'Витрачено в цьому місяці',
+    eng: 'Spent in this month',
+  },
 };
 
 module.exports = ls;

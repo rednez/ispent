@@ -28,6 +28,7 @@ export type BudgetRecord = {
   amount: Scalars['Float'];
   category: Category;
   currency: Currency;
+  currentSpentAmount: Scalars['Float'];
   date: Scalars['String'];
   group: Group;
   prevPlannedAmount: Scalars['Float'];
@@ -75,18 +76,21 @@ export type BudgetsParams = {
 export type Category = {
   __typename?: 'Category';
   color?: Maybe<Scalars['String']>;
+  favorite: Scalars['Boolean'];
   id: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CategoryCreateInput = {
   color?: InputMaybe<Scalars['String']>;
+  favorite: Scalars['Boolean'];
   groupId: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CategoryUpdateInput = {
   color?: InputMaybe<Scalars['String']>;
+  favorite?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['Int'];
   name?: InputMaybe<Scalars['String']>;
 };
@@ -103,6 +107,11 @@ export type Currency = {
   __typename?: 'Currency';
   id: Scalars['Int'];
   name: Scalars['String'];
+};
+
+export type DeleteManyResponse = {
+  __typename?: 'DeleteManyResponse';
+  count: Scalars['Int'];
 };
 
 export type Group = {
@@ -133,6 +142,7 @@ export type Mutation = {
   deleteCategory: Category;
   deleteCurrency: Currency;
   deleteGroup: Group;
+  deleteManyBudgetsRecords: DeleteManyResponse;
   deleteOperation: Operation;
   generateManyBudgetsRecords: Array<BudgetRecord>;
   recreateManyBudgetsRecords: Array<BudgetRecord>;
@@ -168,6 +178,10 @@ export type MutationDeleteCurrencyArgs = {
 
 export type MutationDeleteGroupArgs = {
   id: Scalars['Int'];
+};
+
+export type MutationDeleteManyBudgetsRecordsArgs = {
+  date: Scalars['String'];
 };
 
 export type MutationDeleteOperationArgs = {
@@ -301,6 +315,7 @@ export type CategoryBaseFragment = {
   __typename?: 'Category';
   id: number;
   name: string;
+  favorite: boolean;
 };
 
 export type GroupBaseFragment = {
@@ -317,6 +332,7 @@ export type GroupWithCategoriesFragment = {
     __typename?: 'Category';
     id: number;
     name: string;
+    favorite: boolean;
   }> | null;
 };
 
@@ -325,7 +341,12 @@ export type BudgetRecordBaseFragment = {
   amount: number;
   date: string;
   currency: { __typename?: 'Currency'; id: number; name: string };
-  category: { __typename?: 'Category'; id: number; name: string };
+  category: {
+    __typename?: 'Category';
+    id: number;
+    name: string;
+    favorite: boolean;
+  };
   group: { __typename?: 'Group'; id: number; name: string };
 };
 
@@ -343,6 +364,7 @@ export type OperationBaseFragment = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
   group: {
     __typename?: 'Group';
@@ -370,6 +392,7 @@ export type CurrenciesGroupsCategoriesQuery = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   }>;
 };
 
@@ -386,6 +409,7 @@ export type CurrenciesGroupsQuery = {
       __typename?: 'Category';
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
 };
@@ -417,6 +441,7 @@ export type CategoryQuery = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   } | null;
 };
 
@@ -434,6 +459,7 @@ export type GroupsQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
 };
@@ -454,6 +480,7 @@ export type GroupQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   } | null;
 };
@@ -479,6 +506,7 @@ export type OperationsQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -509,6 +537,7 @@ export type OperationQuery = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -546,10 +575,16 @@ export type BudgetsQuery = {
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -569,16 +604,23 @@ export type CurrenciesGroupsBudgetsQuery = {
       __typename?: 'Category';
       id: number;
       name: string;
+      favorite: boolean;
     }> | null;
   }>;
   budgets: Array<{
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -594,7 +636,12 @@ export type RecreateBudgetsRecordsMutation = {
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
 };
@@ -609,12 +656,30 @@ export type GenerateBudgetsRecordsMutation = {
     __typename?: 'BudgetRecord';
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     amount: number;
     date: string;
     currency: { __typename?: 'Currency'; id: number; name: string };
-    category: { __typename?: 'Category'; id: number; name: string };
+    category: {
+      __typename?: 'Category';
+      id: number;
+      name: string;
+      favorite: boolean;
+    };
     group: { __typename?: 'Group'; id: number; name: string };
   }>;
+};
+
+export type DeleteManyBudgetsRecordsMutationVariables = Exact<{
+  date: Scalars['String'];
+}>;
+
+export type DeleteManyBudgetsRecordsMutation = {
+  __typename?: 'Mutation';
+  deleteManyBudgetsRecords: {
+    __typename?: 'DeleteManyResponse';
+    count: number;
+  };
 };
 
 export type DeleteOperationMutationVariables = Exact<{
@@ -673,6 +738,7 @@ export type UpdateOperationMutation = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -718,6 +784,7 @@ export type UpdateCategoryMutation = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
 };
 
@@ -741,6 +808,7 @@ export type CreateOperationMutation = {
       color?: string | null;
       id: number;
       name: string;
+      favorite: boolean;
     };
     group: {
       __typename?: 'Group';
@@ -785,6 +853,7 @@ export type CreateCategoryMutation = {
     color?: string | null;
     id: number;
     name: string;
+    favorite: boolean;
   };
 };
 
@@ -792,6 +861,7 @@ export const CategoryBaseFragmentDoc = gql`
   fragment CategoryBase on Category {
     id
     name
+    favorite
   }
 `;
 export const GroupWithCategoriesFragmentDoc = gql`
@@ -1110,6 +1180,7 @@ export const BudgetsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${BudgetRecordBaseFragmentDoc}
@@ -1140,6 +1211,7 @@ export const CurrenciesGroupsBudgetsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${CurrencyBaseFragmentDoc}
@@ -1188,6 +1260,7 @@ export const GenerateBudgetsRecordsDocument = gql`
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount
+      currentSpentAmount
     }
   }
   ${BudgetRecordBaseFragmentDoc}
@@ -1201,6 +1274,27 @@ export class GenerateBudgetsRecordsGQL extends Apollo.Mutation<
   GenerateBudgetsRecordsMutationVariables
 > {
   document = GenerateBudgetsRecordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteManyBudgetsRecordsDocument = gql`
+  mutation DeleteManyBudgetsRecords($date: String!) {
+    deleteManyBudgetsRecords(date: $date) {
+      count
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteManyBudgetsRecordsGQL extends Apollo.Mutation<
+  DeleteManyBudgetsRecordsMutation,
+  DeleteManyBudgetsRecordsMutationVariables
+> {
+  document = DeleteManyBudgetsRecordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

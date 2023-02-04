@@ -42,4 +42,12 @@ export class BudgetsResolver {
   ) {
     return this.budgetsService.generateMany(date, uid);
   }
+
+  @Mutation()
+  async deleteManyBudgetsRecords(
+    @Args('date') date: string,
+    @CurrentUserId() uid
+  ) {
+    return this.budgetsService.deleteMany(date, uid);
+  }
 }

@@ -6,6 +6,7 @@ fragment CurrencyBase on Currency {
 fragment CategoryBase on Category {
   id
   name
+  favorite
 }
 
 fragment GroupBase on Group {
@@ -151,6 +152,7 @@ query Budgets($params: BudgetsParams!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
   }
 }
 
@@ -165,6 +167,7 @@ query CurrenciesGroupsBudgets($params: BudgetsParams!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
   }
 }
 
@@ -179,6 +182,13 @@ mutation GenerateBudgetsRecords($date: String!) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount
+    currentSpentAmount
+  }
+}
+
+mutation DeleteManyBudgetsRecords($date: String!) {
+  deleteManyBudgetsRecords(date: $date) {
+    count
   }
 }
 

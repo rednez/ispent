@@ -28,12 +28,14 @@ export class GroupUpdateInput {
 export class CategoryCreateInput {
     name: string;
     groupId: number;
+    favorite: boolean;
     color?: Nullable<string>;
 }
 
 export class CategoryUpdateInput {
     id: number;
     name?: Nullable<string>;
+    favorite?: Nullable<boolean>;
     color?: Nullable<string>;
 }
 
@@ -103,6 +105,7 @@ export class Group {
 export class Category {
     id: number;
     name: string;
+    favorite: boolean;
     color?: Nullable<string>;
 }
 
@@ -123,6 +126,7 @@ export class BudgetRecord {
     amount: number;
     prevPlannedAmount: number;
     prevSpentAmount: number;
+    currentSpentAmount: number;
     currency: Currency;
     category: Category;
     group: Group;
@@ -160,10 +164,16 @@ export abstract class IQuery {
     abstract budgets(params: BudgetsParams): BudgetRecord[] | Promise<BudgetRecord[]>;
 }
 
+export class DeleteManyResponse {
+    count: number;
+}
+
 export abstract class IMutation {
     abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
 
     abstract generateManyBudgetsRecords(date: string): BudgetRecord[] | Promise<BudgetRecord[]>;
+
+    abstract deleteManyBudgetsRecords(date: string): DeleteManyResponse | Promise<DeleteManyResponse>;
 
     abstract createOperation(params: OperationCreateInput): Operation | Promise<Operation>;
 

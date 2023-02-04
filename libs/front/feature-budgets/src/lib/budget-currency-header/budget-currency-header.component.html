@@ -7,7 +7,7 @@
       </mat-option>
       <mat-option (click)="onCreateCurrency()">
         <mat-icon color="primary">add_circle</mat-icon>
-        <div class="text-indigo-800">{{ 'Create currency' | translate }}</div>
+        <div class="text-blue-500">{{ 'Create currency' | translate }}</div>
       </mat-option>
     </mat-select>
     <mat-error *ngIf="currencyId.invalid">
@@ -15,7 +15,7 @@
     </mat-error>
   </mat-form-field>
 
-  <div class="text-green-600">{{ total | amount }}</div>
+  <div class="text-green-500">{{ total | amount }}</div>
 </div>
 
 <div class="space-x-2">

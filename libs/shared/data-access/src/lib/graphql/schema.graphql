@@ -24,18 +24,21 @@ input GroupUpdateInput {
 type Category {
   id: Int!
   name: String!
+  favorite: Boolean!
   color: String
 }
 
 input CategoryCreateInput {
   name: String!
   groupId: Int!
+  favorite: Boolean!
   color: String
 }
 
 input CategoryUpdateInput {
   id: Int!
   name: String
+  favorite: Boolean
   color: String
 }
 
@@ -128,6 +131,7 @@ type BudgetRecord {
   amount: Float!
   prevPlannedAmount: Float!
   prevSpentAmount: Float!
+  currentSpentAmount: Float!
   currency: Currency!
   category: Category!
   group: Group!
@@ -156,9 +160,16 @@ type Query {
   budgets(params: BudgetsParams!): [BudgetRecord!]!
 }
 
+type DeleteManyResponse {
+  count: Int!
+}
+
 type Mutation {
-  recreateManyBudgetsRecords(inputs: [CreateBudgetRecordInput!]!): [BudgetRecord!]!
+  recreateManyBudgetsRecords(
+    inputs: [CreateBudgetRecordInput!]!
+  ): [BudgetRecord!]!
   generateManyBudgetsRecords(date: String!): [BudgetRecord!]!
+  deleteManyBudgetsRecords(date: String!): DeleteManyResponse!
   createOperation(params: OperationCreateInput!): Operation!
   createCurrency(name: String!): Currency!
   createGroup(params: GroupCreateInput!): Group!

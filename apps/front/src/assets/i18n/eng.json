@@ -51,5 +51,9 @@
   "rate": "rate",
   "Today": "Today",
   "Yesterday": "Yesterday",
-  "ApolloError: Inputs params are empty": "The budget for this month can't be generated in reason of either operations or the budget for the previous month are didn't found."
+  "ApolloError: Inputs params are empty": "The budget for this month can't be generated in reason of either operations or the budget for the previous month are didn't found.",
+  "Remains": "Remains",
+  "Planned in the previous month": "Planned in the previous month",
+  "Spent in the previous month": "Spent in the previous month",
+  "Spent in this month": "Spent in this month"
 }

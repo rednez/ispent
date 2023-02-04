@@ -34,6 +34,7 @@ model Category {
   groupId      Int
   Operation    Operation[]
   BudgetRecord BudgetRecord[]
+  favorite     Boolean        @default(false)
 }
 
 model Operation {

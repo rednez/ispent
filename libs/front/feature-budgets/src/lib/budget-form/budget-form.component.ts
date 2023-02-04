@@ -28,6 +28,7 @@ export class BudgetFormComponent implements OnChanges {
   @Input() errorMessage = '';
   @Output() saveForm = new EventEmitter<FormData>();
   @Output() generateBudget = new EventEmitter();
+  @Output() deleteBudget = new EventEmitter();
 
   form!: FormGroup;
 

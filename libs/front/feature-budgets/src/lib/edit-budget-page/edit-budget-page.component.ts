@@ -68,6 +68,20 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
       });
   }
 
+  onDeleteBudget() {
+    this.service
+      .deleteBudget()
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.budgetsData = { currencies: [] };
+        },
+        error: (err) => {
+          this.errorMessage = err.message;
+        },
+      });
+  }
+
   private loadInitData() {
     this.service
       .loadInitData()

@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./budget-category-previous-data.component.scss'],
 })
 export class BudgetCategoryPreviousDataComponent {
-  @Input() planned = 0;
-  @Input() spent = 0;
+  @Input() planedPrevious = 0;
+  @Input() spentPrevious = 0;
+  @Input() spentCurrent = 0;
 }

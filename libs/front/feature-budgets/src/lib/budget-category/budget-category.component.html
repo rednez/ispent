@@ -1,3 +1,31 @@
+<div class="flex justify-between mb-3 sm:mb-0">
+  <div class="flex items-center space-x-4">
+    <ispent-budget-category-previous-data
+      [planedPrevious]="form.value.plannedPrevious!"
+      [spentPrevious]="form.value.spentPrevious!"
+      [spentCurrent]="form.value.spentCurrent!"
+    ></ispent-budget-category-previous-data>
+
+    <mat-icon *ngIf="form.value.favorite" color="accent" class="favorite">
+      favorite
+    </mat-icon>
+  </div>
+
+  <div class="flex">
+    <button
+      mat-icon-button
+      color="primary"
+      (click)="remove.emit(form.value.id!)"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+
+    <button *ngIf="isLast" mat-icon-button color="primary" (click)="add.emit()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+
 <div [formGroup]="form" class="flex items-center space-x-4">
   <mat-form-field appearance="fill">
     <mat-label>{{ 'Category' | translate }}</mat-label>
@@ -10,7 +38,7 @@
       </mat-option>
       <mat-option (click)="onCreateCategory()">
         <mat-icon color="primary">add_circle</mat-icon>
-        <div class="text-indigo-800">{{ 'Create category' | translate }}</div>
+        <div class="text-blue-500">{{ 'Create category' | translate }}</div>
       </mat-option>
     </mat-select>
     <mat-error *ngIf="form.controls['id'].invalid">
@@ -25,19 +53,4 @@
       'Enter amount' | translate
     }}</mat-error>
   </mat-form-field>
-
-  <ispent-budget-category-previous-data
-    [planned]="form.value.planned!"
-    [spent]="form.value.spent!"
-  ></ispent-budget-category-previous-data>
-</div>
-
-<div class="flex">
-  <button mat-icon-button color="primary" (click)="remove.emit(form.value.id!)">
-    <mat-icon>remove</mat-icon>
-  </button>
-
-  <button *ngIf="isLast" mat-icon-button color="primary" (click)="add.emit()">
-    <mat-icon>add</mat-icon>
-  </button>
 </div>

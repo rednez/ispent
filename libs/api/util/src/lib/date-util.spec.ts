@@ -4,17 +4,17 @@ import { isSameDay } from 'date-fns';
 describe('date-util', () => {
   describe('getMonthPeriod', () => {
     const result = {
-      lte: new Date('2022-12-31'),
+      lt: new Date('2022-12-31'),
       gte: new Date('2022-12-01'),
     };
 
     it('should return undefined fields', () => {
-      expect(getMonthPeriod()).toEqual({ lte: undefined, gte: undefined });
+      expect(getMonthPeriod()).toEqual({ lt: undefined, gte: undefined });
     });
 
     it('should return start and end Dates', () => {
-      const { lte, gte } = getMonthPeriod(new Date('2022-12-01'));
-      expect(isSameDay(lte, new Date('2022-12-31T24:00'))).toBeTruthy();
+      const { lt, gte } = getMonthPeriod(new Date('2022-12-01'));
+      expect(isSameDay(lt, new Date('2022-12-31T24:00'))).toBeTruthy();
       expect(isSameDay(gte, result.gte)).toBeTruthy();
     });
 

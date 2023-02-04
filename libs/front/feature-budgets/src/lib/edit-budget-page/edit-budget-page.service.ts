@@ -20,6 +20,7 @@ import {
   RecreateBudgetsRecordsGQL,
   Currency,
   Group,
+  DeleteManyBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
 import {
   DialogCreateCategoryComponent,
@@ -58,6 +59,7 @@ export class EditBudgetPageService {
     private budgetsGql: BudgetsGQL,
     private recreateBudgetsRecordsGQL: RecreateBudgetsRecordsGQL,
     private generateBudgetsRecordsGQL: GenerateBudgetsRecordsGQL,
+    private deleteManyBudgetsRecordsGQL: DeleteManyBudgetsRecordsGQL,
     private currencyService: CurrencyService,
     private groupService: GroupService,
     private categoryService: CategoryService,
@@ -199,6 +201,36 @@ export class EditBudgetPageService {
     );
   }
 
+  deleteBudget() {
+    this._isDataLoading$.next(true);
+    this._isDataError$.next(false);
+
+    return this.currentMonth.dateISO$.pipe(
+      switchMap((date) =>
+        this.deleteManyBudgetsRecordsGQL
+          .mutate(
+            { date },
+            {
+              refetchQueries: [
+                {
+                  query: BudgetsDocument,
+                  variables: { params: { date } },
+                },
+              ],
+            }
+          )
+          .pipe(
+            tap(() => this._isDataLoading$.next(false)),
+            catchError((err) => {
+              this._isDataLoading$.next(false);
+              this._isDataError$.next(true);
+              throw new Error(err);
+            })
+          )
+      )
+    );
+  }
+
   onCreateCurrency$() {
     return this.actions.createCurrency$.pipe(
       withLatestFrom(this.currenciesGQL.watch().valueChanges),
@@ -328,8 +360,10 @@ export class EditBudgetPageService {
           categories: gValue.map((i) => ({
             id: i.category.id,
             amount: i.amount,
-            planned: i.prevPlannedAmount,
-            spent: i.prevSpentAmount,
+            plannedPrevious: i.prevPlannedAmount,
+            spentPrevious: i.prevSpentAmount,
+            spentCurrent: i.currentSpentAmount,
+            favorite: i.category.favorite,
           })),
         })),
       })),

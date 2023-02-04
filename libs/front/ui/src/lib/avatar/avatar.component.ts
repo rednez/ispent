@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   selector: 'ispent-avatar',
   template: `
     <div [matMenuTriggerFor]="userMenu">
-      <img *ngIf="photoUrl; else noPhoto" [src]="photoUrl" alt="userPhoto"/>
+      <img *ngIf="photoUrl; else noPhoto" [src]="photoUrl" alt="userPhoto" />
 
       <ng-template #noPhoto>
         <div
@@ -20,12 +20,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
         <div>{{ name }}</div>
         <div class="text-sm text-gray-600">{{ email }}</div>
       </div>
-      <mat-divider/>
+      <mat-divider />
       <button mat-menu-item (click)="logout.emit()">
-        <div class="flex items-center space-x-2">
-          <div>Logout</div>
-          <mat-icon color="primary" style="font-size: 22px">logout</mat-icon>
-        </div>
+        <mat-icon color="primary" style="font-size: 22px">logout</mat-icon>
+        <div class="text-blue-500">Logout</div>
       </button>
     </mat-menu>
   `,

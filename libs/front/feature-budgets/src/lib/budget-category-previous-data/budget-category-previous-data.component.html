@@ -1,12 +1,36 @@
-<div class="space-x-1 flex content-between items-center">
-  <div class="text-xs text-gray-400 hidden sm:flex">
-    {{ 'Planned' | translate }}:
-  </div>
-  <div class="text-green-600">{{ planned | amount }}</div>
+<div
+  class="space-x-1 flex content-between items-center"
+  [matTooltip]="
+    ('Planned in the previous month' | translate) +
+    ': ' +
+    (planedPrevious | amount)
+  "
+  matTooltipClass="text-sm"
+>
+  <div class="text-xs text-gray-400 hidden sm:flex">PP:</div>
+  <div class="text-green-400">{{ planedPrevious | amount }}</div>
 </div>
-<div class="space-x-1 flex content-between items-center">
-  <div class="text-xs text-gray-400 hidden sm:flex">
-    {{ 'Spent' | translate }}:
-  </div>
-  <div class="text-red-600">{{ spent | amount }}</div>
+
+<div
+  class="space-x-1 flex content-between items-center"
+  [matTooltip]="
+    ('Spent in the previous month' | translate) +
+    ': ' +
+    (spentPrevious | amount)
+  "
+  matTooltipClass="text-sm"
+>
+  <div class="text-xs text-gray-400 hidden sm:flex">SP:</div>
+  <div class="text-amber-400">{{ spentPrevious | amount }}</div>
+</div>
+
+<div
+  class="space-x-1 flex content-between items-center"
+  [matTooltip]="
+    ('Spent in this month' | translate) + ': ' + (spentCurrent | amount)
+  "
+  matTooltipClass="text-sm"
+>
+  <div class="text-xs text-gray-400 hidden sm:flex">SC:</div>
+  <div class="text-amber-500">{{ spentCurrent | amount }}</div>
 </div>
