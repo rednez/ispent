@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isNaN, round } from 'lodash';
+import { isNaN, round } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root',

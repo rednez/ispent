@@ -9,7 +9,9 @@ import {
 } from '@angular/core';
 import { Operation } from '@ispent/front/data-access';
 import { format } from 'date-fns';
-import { entries, groupBy, pipe } from 'lodash/fp';
+import groupBy from 'lodash/fp/groupBy';
+import pipe from 'lodash/fp/pipe';
+import entries from 'lodash/fp/entries';
 
 @Component({
   selector: 'ispent-operations-list',

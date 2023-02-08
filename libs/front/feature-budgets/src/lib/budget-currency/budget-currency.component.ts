@@ -22,15 +22,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Category, Group } from '@ispent/front/data-access';
-import {
-  add,
-  flattenDeep,
-  get,
-  isEqual,
-  map as fpMap,
-  pipe,
-  reduce,
-} from 'lodash/fp';
+import add from 'lodash/fp/add';
+import flattenDeep from 'lodash/fp/flattenDeep';
+import prop from 'lodash/fp/prop';
+import isEqual from 'lodash/fp/isEqual';
+import fpMap from 'lodash/fp/map';
+import pipe from 'lodash/fp/pipe';
+import reduce from 'lodash/fp/reduce';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetCurrency, FormBudgetEntity } from '../data';
@@ -94,10 +92,10 @@ export class BudgetCurrencyComponent
     this.totalAmount$ = this.form.valueChanges.pipe(
       map(
         pipe(
-          get('groups'),
-          fpMap(get('categories')),
+          prop('groups'),
+          fpMap(prop('categories')),
           flattenDeep,
-          fpMap(get('amount')),
+          fpMap(prop('amount')),
           reduce(add, 0)
         )
       )
@@ -169,7 +167,7 @@ export class BudgetCurrencyComponent
   }
 
   getCategoriesList(groupId: number): Category[] {
-    const group = this.groupsList?.find(pipe(get('id'), isEqual(groupId)));
+    const group = this.groupsList?.find(pipe(prop('id'), isEqual(groupId)));
     return (group && group.categories) || [];
   }
 

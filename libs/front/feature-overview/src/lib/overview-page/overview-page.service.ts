@@ -7,7 +7,7 @@ import {
   Operation,
   OperationsGQL,
 } from '@ispent/front/data-access';
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import {
   BehaviorSubject,
   catchError,
@@ -33,12 +33,13 @@ export class OverviewPageService {
       this._isCurrenciesBudgetsLoading$.next(true);
       this._isCurrenciesBudgetsError$.next(false);
     }),
-    switchMap((month) =>
+    switchMap((dateISO) =>
       this.budgetsSummariesGQL
         .watch({
           params: {
             type: BudgetSummaryType.Currency,
-            month,
+            dateTimeStart: dateISO,
+            dateTimeEnd: this.currentMonth.lastDay,
           },
         })
         .valueChanges.pipe(
@@ -56,9 +57,15 @@ export class OverviewPageService {
       this._isRecentOperationsLoading$.next(true);
       this._isRecentOperationsError$.next(false);
     }),
-    switchMap((month) =>
+    switchMap((dateISO) =>
       this.operationsGql
-        .watch({ params: { month, limit: 10 } })
+        .watch({
+          params: {
+            dateTimeStart: dateISO,
+            dateTimeEnd: this.currentMonth.lastDay,
+            limit: 10,
+          },
+        })
         .valueChanges.pipe(
           catchError((err: ApolloError) => {
             this._isRecentOperationsLoading$.next(false);

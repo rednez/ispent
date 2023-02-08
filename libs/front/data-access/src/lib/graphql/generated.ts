@@ -29,6 +29,10 @@ export type BudgetRecord = {
   category: Category;
   currency: Currency;
   currentSpentAmount: Scalars['Float'];
+  /**
+   * ISO 8601
+   * Presented by the first day of the month in UTC
+   */
   date: Scalars['String'];
   group: Group;
   prevPlannedAmount: Scalars['Float'];
@@ -48,13 +52,17 @@ export type BudgetSummary = {
 export type BudgetSummaryParams = {
   categoryId?: InputMaybe<Scalars['Int']>;
   currencyId?: InputMaybe<Scalars['Int']>;
-  groupId?: InputMaybe<Scalars['Int']>;
   /**
-   * ISO 8601 string that represents the selected month.
-   *
-   * The _day_ in the string is not taken into account.
+   * ISO 8601
+   * Must be presented in the local time of a web-client
    */
-  month?: InputMaybe<Scalars['String']>;
+  dateTimeEnd?: InputMaybe<Scalars['String']>;
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  dateTimeStart?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
   type: BudgetSummaryType;
 };
 
@@ -66,11 +74,30 @@ export enum BudgetSummaryType {
 
 export type BudgetsParams = {
   /**
-   * ISO 8601 string that represents the selected month.
-   *
-   * The _day_ in the string is not taken into account.
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  currentOperationsDateTimeEnd?: InputMaybe<Scalars['String']>;
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  currentOperationsDateTimeStart?: InputMaybe<Scalars['String']>;
+  /**
+   * ISO 8601
+   * Must be presented on the first day of the month in UTC
    */
   date: Scalars['String'];
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  prevOperationsDateTimeEnd?: InputMaybe<Scalars['String']>;
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  prevOperationsDateTimeStart?: InputMaybe<Scalars['String']>;
 };
 
 export type Category = {
@@ -112,6 +139,24 @@ export type Currency = {
 export type DeleteManyResponse = {
   __typename?: 'DeleteManyResponse';
   count: Scalars['Int'];
+};
+
+export type GenerateBudgetsRecordsInput = {
+  /**
+   * ISO 8601
+   * Must be presented on the first day of the month in UTC
+   */
+  date: Scalars['String'];
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  prevOperationsDateTimeEnd: Scalars['String'];
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  prevOperationsDateTimeStart: Scalars['String'];
 };
 
 export type Group = {
@@ -189,11 +234,11 @@ export type MutationDeleteOperationArgs = {
 };
 
 export type MutationGenerateManyBudgetsRecordsArgs = {
-  date: Scalars['String'];
+  input: GenerateBudgetsRecordsInput;
 };
 
 export type MutationRecreateManyBudgetsRecordsArgs = {
-  inputs: Array<CreateBudgetRecordInput>;
+  input: Array<CreateBudgetRecordInput>;
 };
 
 export type MutationUpdateCategoryArgs = {
@@ -253,14 +298,18 @@ export type OperationUpdateInput = {
 export type OperationsParams = {
   categoryId?: InputMaybe<Scalars['Int']>;
   currencyId?: InputMaybe<Scalars['Int']>;
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  dateTimeEnd?: InputMaybe<Scalars['String']>;
+  /**
+   * ISO 8601
+   * Must be presented in the local time of a web-client
+   */
+  dateTimeStart?: InputMaybe<Scalars['String']>;
   groupId?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
-  /**
-   * ISO 8601 string that represents the selected month.
-   *
-   * The _day_ in the string is not taken into account.
-   */
-  month?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -626,7 +675,7 @@ export type CurrenciesGroupsBudgetsQuery = {
 };
 
 export type RecreateBudgetsRecordsMutationVariables = Exact<{
-  inputs: Array<CreateBudgetRecordInput> | CreateBudgetRecordInput;
+  input: Array<CreateBudgetRecordInput> | CreateBudgetRecordInput;
 }>;
 
 export type RecreateBudgetsRecordsMutation = {
@@ -647,7 +696,7 @@ export type RecreateBudgetsRecordsMutation = {
 };
 
 export type GenerateBudgetsRecordsMutationVariables = Exact<{
-  date: Scalars['String'];
+  input: GenerateBudgetsRecordsInput;
 }>;
 
 export type GenerateBudgetsRecordsMutation = {
@@ -1233,8 +1282,8 @@ export class CurrenciesGroupsBudgetsGQL extends Apollo.Query<
   }
 }
 export const RecreateBudgetsRecordsDocument = gql`
-  mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
-    recreateManyBudgetsRecords(inputs: $inputs) {
+  mutation RecreateBudgetsRecords($input: [CreateBudgetRecordInput!]!) {
+    recreateManyBudgetsRecords(input: $input) {
       ...BudgetRecordBase
     }
   }
@@ -1255,8 +1304,8 @@ export class RecreateBudgetsRecordsGQL extends Apollo.Mutation<
   }
 }
 export const GenerateBudgetsRecordsDocument = gql`
-  mutation GenerateBudgetsRecords($date: String!) {
-    generateManyBudgetsRecords(date: $date) {
+  mutation GenerateBudgetsRecords($input: GenerateBudgetsRecordsInput!) {
+    generateManyBudgetsRecords(input: $input) {
       ...BudgetRecordBase
       prevPlannedAmount
       prevSpentAmount

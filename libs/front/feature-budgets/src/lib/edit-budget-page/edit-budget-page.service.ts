@@ -7,28 +7,28 @@ import {
   BudgetsDocument,
   BudgetsGQL,
   BudgetsQuery,
-  CreateBudgetRecordInput,
   CategoryService,
-  CurrencyService,
-  GroupService,
+  CreateBudgetRecordInput,
   CurrenciesGQL,
   CurrenciesGroupsBudgetsGQL,
   CurrenciesGroupsGQL,
+  Currency,
+  CurrencyService,
   CurrentMonthService,
+  DeleteManyBudgetsRecordsGQL,
   GenerateBudgetsRecordsGQL,
+  Group,
+  GroupService,
   GroupsGQL,
   RecreateBudgetsRecordsGQL,
-  Currency,
-  Group,
-  DeleteManyBudgetsRecordsGQL,
 } from '@ispent/front/data-access';
 import {
   DialogCreateCategoryComponent,
   DialogCreateCurrencyComponent,
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
-import { format } from 'date-fns';
-import { groupBy, map as _map } from 'lodash';
+import { addDays, lastDayOfMonth, subMonths } from 'date-fns';
+import { groupBy, map as _map } from 'lodash-es';
 import {
   BehaviorSubject,
   catchError,
@@ -96,38 +96,51 @@ export class EditBudgetPageService {
       .valueChanges.pipe(map((query) => query.data.groups));
   }
 
-  loadInitData() {
-    return this.currentMonth.dateISO$.pipe(
-      tap(() => {
-        this._isDataLoading$.next(true);
-        this._isDataError$.next(false);
-      }),
-      switchMap((date) =>
-        this.currenciesGroupsBudgetsGQL
-          .watch({ params: { date } })
-          .valueChanges.pipe(
-            map((v) => v.data),
-            map((date) => ({
-              budgetsData: this.deserializeServerData(date),
-            }))
-          )
-          .pipe(tap(() => this._isDataLoading$.next(false)))
-      ),
-      catchError((err) => {
-        this._isDataLoading$.next(false);
-        this._isDataError$.next(true);
-        return throwError(() => of(err));
-      })
-    );
-  }
-
-  loadBudgets(date: Date) {
+  get initData$() {
     this._isDataLoading$.next(true);
     this._isDataError$.next(false);
 
+    const { prevMonthStart, prevMonthEnd } = this.getPreviousMonthInterval();
+
+    return this.currenciesGroupsBudgetsGQL
+      .watch({
+        params: {
+          date: this.currentMonth.dateISOWithoutLocalOffset,
+          currentOperationsDateTimeStart: this.currentMonth.dateISO,
+          currentOperationsDateTimeEnd: this.currentMonth.lastDay,
+          prevOperationsDateTimeStart: prevMonthStart,
+          prevOperationsDateTimeEnd: prevMonthEnd,
+        },
+      })
+      .valueChanges.pipe(
+        map((v) => v.data),
+        map((data) => ({
+          budgetsData: this.deserializeServerData(data),
+        })),
+        tap(() => this._isDataLoading$.next(false)),
+        catchError((err) => {
+          this._isDataLoading$.next(false);
+          this._isDataError$.next(true);
+          return throwError(() => of(err));
+        })
+      );
+  }
+
+  loadBudgets() {
+    this._isDataLoading$.next(true);
+    this._isDataError$.next(false);
+
+    const { prevMonthStart, prevMonthEnd } = this.getPreviousMonthInterval();
+
     return this.budgetsGql
       .watch({
-        params: { date: format(date, 'yyyy-MM-dd') },
+        params: {
+          date: this.currentMonth.dateISOWithoutLocalOffset,
+          currentOperationsDateTimeStart: this.currentMonth.dateISO,
+          currentOperationsDateTimeEnd: this.currentMonth.lastDay,
+          prevOperationsDateTimeStart: prevMonthStart,
+          prevOperationsDateTimeEnd: prevMonthEnd,
+        },
       })
       .valueChanges.pipe(
         map((v) => this.deserializeServerData(v.data)),
@@ -145,14 +158,14 @@ export class EditBudgetPageService {
   }
 
   saveFormData(formData: FormData) {
-    const inputs = this.serializeServerData(
+    const input = this.serializeServerData(
       formData,
-      this.currentMonth.date$.value.toISOString()
+      this.currentMonth.dateISOWithoutLocalOffset
     );
 
     this._isDataSaving$.next(true);
 
-    this.recreateBudgetsRecordsGQL.mutate({ inputs }).subscribe({
+    this.recreateBudgetsRecordsGQL.mutate({ input }).subscribe({
       next: () => {
         this.isDataSaving$.next(false);
         this.requestResultNotification.success(
@@ -170,65 +183,68 @@ export class EditBudgetPageService {
     this._isDataLoading$.next(true);
     this._isDataError$.next(false);
 
-    return this.currentMonth.dateISO$.pipe(
-      switchMap((date) =>
-        this.generateBudgetsRecordsGQL
-          .mutate(
-            { date },
+    const date = this.currentMonth.dateISOWithoutLocalOffset;
+    const { prevMonthStart, prevMonthEnd } = this.getPreviousMonthInterval();
+
+    return this.generateBudgetsRecordsGQL
+      .mutate(
+        {
+          input: {
+            date,
+            prevOperationsDateTimeStart: prevMonthStart,
+            prevOperationsDateTimeEnd: prevMonthEnd,
+          },
+        },
+        {
+          refetchQueries: [
             {
-              refetchQueries: [
-                {
-                  query: BudgetsDocument,
-                  variables: { params: { date } },
-                },
-              ],
-            }
-          )
-          .pipe(
-            map((v) =>
-              this.deserializeServerData({
-                budgets: v.data?.generateManyBudgetsRecords as any,
-              })
-            ),
-            tap(() => this._isDataLoading$.next(false)),
-            catchError((err) => {
-              this._isDataLoading$.next(false);
-              this._isDataError$.next(true);
-              throw new Error(err);
-            })
-          )
+              query: BudgetsDocument,
+              variables: { params: { date } },
+            },
+          ],
+        }
       )
-    );
+      .pipe(
+        map((v) =>
+          this.deserializeServerData({
+            budgets: v.data?.generateManyBudgetsRecords as any,
+          })
+        ),
+        tap(() => this._isDataLoading$.next(false)),
+        catchError((err) => {
+          this._isDataLoading$.next(false);
+          this._isDataError$.next(true);
+          throw new Error(err);
+        })
+      );
   }
 
   deleteBudget() {
     this._isDataLoading$.next(true);
     this._isDataError$.next(false);
 
-    return this.currentMonth.dateISO$.pipe(
-      switchMap((date) =>
-        this.deleteManyBudgetsRecordsGQL
-          .mutate(
-            { date },
+    const date = this.currentMonth.dateISOWithoutLocalOffset;
+
+    return this.deleteManyBudgetsRecordsGQL
+      .mutate(
+        { date },
+        {
+          refetchQueries: [
             {
-              refetchQueries: [
-                {
-                  query: BudgetsDocument,
-                  variables: { params: { date } },
-                },
-              ],
-            }
-          )
-          .pipe(
-            tap(() => this._isDataLoading$.next(false)),
-            catchError((err) => {
-              this._isDataLoading$.next(false);
-              this._isDataError$.next(true);
-              throw new Error(err);
-            })
-          )
+              query: BudgetsDocument,
+              variables: { params: { date } },
+            },
+          ],
+        }
       )
-    );
+      .pipe(
+        tap(() => this._isDataLoading$.next(false)),
+        catchError((err) => {
+          this._isDataLoading$.next(false);
+          this._isDataError$.next(true);
+          throw new Error(err);
+        })
+      );
   }
 
   onCreateCurrency$() {
@@ -391,5 +407,17 @@ export class EditBudgetPageService {
     );
 
     return result;
+  }
+
+  private getPreviousMonthInterval(): {
+    prevMonthStart: string;
+    prevMonthEnd: string;
+  } {
+    const start = subMonths(this.currentMonth.date$.value, 1);
+    const end = addDays(lastDayOfMonth(start), 1);
+    return {
+      prevMonthStart: start.toISOString(),
+      prevMonthEnd: end.toISOString(),
+    };
   }
 }

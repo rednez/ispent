@@ -22,7 +22,7 @@ import {
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
 import { gql, MutationResult } from 'apollo-angular';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import {
   catchError,
   map,

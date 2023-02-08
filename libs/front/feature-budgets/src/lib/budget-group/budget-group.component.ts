@@ -27,7 +27,13 @@ import {
   BudgetSummaryType,
   CurrentMonthService,
 } from '@ispent/front/data-access';
-import { add, get, isNil, map as fpMap, negate, pipe, reduce } from 'lodash/fp';
+import add from 'lodash/fp/add';
+import prop from 'lodash/fp/prop';
+import isNil from 'lodash/fp/isNil';
+import fpMap from 'lodash/fp/map';
+import negate from 'lodash/fp/negate';
+import pipe from 'lodash/fp/pipe';
+import reduce from 'lodash/fp/reduce';
 import {
   distinctUntilChanged,
   filter,
@@ -40,6 +46,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
+import { subMonths } from 'date-fns';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetEntity, FormBudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
@@ -208,7 +215,7 @@ export class BudgetGroupComponent
       .subscribe();
 
     this.totalAmount$ = this.form.valueChanges.pipe(
-      map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
+      map(pipe(prop('categories'), fpMap(prop('amount')), reduce(add, 0)))
     );
   }
 
@@ -216,7 +223,7 @@ export class BudgetGroupComponent
     return control.valueChanges
       .pipe(
         skip(1),
-        map(get('id')),
+        map(prop('id')),
         filter(negate(isNil)),
         filter(() => !!this.currencyId && this.form.get('id')?.value),
         distinctUntilChanged(),
@@ -224,7 +231,8 @@ export class BudgetGroupComponent
           (categoryId) =>
             this.budgetsSummariesGQL.watch({
               params: {
-                month: this.currentMonth.previousDateIso,
+                dateTimeStart: this.currentMonth.previousDateISO,
+                dateTimeEnd: this.currentMonth.dateISO,
                 type: BudgetSummaryType.Category,
                 currencyId: this.currencyId,
                 groupId: parseInt(this.form.value['id']),

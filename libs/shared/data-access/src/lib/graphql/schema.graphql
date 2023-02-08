@@ -47,11 +47,15 @@ input OperationsParams {
   groupId: Int
   categoryId: Int
   """
-  ISO 8601 string that represents the selected month.
-
-  The _day_ in the string is not taken into account.
+  ISO 8601
+  Must be presented in the local time of a web-client
   """
-  month: String
+  dateTimeStart: String
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  dateTimeEnd: String
   limit: Int
 }
 
@@ -103,20 +107,43 @@ input BudgetSummaryParams {
   groupId: Int
   categoryId: Int
   """
-  ISO 8601 string that represents the selected month.
-
-  The _day_ in the string is not taken into account.
+  ISO 8601
+  Must be presented in the local time of a web-client
   """
-  month: String
+  dateTimeStart: String
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  dateTimeEnd: String
 }
 
 input BudgetsParams {
   """
-  ISO 8601 string that represents the selected month.
-
-  The _day_ in the string is not taken into account.
+  ISO 8601
+  Must be presented on the first day of the month in UTC
   """
   date: String!
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  prevOperationsDateTimeStart: String
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  prevOperationsDateTimeEnd: String
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  currentOperationsDateTimeStart: String
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  currentOperationsDateTimeEnd: String
 }
 
 input CreateBudgetRecordInput {
@@ -127,6 +154,24 @@ input CreateBudgetRecordInput {
   dateTime: String!
 }
 
+input GenerateBudgetsRecordsInput {
+  """
+  ISO 8601
+  Must be presented on the first day of the month in UTC
+  """
+  date: String!
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  prevOperationsDateTimeStart: String!
+  """
+  ISO 8601
+  Must be presented in the local time of a web-client
+  """
+  prevOperationsDateTimeEnd: String!
+}
+
 type BudgetRecord {
   amount: Float!
   prevPlannedAmount: Float!
@@ -135,6 +180,10 @@ type BudgetRecord {
   currency: Currency!
   category: Category!
   group: Group!
+  """
+  ISO 8601
+  Presented by the first day of the month in UTC
+  """
   date: String!
 }
 
@@ -145,6 +194,10 @@ type BudgetSummary {
   planned: Float!
   spent: Float!
   color: String
+}
+
+type DeleteManyResponse {
+  count: Int!
 }
 
 type Query {
@@ -160,15 +213,11 @@ type Query {
   budgets(params: BudgetsParams!): [BudgetRecord!]!
 }
 
-type DeleteManyResponse {
-  count: Int!
-}
-
 type Mutation {
   recreateManyBudgetsRecords(
-    inputs: [CreateBudgetRecordInput!]!
+    input: [CreateBudgetRecordInput!]!
   ): [BudgetRecord!]!
-  generateManyBudgetsRecords(date: String!): [BudgetRecord!]!
+  generateManyBudgetsRecords(input: GenerateBudgetsRecordsInput!): [BudgetRecord!]!
   deleteManyBudgetsRecords(date: String!): DeleteManyResponse!
   createOperation(params: OperationCreateInput!): Operation!
   createCurrency(name: String!): Currency!

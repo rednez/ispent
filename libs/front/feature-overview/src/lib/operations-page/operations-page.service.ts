@@ -25,7 +25,12 @@ import {
   DialogCreateCurrencyComponent,
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
-import { eq, flow, get, mapKeys, mapValues, toString } from 'lodash/fp';
+import eq from 'lodash/fp/eq';
+import flow from 'lodash/fp/flow';
+import prop from 'lodash/fp/prop';
+import mapKeys from 'lodash/fp/mapKeys';
+import mapValues from 'lodash/fp/mapValues';
+import toString from 'lodash/fp/toString';
 import {
   BehaviorSubject,
   catchError,
@@ -128,12 +133,13 @@ export class OperationsPageService {
         this._isOneBudgetSummaryLoading$.next(true);
         this._isOneBudgetSummaryError$.next(false);
       }),
-      switchMap(([params, data, date]) =>
+      switchMap(([params, data, dateISO]) =>
         this.budgetsSummariesGql
           .watch({
             params: {
               type: data['type'],
-              month: date,
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
               ...flow(
                 mapKeys((k) => k + 'Id'),
                 mapValues(parseInt)
@@ -159,7 +165,7 @@ export class OperationsPageService {
       this._routeData$,
       this.currentMonth.dateISO$,
     ]).pipe(
-      switchMap(([params, data, date]) =>
+      switchMap(([params, data, dateISO]) =>
         this.budgetsSummariesGql
           .watch({
             params: {
@@ -167,7 +173,8 @@ export class OperationsPageService {
                 data['type'] === BudgetSummaryType.Currency
                   ? BudgetSummaryType.Group
                   : BudgetSummaryType.Category,
-              month: date,
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
               ...flow(
                 mapKeys((k) => k + 'Id'),
                 mapValues(parseInt)
@@ -185,11 +192,12 @@ export class OperationsPageService {
         this._isOperationsLoading$.next(true);
         this._isOperationsError$.next(false);
       }),
-      switchMap(([params, date]) =>
+      switchMap(([params, dateISO]) =>
         this.operationsGql
           .watch({
             params: {
-              month: date,
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
               ...flow(
                 mapKeys((k) => k + 'Id'),
                 mapValues(parseInt)
@@ -352,7 +360,7 @@ export class OperationsPageService {
     itemsList: Array<{ id: number; name: string }>,
     itemId?: string
   ): string | undefined {
-    const item = itemsList.find(flow(get('id'), toString, eq(itemId)));
+    const item = itemsList.find(flow(prop('id'), toString, eq(itemId)));
     return item?.name;
   }
 

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { get, isEqual, pipe } from 'lodash/fp';
+import isEqual from 'lodash/fp/isEqual';
+import pipe from 'lodash/fp/pipe';
+import prop from 'lodash/fp/prop';
 
 interface Locale {
   name: string;
@@ -34,7 +36,7 @@ export class LanguageSwitcherComponent implements OnInit {
   ngOnInit(): void {
     if (this.localeName) {
       this.currentLocale = this.locales.find(
-        pipe(get('name'), isEqual(this.localeName))
+        pipe(prop('name'), isEqual(this.localeName))
       ) as Locale;
     }
   }

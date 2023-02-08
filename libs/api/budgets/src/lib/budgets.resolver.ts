@@ -2,6 +2,7 @@ import { CurrentUserId } from '@ispent/api/auth';
 import {
   BudgetsParams,
   CreateBudgetRecordInput,
+  GenerateBudgetsRecordsInput,
 } from '@ispent/api/data-access';
 import {
   Args,
@@ -29,18 +30,18 @@ export class BudgetsResolver {
 
   @Mutation()
   async recreateManyBudgetsRecords(
-    @Args('inputs') inputs: CreateBudgetRecordInput[],
+    @Args('input') input: CreateBudgetRecordInput[],
     @CurrentUserId() uid
   ) {
-    return this.budgetsService.recreateMany(inputs, uid);
+    return this.budgetsService.recreateMany(input, uid);
   }
 
   @Mutation()
   async generateManyBudgetsRecords(
-    @Args('date') date: string,
+    @Args('input') input: GenerateBudgetsRecordsInput,
     @CurrentUserId() uid
   ) {
-    return this.budgetsService.generateMany(date, uid);
+    return this.budgetsService.generateMany(input, uid);
   }
 
   @Mutation()

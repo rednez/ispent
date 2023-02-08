@@ -15,7 +15,10 @@ import {
   Group,
   Operation,
 } from '@ispent/front/data-access';
-import { prop, isEqual, negate, pipe } from 'lodash/fp';
+import prop from 'lodash/fp/prop';
+import isEqual from 'lodash/fp/isEqual';
+import negate from 'lodash/fp/negate';
+import pipe from 'lodash/fp/pipe';
 import { map, Subject, takeUntil } from 'rxjs';
 import { EditorFormService } from './editor-form.service';
 
