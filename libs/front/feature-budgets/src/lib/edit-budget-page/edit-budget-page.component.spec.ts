@@ -1,7 +1,7 @@
-import { EditBudgetPageComponent } from './edit-budget-page.component';
 import { MockBuilder, MockRender } from 'ng-mocks';
-import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
 import { EMPTY } from 'rxjs';
+import { FrontFeatureBudgetsModule } from '../front-feature-budgets.module';
+import { EditBudgetPageComponent } from './edit-budget-page.component';
 import { EditBudgetPageService } from './edit-budget-page.service';
 
 describe('EditBudgetPageComponent', () => {
@@ -14,10 +14,12 @@ describe('EditBudgetPageComponent', () => {
         isDataError$: EMPTY,
         isDataSaving$: EMPTY,
         data$: EMPTY,
+        currencies$: EMPTY,
+        groups$: EMPTY,
         onCreateCurrency$: () => EMPTY,
         onCreateGroup$: () => EMPTY,
         onCreateCategory$: () => EMPTY,
-        loadInitData: () => EMPTY,
+        initData$: EMPTY,
       },
     })
   );

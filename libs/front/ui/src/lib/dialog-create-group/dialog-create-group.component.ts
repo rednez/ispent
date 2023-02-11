@@ -10,9 +10,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Group } from '@ispent/front/data-access';
 import { randomColorHex } from '@ispent/shared/utils';
-import isEqual from 'lodash/fp/isEqual';
-import pipe from 'lodash/fp/pipe';
-import prop from 'lodash/fp/prop';
+import { equals, pipe, prop } from 'ramda';
 import { uniqNameValidator } from '../validators';
 
 @Component({
@@ -132,7 +130,7 @@ export class DialogCreateGroupComponent implements OnInit {
       return undefined;
     }
 
-    return this.data.groups.find(pipe(prop('id'), isEqual(this.data.id)));
+    return this.data.groups.find(pipe(prop('id'), equals(this.data.id)));
   }
 
   close() {

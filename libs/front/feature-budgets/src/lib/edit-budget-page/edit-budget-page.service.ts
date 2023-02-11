@@ -28,7 +28,7 @@ import {
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
 import { addDays, lastDayOfMonth, subMonths } from 'date-fns';
-import { groupBy, map as _map } from 'lodash-es';
+import { groupBy, mapObjIndexed, pipe, prop, toString, values } from 'ramda';
 import {
   BehaviorSubject,
   catchError,
@@ -369,20 +369,28 @@ export class EditBudgetPageService {
 
   private deserializeServerData(data: BudgetsQuery): FormData {
     return {
-      currencies: _map(groupBy(data.budgets, 'currency.id'), (value, key) => ({
-        id: parseInt(key),
-        groups: _map(groupBy(value, 'group.id'), (gValue, gKey) => ({
-          id: parseInt(gKey),
-          categories: gValue.map((i) => ({
-            id: i.category.id,
-            amount: i.amount,
-            plannedPrevious: i.prevPlannedAmount,
-            spentPrevious: i.prevSpentAmount,
-            spentCurrent: i.currentSpentAmount,
-            favorite: i.category.favorite,
-          })),
+      currencies: pipe(
+        groupBy(pipe(prop('currency'), prop('id'), toString)),
+        mapObjIndexed((groups, currencyId) => ({
+          id: parseInt(currencyId),
+          groups: pipe(
+            groupBy(pipe(prop('group'), prop('id'), toString)),
+            mapObjIndexed((categories, groupId) => ({
+              id: parseInt(groupId),
+              categories: categories.map((i: any) => ({
+                id: i.category.id,
+                amount: i.amount,
+                plannedPrevious: i.prevPlannedAmount,
+                spentPrevious: i.prevSpentAmount,
+                spentCurrent: i.currentSpentAmount,
+                favorite: i.category.favorite,
+              })),
+            })),
+            values
+          )(groups),
         })),
-      })),
+        values
+      )(data.budgets),
     };
   }
 

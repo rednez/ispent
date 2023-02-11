@@ -25,12 +25,7 @@ import {
   DialogCreateCurrencyComponent,
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
-import eq from 'lodash/fp/eq';
-import flow from 'lodash/fp/flow';
-import prop from 'lodash/fp/prop';
-import mapKeys from 'lodash/fp/mapKeys';
-import mapValues from 'lodash/fp/mapValues';
-import toString from 'lodash/fp/toString';
+import { equals, pipe, prop, toString } from 'ramda';
 import {
   BehaviorSubject,
   catchError,
@@ -133,17 +128,14 @@ export class OperationsPageService {
         this._isOneBudgetSummaryLoading$.next(true);
         this._isOneBudgetSummaryError$.next(false);
       }),
-      switchMap(([params, data, dateISO]) =>
-        this.budgetsSummariesGql
+      switchMap(([params, data, dateISO]) => {
+        return this.budgetsSummariesGql
           .watch({
             params: {
               type: data['type'],
               dateTimeStart: dateISO,
               dateTimeEnd: this.currentMonth.lastDay,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              ...this.transformRouteParams(params),
             },
           })
           .valueChanges.pipe(
@@ -154,8 +146,8 @@ export class OperationsPageService {
               this._isOneBudgetSummaryError$.next(true);
               return throwError(() => err);
             })
-          )
-      )
+          );
+      })
     );
   }
 
@@ -175,10 +167,7 @@ export class OperationsPageService {
                   : BudgetSummaryType.Category,
               dateTimeStart: dateISO,
               dateTimeEnd: this.currentMonth.lastDay,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              ...this.transformRouteParams(params),
             },
           })
           .valueChanges.pipe(map((result) => result.data.budgetsSummary))
@@ -192,16 +181,13 @@ export class OperationsPageService {
         this._isOperationsLoading$.next(true);
         this._isOperationsError$.next(false);
       }),
-      switchMap(([params, dateISO]) =>
+      switchMap(([routeParams, dateISO]) =>
         this.operationsGql
           .watch({
             params: {
               dateTimeStart: dateISO,
               dateTimeEnd: this.currentMonth.lastDay,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              ...this.transformRouteParams(routeParams),
             },
           })
           .valueChanges.pipe(
@@ -360,7 +346,7 @@ export class OperationsPageService {
     itemsList: Array<{ id: number; name: string }>,
     itemId?: string
   ): string | undefined {
-    const item = itemsList.find(flow(prop('id'), toString, eq(itemId)));
+    const item = itemsList.find(pipe(prop('id'), toString, equals(itemId)));
     return item?.name;
   }
 
@@ -409,5 +395,13 @@ export class OperationsPageService {
     }
 
     return result;
+  };
+
+  private transformRouteParams = (
+    routeParams: Record<string, string>
+  ): Record<string, number> => {
+    return Object.entries(routeParams).reduce((acc, [key, val]) => {
+      return { ...{ [key + 'Id']: parseInt(val) }, ...acc };
+    }, {});
   };
 }

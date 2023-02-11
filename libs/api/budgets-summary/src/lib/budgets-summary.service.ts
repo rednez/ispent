@@ -8,7 +8,6 @@ import {
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { get } from 'lodash';
 import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable()
@@ -220,8 +219,8 @@ export class BudgetsSummaryService {
         parentId: mainQueryItem.id,
         type,
         title: mainQueryItem.name,
-        planned: get(groupedBudgetRecord, '_sum.amount', 0),
-        spent: get(groupedOperation, '_sum.amount', 0),
+        planned: groupedBudgetRecord?._sum?.amount || 0,
+        spent: groupedOperation?._sum?.amount || 0,
         color: mainQueryItem.color || null,
       };
     };

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { isNaN, round } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +8,7 @@ export class EditorFormService {
     operationAmount: number | string,
     withdrawalAmount: number | string
   ): number {
+    const precision = 10000;
     const oAmount =
       typeof operationAmount === 'string'
         ? parseFloat(operationAmount)
@@ -22,6 +22,6 @@ export class EditorFormService {
       return 0;
     }
 
-    return round(wAmount / oAmount, 4);
+    return Math.round((wAmount / oAmount) * precision) / precision;
   }
 }

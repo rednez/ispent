@@ -7,8 +7,7 @@ import { PrismaService } from '@ispent/api/db';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Operation } from '@prisma/client';
 import { isFirstDayOfMonth, isValid, parseISO, subMonths } from 'date-fns';
-import { unionWith } from 'lodash';
-import { add, get, isEqual, pipe } from 'lodash/fp';
+import { add, equals, pipe, prop, unionWith } from 'ramda';
 
 @Injectable()
 export class BudgetsService {
@@ -163,16 +162,25 @@ export class BudgetsService {
       })
     );
 
-    const budgetsInputs: CreateBudgetRecordInput[] = unionWith(
+    const budgetsInputs: CreateBudgetRecordInput[] = this.unionByFirst(
       prevOperationsMapped,
-      pevBudgetsMapped,
-      (a, b) =>
-        a.currencyId === b.currencyId &&
-        a.groupId === b.groupId &&
-        a.categoryId === b.categoryId
+      pevBudgetsMapped
     ).map((i) => ({ ...i, dateTime: date }));
 
     return this.recreateMany(budgetsInputs, uid);
+  }
+
+  private unionByFirst<
+    T extends { currencyId: number; groupId: number; categoryId: number }
+  >(first: T[], second: T[]): T[] {
+    return unionWith(
+      (a, b) =>
+        a.currencyId === b.currencyId &&
+        a.groupId === b.groupId &&
+        a.categoryId === b.categoryId,
+      first,
+      second
+    );
   }
 
   private computeTotalAmount(
@@ -185,9 +193,9 @@ export class BudgetsService {
     budgetCategoryId: number
   ): number {
     return operations
-      .filter(pipe(get('currencyId'), isEqual(budgetCurrencyId)))
-      .filter(pipe(get('categoryId'), isEqual(budgetCategoryId)))
-      .map(get('amount'))
+      .filter(pipe(prop('currencyId'), equals(budgetCurrencyId)))
+      .filter(pipe(prop('categoryId'), equals(budgetCategoryId)))
+      .map(prop('amount'))
       .reduce(add, 0);
   }
 

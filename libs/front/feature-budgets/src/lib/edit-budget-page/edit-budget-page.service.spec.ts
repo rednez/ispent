@@ -35,6 +35,7 @@ const formData = {
               plannedPrevious: 0,
               spentPrevious: 0,
               spentCurrent: 0,
+              favorite: true,
             },
             {
               id: 2,
@@ -42,6 +43,7 @@ const formData = {
               plannedPrevious: 0,
               spentPrevious: 0,
               spentCurrent: 0,
+              favorite: false,
             },
           ],
         },
@@ -54,6 +56,7 @@ const formData = {
               plannedPrevious: 0,
               spentPrevious: 0,
               spentCurrent: 0,
+              favorite: false,
             },
           ],
         },
@@ -107,6 +110,7 @@ describe('EditBudgetPageService', () => {
           category: {
             id: 1,
             name: 'Продукти',
+            favorite: true,
           },
           group: {
             id: 1,
@@ -126,6 +130,7 @@ describe('EditBudgetPageService', () => {
           category: {
             id: 2,
             name: 'Комуналка',
+            favorite: false,
           },
           group: {
             id: 1,
@@ -145,6 +150,7 @@ describe('EditBudgetPageService', () => {
           category: {
             id: 3,
             name: 'Математика',
+            favorite: false,
           },
           group: {
             id: 2,

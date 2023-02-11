@@ -9,9 +9,7 @@ import {
 } from '@angular/core';
 import { Operation } from '@ispent/front/data-access';
 import { format } from 'date-fns';
-import groupBy from 'lodash/fp/groupBy';
-import pipe from 'lodash/fp/pipe';
-import entries from 'lodash/fp/entries';
+import { toPairs, groupBy, pipe } from 'ramda';
 
 @Component({
   selector: 'ispent-operations-list',
@@ -93,7 +91,7 @@ export class OperationsListComponent implements OnChanges {
   ): Array<[string, Operation[]]> {
     return pipe(
       groupBy((i: Operation) => format(new Date(i.dateTime), 'yyyy-MM-dd')),
-      entries
-    )(operations);
+      toPairs
+    )(operations) as Array<[string, Operation[]]>;
   }
 }

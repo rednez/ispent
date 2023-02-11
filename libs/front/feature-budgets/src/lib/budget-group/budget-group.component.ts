@@ -27,13 +27,7 @@ import {
   BudgetSummaryType,
   CurrentMonthService,
 } from '@ispent/front/data-access';
-import add from 'lodash/fp/add';
-import prop from 'lodash/fp/prop';
-import isNil from 'lodash/fp/isNil';
-import fpMap from 'lodash/fp/map';
-import negate from 'lodash/fp/negate';
-import pipe from 'lodash/fp/pipe';
-import reduce from 'lodash/fp/reduce';
+import { add, isNil, not, pipe as rPipe, prop } from 'ramda';
 import {
   distinctUntilChanged,
   filter,
@@ -46,7 +40,6 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { subMonths } from 'date-fns';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetEntity, FormBudgetGroup } from '../data';
 import { ParentBudgetEntitiesService } from '../parent-budget-entities.service';
@@ -215,16 +208,22 @@ export class BudgetGroupComponent
       .subscribe();
 
     this.totalAmount$ = this.form.valueChanges.pipe(
-      map(pipe(prop('categories'), fpMap(prop('amount')), reduce(add, 0)))
+      map(this.computeTotalAmount)
     );
   }
+
+  private computeTotalAmount = (params: {
+    categories: Array<{ amount: number }>;
+  }): number => {
+    return params.categories.map(prop('amount')).reduce(add, 0);
+  };
 
   private createCategoryIdSubscription(control: FormControl): Subscription {
     return control.valueChanges
       .pipe(
         skip(1),
         map(prop('id')),
-        filter(negate(isNil)),
+        filter(rPipe(not, isNil)),
         filter(() => !!this.currencyId && this.form.get('id')?.value),
         distinctUntilChanged(),
         switchMap(

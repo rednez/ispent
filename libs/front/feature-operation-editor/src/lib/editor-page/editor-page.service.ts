@@ -22,7 +22,7 @@ import {
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
 import { gql, MutationResult } from 'apollo-angular';
-import { omit } from 'lodash-es';
+import { omit } from 'ramda';
 import {
   catchError,
   map,
@@ -102,7 +102,7 @@ export class EditorPageService {
       return this.updateOperationGQL
         .mutate({
           params: {
-            ...omit(params, 'isOtherWithdrawalCurrency'),
+            ...omit(['isOtherWithdrawalCurrency'], params),
             id: params.id,
             dateTime,
           },
@@ -120,7 +120,7 @@ export class EditorPageService {
         .mutate(
           {
             params: {
-              ...omit(params, ['id', 'isOtherWithdrawalCurrency']),
+              ...omit(['id', 'isOtherWithdrawalCurrency'], params),
               dateTime,
             },
           },

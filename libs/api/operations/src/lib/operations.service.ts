@@ -5,7 +5,7 @@ import {
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
 import { Injectable } from '@nestjs/common';
-import { isEqual, pipe, prop } from 'lodash/fp';
+import { equals, pipe, prop } from 'ramda';
 
 @Injectable()
 export class OperationsService {
@@ -48,7 +48,7 @@ export class OperationsService {
         ? {
             ...operation,
             withdrawalCurrencyName: currencies.find(
-              pipe(prop('id'), isEqual(operation.withdrawalCurrencyId))
+              pipe(prop('id'), equals(operation.withdrawalCurrencyId))
             ).name,
           }
         : operation

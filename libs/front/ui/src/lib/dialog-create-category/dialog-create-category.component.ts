@@ -10,9 +10,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Group } from '@ispent/front/data-access';
 import { randomColorHex } from '@ispent/shared/utils';
-import isEqual from 'lodash/fp/isEqual';
-import pipe from 'lodash/fp/pipe';
-import prop from 'lodash/fp/prop';
+import { equals, pipe, prop } from 'ramda';
 import { uniqNameValidator } from '../validators';
 
 interface BaseCategoryData {
@@ -94,7 +92,7 @@ export class DialogCreateCategoryComponent implements OnInit {
             this.title = 'Edit category';
             this.submitButtonTitle = 'Update';
             const editableCategory = parentGroup.categories.find(
-              pipe(prop('id'), isEqual(this.data.id))
+              pipe(prop('id'), equals(this.data.id))
             );
             if (editableCategory) {
               this.category.setValue(editableCategory.name);

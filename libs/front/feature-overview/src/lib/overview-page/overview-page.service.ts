@@ -7,7 +7,7 @@ import {
   Operation,
   OperationsGQL,
 } from '@ispent/front/data-access';
-import { isEmpty } from 'lodash-es';
+import { isEmpty } from 'ramda';
 import {
   BehaviorSubject,
   catchError,
