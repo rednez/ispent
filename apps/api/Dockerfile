@@ -1,4 +1,4 @@
-FROM rednez/ispent-base:1.4.0
+FROM rednez/ispent-base:1.5.1
 
 WORKDIR /app
 COPY . .
