@@ -11,23 +11,23 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
       [matTooltip]="
         ('Planned' | translate) +
         ': ' +
-        (plan | amount) +
+        (plan | number : '1.2-2') +
         ', ' +
         ('Spent' | translate) +
         ': ' +
-        (spent | amount) +
+        (spent | number : '1.2-2') +
         ', ' +
         ('Remains' | translate) +
         ': ' +
-        (plan - spent | amount)
+        (plan - spent | number : '1.2-2')
       "
       matTooltipClass="text-sm"
     >
       <span class="font-medium" [ngStyle]="setTitleColor()">{{ title }}</span>
-      <span class="text-green-500">{{ planAmount | amount }}</span>
-      <span class="text-amber-500">{{ spentAmount | amount }}</span>
+      <span class="text-green-500">{{ planAmount | number : '1.2-2' }}</span>
+      <span class="text-amber-500">{{ spentAmount | number : '1.2-2' }}</span>
       <span [ngClass]="setRemainsAmountClasses()">{{
-        remainsAmount | amount
+        remainsAmount | number : '1.2-2'
       }}</span>
     </div>
   `,

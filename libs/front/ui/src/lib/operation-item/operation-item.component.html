@@ -4,7 +4,7 @@
 >
   <div class="space-y-1">
     <div class="font-medium">
-      {{ amount | amount | currency : currency }}
+      {{ amount | currency : currency : 'code' : '1.2-2' }}
     </div>
     <div
       *ngIf="withdrawalCurrency"
@@ -16,7 +16,7 @@
         ' 1 ' +
         currency +
         ' = ' +
-        (exchangeRate | amount : '0000' | currency : withdrawalCurrency)
+        (exchangeRate | currency : withdrawalCurrency : 'code' : '1.4-4')
       "
       matTooltipClass="text-sm"
     >
@@ -24,7 +24,7 @@
         >currency_exchange
       </mat-icon>
       <span>{{
-        withdrawalAmount | amount | currency : withdrawalCurrency!
+        withdrawalAmount | currency : currency : 'code' : '1.2-2'
       }}</span>
     </div>
   </div>

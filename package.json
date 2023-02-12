@@ -1,7 +1,7 @@
 {
   "name": "ispent",
   "description": "The web app for spending accounting",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "license": "MIT",
   "author": {
     "name": "Vasyl Yefimenko",
@@ -71,7 +71,6 @@
     "ng-mocks": "^14.5.2",
     "ngx-color-picker": "^13.0.0",
     "ngx-mask": "^15.0.2",
-    "numeral": "^2.0.6",
     "passport": "^0.6.0",
     "passport-firebase-jwt": "^1.2.1",
     "passport-jwt": "^4.0.1",
@@ -107,7 +106,6 @@
     "@nrwl/workspace": "15.6.3",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
-    "@types/numeral": "^2.0.2",
     "@types/passport-jwt": "^3.0.8",
     "@types/ramda": "^0.28.22",
     "@typescript-eslint/eslint-plugin": "^5.36.1",

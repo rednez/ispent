@@ -24,15 +24,15 @@
   <div class="text-sm">
     <div class="row">
       <div>{{ 'Planned' | translate }}:</div>
-      <div class="text-green-500">{{ planed | amount }}</div>
+      <div class="text-green-500">{{ planed | number : '1.2-2' }}</div>
     </div>
     <div class="row">
       <div>{{ 'Spent' | translate }}:</div>
-      <div class="text-amber-500">{{ spent | amount }}</div>
+      <div class="text-amber-500">{{ spent | number : '1.2-2' }}</div>
     </div>
     <div class="row">
       <div>{{ 'Remains' | translate }}:</div>
-      <div>{{ remains | amount }}</div>
+      <div>{{ remains | number : '1.2-2' }}</div>
     </div>
   </div>
 </div>
