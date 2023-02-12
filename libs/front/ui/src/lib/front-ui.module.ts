@@ -22,8 +22,6 @@ import { OperationItemComponent } from './operation-item/operation-item.componen
 import { OperationsListGroupHeaderComponent } from './operations-list-group-header/operations-list-group-header.component';
 import { OperationsListComponent } from './operations-list/operations-list.component';
 import { PageLayoutComponent } from './page-layout/page-layout.component';
-import { AmountPipe } from './pipes/amount.pipe';
-import { CurrencyPipe } from './pipes/currency.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 import { RequestResultNotificationComponent } from './request-result-notification/request-result-notification.component';
 
@@ -38,13 +36,11 @@ import { RequestResultNotificationComponent } from './request-result-notificatio
     ColorPickerModule,
   ],
   declarations: [
-    AmountPipe,
     AppBarComponent,
     PageLayoutComponent,
     BudgetSummaryWidgetComponent,
     BiValuedIndicatorComponent,
     ChipComponent,
-    CurrencyPipe,
     OperationItemComponent,
     OperationsListComponent,
     BudgetChipComponent,
@@ -63,7 +59,6 @@ import { RequestResultNotificationComponent } from './request-result-notificatio
   exports: [
     RouterModule,
     FrontCustomMaterialModule,
-    AmountPipe,
     NgxMaskDirective,
     NgxMaskPipe,
     AppBarComponent,
@@ -71,7 +66,6 @@ import { RequestResultNotificationComponent } from './request-result-notificatio
     BudgetSummaryWidgetComponent,
     BiValuedIndicatorComponent,
     ChipComponent,
-    CurrencyPipe,
     OperationItemComponent,
     OperationsListComponent,
     BudgetChipComponent,

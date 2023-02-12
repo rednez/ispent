@@ -24,10 +24,7 @@
         "styles": [
           "apps/front/src/styles.scss"
         ],
-        "scripts": [],
-        "allowedCommonJsDependencies": [
-          "numeral"
-        ]
+        "scripts": []
       },
       "configurations": {
         "production": {

@@ -1,5 +1,7 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import ukLocale from '@angular/common/locales/uk';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
@@ -19,6 +21,7 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { GraphqlModule } from './graphql.module';
 import { RoutingModule } from './routing.module';
+registerLocaleData(ukLocale);
 
 function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -63,6 +66,7 @@ const DATE_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     provideNgxMask(),
+    { provide: LOCALE_ID, useValue: 'uk-UA' },
   ],
   bootstrap: [AppComponent],
 })

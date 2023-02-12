@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
     <div class="text-sm mb-3">
       <span class="font-medium">{{ 'Rate' | translate }}:</span>
       <span class="ml-0.5" [class.text-slate-500]="!rate">{{
-        rate | amount : '0000'
+        rate | number : '1.4-4'
       }}</span>
     </div>
   `,
