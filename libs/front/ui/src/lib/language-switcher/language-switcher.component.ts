@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { equals, pipe, prop } from 'ramda';
 
 interface Locale {
@@ -15,6 +17,20 @@ interface Locale {
 export class LanguageSwitcherComponent implements OnInit {
   @Input() localeName?: string;
   @Output() changeLocale = new EventEmitter<string>();
+
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
+    iconRegistry.addSvgIcon(
+      'flag-ua',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/images/ua.svg')
+    );
+    iconRegistry.addSvgIcon(
+      'flag-us',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/images/us.svg')
+    );
+  }
 
   readonly locales: Locale[] = [
     {
@@ -42,5 +58,13 @@ export class LanguageSwitcherComponent implements OnInit {
   onChangeLocale(locale: Locale) {
     this.currentLocale = locale;
     this.changeLocale.emit(locale.name);
+  }
+
+  getNationalFlag(locale: Locale) {
+    return locale.name === 'uk'
+      ? 'flag-ua'
+      : locale.name === 'eng'
+      ? 'flag-us'
+      : '';
   }
 }

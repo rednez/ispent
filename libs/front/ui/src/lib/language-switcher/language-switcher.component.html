@@ -1,5 +1,5 @@
 <button mat-button [matMenuTriggerFor]="menu">
-  {{ currentLocale.titleShort }}
+  <mat-icon [svgIcon]="getNationalFlag(currentLocale)"></mat-icon>
 </button>
 <mat-menu #menu="matMenu">
   <button
@@ -7,6 +7,7 @@
     mat-menu-item
     (click)="onChangeLocale(locale)"
   >
+    <mat-icon [svgIcon]="getNationalFlag(locale)"></mat-icon>
     {{ locale.titleFull }}
   </button>
 </mat-menu>
