@@ -18,4 +18,41 @@ describe('BudgetCurrencyComponent', () => {
     const fixture = MockRender(BudgetCurrencyComponent);
     expect(fixture.point.componentInstance).toBeTruthy();
   });
+
+  it('computeTotalAmount should return total amount for a currency', () => {
+    const fixture = MockRender(BudgetCurrencyComponent);
+    const params = {
+      groups: [
+        {
+          id: 1,
+          categories: [
+            {
+              id: 1,
+              amount: 2,
+            },
+            {
+              id: 2,
+              amount: 10,
+            },
+          ],
+        },
+        {
+          id: 2,
+          categories: [
+            {
+              id: 3,
+              amount: 10,
+            },
+            {
+              id: 4,
+              amount: 15,
+            },
+          ],
+        },
+      ],
+    };
+    expect((<any>fixture.componentInstance).computeTotalAmount(params)).toBe(
+      37
+    );
+  });
 });

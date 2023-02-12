@@ -15,7 +15,7 @@ import {
   Group,
   Operation,
 } from '@ispent/front/data-access';
-import { prop, isEqual, negate, pipe } from 'lodash/fp';
+import { equals, not, pipe, prop } from 'ramda';
 import { map, Subject, takeUntil } from 'rxjs';
 import { EditorFormService } from './editor-form.service';
 
@@ -119,7 +119,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
 
     if (groups?.currentValue && this.operationForm?.get('groupId')?.value) {
       const group = groups.currentValue.find(
-        pipe(prop('id'), isEqual(this.operationForm.get('groupId')?.value))
+        pipe(prop('id'), equals(this.operationForm.get('groupId')?.value))
       ) as Group;
       if (group) {
         this.categories = group.categories as Category[];
@@ -235,7 +235,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       .get('groupId')
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
       .subscribe((groupId) => {
-        const group = this.groups.find(pipe(prop('id'), isEqual(groupId)));
+        const group = this.groups.find(pipe(prop('id'), equals(groupId)));
         if (group) {
           this.categories = group.categories as Category[];
           this.operationForm.get('categoryId')?.reset();
@@ -247,7 +247,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
       .subscribe((id) => {
         this.withdrawalCurrencies = this.currencies.filter(
-          pipe(prop('id'), negate(isEqual(id)))
+          pipe(prop('id'), equals(id), not)
         );
         if (this.operationForm.get('isOtherWithdrawalCurrency')?.value) {
           this.operationForm.get('withdrawalCurrencyId')?.reset();

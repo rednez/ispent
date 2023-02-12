@@ -17,4 +17,17 @@ describe('BudgetGroupComponent', () => {
     const fixture = MockRender(BudgetGroupComponent);
     expect(fixture.point.componentInstance).toBeTruthy();
   });
+
+  it('computeTotalAmount should return total amount for a group', () => {
+    const fixture = MockRender(BudgetGroupComponent);
+    const params = {
+      categories: [
+        { id: 1, amount: 10 },
+        { id: 2, amount: 2 },
+      ],
+    };
+    expect((<any>fixture.componentInstance).computeTotalAmount(params)).toBe(
+      12
+    );
+  });
 });

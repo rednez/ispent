@@ -140,4 +140,20 @@ describe('OperationsPageService', () => {
       });
     });
   });
+
+  it('transformRouteParams should return transformed object', () => {
+    expect((<any>service).transformRouteParams({ currency: '1' })).toEqual({
+      currencyId: 1,
+    });
+    expect(
+      (<any>service).transformRouteParams({ currency: '1', group: '2' })
+    ).toEqual({ currencyId: 1, groupId: 2 });
+    expect(
+      (<any>service).transformRouteParams({
+        currency: '1',
+        group: '2',
+        category: '3',
+      })
+    ).toEqual({ currencyId: 1, groupId: 2, categoryId: 3 });
+  });
 });

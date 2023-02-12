@@ -27,7 +27,7 @@ import {
   BudgetSummaryType,
   CurrentMonthService,
 } from '@ispent/front/data-access';
-import { add, get, isNil, map as fpMap, negate, pipe, reduce } from 'lodash/fp';
+import { add, isNil, not, pipe as rPipe, prop } from 'ramda';
 import {
   distinctUntilChanged,
   filter,
@@ -208,23 +208,30 @@ export class BudgetGroupComponent
       .subscribe();
 
     this.totalAmount$ = this.form.valueChanges.pipe(
-      map(pipe(get('categories'), fpMap(get('amount')), reduce(add, 0)))
+      map(this.computeTotalAmount)
     );
   }
+
+  private computeTotalAmount = (params: {
+    categories: Array<{ amount: number }>;
+  }): number => {
+    return params.categories.map(prop('amount')).reduce(add, 0);
+  };
 
   private createCategoryIdSubscription(control: FormControl): Subscription {
     return control.valueChanges
       .pipe(
         skip(1),
-        map(get('id')),
-        filter(negate(isNil)),
+        map(prop('id')),
+        filter(rPipe(not, isNil)),
         filter(() => !!this.currencyId && this.form.get('id')?.value),
         distinctUntilChanged(),
         switchMap(
           (categoryId) =>
             this.budgetsSummariesGQL.watch({
               params: {
-                month: this.currentMonth.previousDateIso,
+                dateTimeStart: this.currentMonth.previousDateISO,
+                dateTimeEnd: this.currentMonth.dateISO,
                 type: BudgetSummaryType.Category,
                 currencyId: this.currencyId,
                 groupId: parseInt(this.form.value['id']),

@@ -22,15 +22,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Category, Group } from '@ispent/front/data-access';
-import {
-  add,
-  flattenDeep,
-  get,
-  isEqual,
-  map as fpMap,
-  pipe,
-  reduce,
-} from 'lodash/fp';
+import { equals, flatten, pipe, pluck, prop, sum } from 'ramda';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { ChildBudgetEntitiesService } from '../child-budget-entities.service';
 import { FormBudgetCurrency, FormBudgetEntity } from '../data';
@@ -92,19 +84,22 @@ export class BudgetCurrencyComponent
       .subscribe();
 
     this.totalAmount$ = this.form.valueChanges.pipe(
-      map(
-        pipe(
-          get('groups'),
-          fpMap(get('categories')),
-          flattenDeep,
-          fpMap(get('amount')),
-          reduce(add, 0)
-        )
-      )
+      map(this.computeTotalAmount)
     );
 
     this.currencies$ = this.childBudgetEntities.availableEntities;
   }
+
+  private computeTotalAmount = (params: {
+    groups: Array<{ categories: Array<{ amount: number }> }>;
+  }) => {
+    return pipe(
+      pluck('categories'),
+      flatten,
+      pluck('amount'),
+      sum
+    )(params.groups);
+  };
 
   ngOnChanges(changes: SimpleChanges): void {
     const { groupsList } = changes;
@@ -169,7 +164,7 @@ export class BudgetCurrencyComponent
   }
 
   getCategoriesList(groupId: number): Category[] {
-    const group = this.groupsList?.find(pipe(get('id'), isEqual(groupId)));
+    const group = this.groupsList?.find(pipe(prop('id'), equals(groupId)));
     return (group && group.categories) || [];
   }
 

@@ -7,9 +7,7 @@ import {
   Group,
 } from '@ispent/api/data-access';
 import { PrismaService } from '@ispent/api/db';
-import { getMonthPeriod } from '@ispent/api/util';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { get } from 'lodash';
 import { forkJoin, from, iif, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable()
@@ -20,10 +18,20 @@ export class BudgetsSummaryService {
     query: BudgetSummaryParams,
     userId: string
   ): Observable<BudgetSummary[]> {
-    const { type, currencyId, groupId, categoryId, month } = query;
+    const {
+      type,
+      currencyId,
+      groupId,
+      categoryId,
+      dateTimeStart,
+      dateTimeEnd,
+    } = query;
 
     const where = {
-      dateTime: getMonthPeriod(month ? new Date(month) : undefined),
+      dateTime: {
+        gte: dateTimeStart ? new Date(dateTimeStart) : null,
+        lt: dateTimeEnd ? new Date(dateTimeEnd) : null,
+      },
       userId,
     };
 
@@ -211,8 +219,8 @@ export class BudgetsSummaryService {
         parentId: mainQueryItem.id,
         type,
         title: mainQueryItem.name,
-        planned: get(groupedBudgetRecord, '_sum.amount', 0),
-        spent: get(groupedOperation, '_sum.amount', 0),
+        planned: groupedBudgetRecord?._sum?.amount || 0,
+        spent: groupedOperation?._sum?.amount || 0,
         color: mainQueryItem.color || null,
       };
     };

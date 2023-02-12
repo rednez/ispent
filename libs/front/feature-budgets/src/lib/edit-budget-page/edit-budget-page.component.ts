@@ -42,7 +42,7 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
     this.budgetsData = { currencies: [] };
     timer(1)
       .pipe(
-        switchMap(() => this.service.loadBudgets(date)),
+        switchMap(() => this.service.loadBudgets()),
         take(1)
       )
       .subscribe((budgetsData) => {
@@ -83,12 +83,9 @@ export class EditBudgetPageComponent implements OnInit, OnDestroy {
   }
 
   private loadInitData() {
-    this.service
-      .loadInitData()
-      .pipe(take(1))
-      .subscribe(({ budgetsData }) => {
-        this.budgetsData = budgetsData;
-      });
+    this.service.initData$.pipe(take(1)).subscribe(({ budgetsData }) => {
+      this.budgetsData = budgetsData;
+    });
 
     this.service
       .onCreateCurrency$()

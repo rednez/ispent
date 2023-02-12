@@ -25,7 +25,7 @@ import {
   DialogCreateCurrencyComponent,
   DialogCreateGroupComponent,
 } from '@ispent/front/ui';
-import { eq, flow, get, mapKeys, mapValues, toString } from 'lodash/fp';
+import { equals, pipe, prop, toString } from 'ramda';
 import {
   BehaviorSubject,
   catchError,
@@ -128,16 +128,14 @@ export class OperationsPageService {
         this._isOneBudgetSummaryLoading$.next(true);
         this._isOneBudgetSummaryError$.next(false);
       }),
-      switchMap(([params, data, date]) =>
-        this.budgetsSummariesGql
+      switchMap(([params, data, dateISO]) => {
+        return this.budgetsSummariesGql
           .watch({
             params: {
               type: data['type'],
-              month: date,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
+              ...this.transformRouteParams(params),
             },
           })
           .valueChanges.pipe(
@@ -148,8 +146,8 @@ export class OperationsPageService {
               this._isOneBudgetSummaryError$.next(true);
               return throwError(() => err);
             })
-          )
-      )
+          );
+      })
     );
   }
 
@@ -159,7 +157,7 @@ export class OperationsPageService {
       this._routeData$,
       this.currentMonth.dateISO$,
     ]).pipe(
-      switchMap(([params, data, date]) =>
+      switchMap(([params, data, dateISO]) =>
         this.budgetsSummariesGql
           .watch({
             params: {
@@ -167,11 +165,9 @@ export class OperationsPageService {
                 data['type'] === BudgetSummaryType.Currency
                   ? BudgetSummaryType.Group
                   : BudgetSummaryType.Category,
-              month: date,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
+              ...this.transformRouteParams(params),
             },
           })
           .valueChanges.pipe(map((result) => result.data.budgetsSummary))
@@ -185,15 +181,13 @@ export class OperationsPageService {
         this._isOperationsLoading$.next(true);
         this._isOperationsError$.next(false);
       }),
-      switchMap(([params, date]) =>
+      switchMap(([routeParams, dateISO]) =>
         this.operationsGql
           .watch({
             params: {
-              month: date,
-              ...flow(
-                mapKeys((k) => k + 'Id'),
-                mapValues(parseInt)
-              )(params),
+              dateTimeStart: dateISO,
+              dateTimeEnd: this.currentMonth.lastDay,
+              ...this.transformRouteParams(routeParams),
             },
           })
           .valueChanges.pipe(
@@ -352,7 +346,7 @@ export class OperationsPageService {
     itemsList: Array<{ id: number; name: string }>,
     itemId?: string
   ): string | undefined {
-    const item = itemsList.find(flow(get('id'), toString, eq(itemId)));
+    const item = itemsList.find(pipe(prop('id'), toString, equals(itemId)));
     return item?.name;
   }
 
@@ -401,5 +395,13 @@ export class OperationsPageService {
     }
 
     return result;
+  };
+
+  private transformRouteParams = (
+    routeParams: Record<string, string>
+  ): Record<string, number> => {
+    return Object.entries(routeParams).reduce((acc, [key, val]) => {
+      return { ...{ [key + 'Id']: parseInt(val) }, ...acc };
+    }, {});
   };
 }

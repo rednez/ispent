@@ -171,14 +171,14 @@ query CurrenciesGroupsBudgets($params: BudgetsParams!) {
   }
 }
 
-mutation RecreateBudgetsRecords($inputs: [CreateBudgetRecordInput!]!) {
-  recreateManyBudgetsRecords(inputs: $inputs) {
+mutation RecreateBudgetsRecords($input: [CreateBudgetRecordInput!]!) {
+  recreateManyBudgetsRecords(input: $input) {
     ...BudgetRecordBase
   }
 }
 
-mutation GenerateBudgetsRecords($date: String!) {
-  generateManyBudgetsRecords(date: $date) {
+mutation GenerateBudgetsRecords($input: GenerateBudgetsRecordsInput!) {
+  generateManyBudgetsRecords(input: $input) {
     ...BudgetRecordBase
     prevPlannedAmount
     prevSpentAmount

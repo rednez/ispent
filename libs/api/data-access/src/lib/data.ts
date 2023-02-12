@@ -43,7 +43,8 @@ export class OperationsParams {
     currencyId?: Nullable<number>;
     groupId?: Nullable<number>;
     categoryId?: Nullable<number>;
-    month?: Nullable<string>;
+    dateTimeStart?: Nullable<string>;
+    dateTimeEnd?: Nullable<string>;
     limit?: Nullable<number>;
 }
 
@@ -75,11 +76,16 @@ export class BudgetSummaryParams {
     currencyId?: Nullable<number>;
     groupId?: Nullable<number>;
     categoryId?: Nullable<number>;
-    month?: Nullable<string>;
+    dateTimeStart?: Nullable<string>;
+    dateTimeEnd?: Nullable<string>;
 }
 
 export class BudgetsParams {
     date: string;
+    prevOperationsDateTimeStart?: Nullable<string>;
+    prevOperationsDateTimeEnd?: Nullable<string>;
+    currentOperationsDateTimeStart?: Nullable<string>;
+    currentOperationsDateTimeEnd?: Nullable<string>;
 }
 
 export class CreateBudgetRecordInput {
@@ -88,6 +94,12 @@ export class CreateBudgetRecordInput {
     categoryId: number;
     groupId: number;
     dateTime: string;
+}
+
+export class GenerateBudgetsRecordsInput {
+    date: string;
+    prevOperationsDateTimeStart: string;
+    prevOperationsDateTimeEnd: string;
 }
 
 export class Currency {
@@ -142,6 +154,10 @@ export class BudgetSummary {
     color?: Nullable<string>;
 }
 
+export class DeleteManyResponse {
+    count: number;
+}
+
 export abstract class IQuery {
     abstract currencies(): Currency[] | Promise<Currency[]>;
 
@@ -164,14 +180,10 @@ export abstract class IQuery {
     abstract budgets(params: BudgetsParams): BudgetRecord[] | Promise<BudgetRecord[]>;
 }
 
-export class DeleteManyResponse {
-    count: number;
-}
-
 export abstract class IMutation {
-    abstract recreateManyBudgetsRecords(inputs: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
+    abstract recreateManyBudgetsRecords(input: CreateBudgetRecordInput[]): BudgetRecord[] | Promise<BudgetRecord[]>;
 
-    abstract generateManyBudgetsRecords(date: string): BudgetRecord[] | Promise<BudgetRecord[]>;
+    abstract generateManyBudgetsRecords(input: GenerateBudgetsRecordsInput): BudgetRecord[] | Promise<BudgetRecord[]>;
 
     abstract deleteManyBudgetsRecords(date: string): DeleteManyResponse | Promise<DeleteManyResponse>;
 

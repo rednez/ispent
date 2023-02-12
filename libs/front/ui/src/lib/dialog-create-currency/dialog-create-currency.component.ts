@@ -9,7 +9,7 @@ import {
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Currency } from '@ispent/front/data-access';
-import { isEqual, pipe, prop } from 'lodash/fp';
+import { equals, pipe, prop } from 'ramda';
 import { uniqNameValidator } from '../validators';
 
 @Component({
@@ -107,7 +107,7 @@ export class DialogCreateCurrencyComponent implements OnInit {
     }
 
     const currency = this.data.currencies.find(
-      pipe(prop('id'), isEqual(this.data.id))
+      pipe(prop('id'), equals(this.data.id))
     );
     return currency ? currency.name : '';
   }
