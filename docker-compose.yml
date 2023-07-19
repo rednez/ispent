@@ -1,17 +1,8 @@
 version: '3.9'
 
 services:
-  #  web:
-  #    build:
-  #      context: ./
-  #      dockerfile: ./apps/front/Dockerfile
-  #    ports:
-  #      - '4200:80'
-  #    restart: on-failure
-  #    depends_on:
-  #      - api
   api:
-    image: rednez/ispent-api:1.5.1
+    build: .
     ports:
       - '3333:3333'
     environment:
