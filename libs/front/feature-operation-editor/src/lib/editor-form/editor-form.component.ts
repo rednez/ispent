@@ -165,7 +165,7 @@ export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
 
   private buildForm() {
     this.operationForm = this.fb.group({
-      amount: [0, [Validators.required]],
+      amount: [null, [Validators.required]],
       currencyId: [null, [Validators.required]],
       groupId: [null, [Validators.required]],
       categoryId: [null, [Validators.required]],
