@@ -24,7 +24,7 @@
         >currency_exchange
       </mat-icon>
       <span>{{
-        withdrawalAmount | currency : currency : 'code' : '1.2-2'
+        withdrawalAmount! | currency : withdrawalCurrency : 'code' : '1.2-2'
       }}</span>
     </div>
   </div>
