@@ -14,6 +14,7 @@ export class EditorPageComponent implements OnInit, OnDestroy {
   groups: Group[] = [];
   currencies: Currency[] = [];
   operation?: Operation;
+  isOperationProcessing = false;
   private onDestroy$ = new Subject();
 
   constructor(
@@ -72,9 +73,15 @@ export class EditorPageComponent implements OnInit, OnDestroy {
   }
 
   onClickSubmit(data: SubmitEventData) {
-    this.service.upsertOperation(data).subscribe(() => {
-      this.goBack();
-    });
+    this.isOperationProcessing = true;
+
+    this.service.upsertOperation(data).subscribe(
+      () => {
+        this.isOperationProcessing = false;
+        this.goBack();
+      },
+      () => (this.isOperationProcessing = false)
+    );
   }
 
   createCurrency() {

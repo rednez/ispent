@@ -1,0 +1,12 @@
+.editor-form {
+  @apply block border rounded-md mx-auto bg-white max-w-md;
+  overflow: hidden;
+
+  .content {
+    padding: 24px;
+
+    &.loading {
+      padding-top: 20px;
+    }
+  }
+}
