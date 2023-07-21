@@ -35,19 +35,14 @@ export interface SubmitEventData {
 @Component({
   selector: 'ispent-editor-form',
   templateUrl: './editor-form.component.html',
-  styles: [
-    `
-      :host {
-        @apply block border rounded-md mx-auto p-6 bg-white max-w-md;
-      }
-    `,
-  ],
+  styleUrls: ['./editor-form.component.scss'],
 })
 export class EditorFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() id: number | null = null;
   @Input() currencies: Currency[] = [];
   @Input() groups: Group[] = [];
   @Input() operation?: Operation;
+  @Input() isOperationProcessing = false;
   @Output() clickCancel = new EventEmitter();
   @Output() clickDelete = new EventEmitter<number>();
   @Output() clickSubmit = new EventEmitter<SubmitEventData>();

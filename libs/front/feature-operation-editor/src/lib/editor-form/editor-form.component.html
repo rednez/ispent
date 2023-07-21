@@ -1,137 +1,173 @@
-<h1 class="mb-4">{{ headerTitle | translate }}</h1>
+<div class="editor-form">
+  <mat-progress-bar
+    *ngIf="isOperationProcessing"
+    mode="indeterminate"
+  ></mat-progress-bar>
 
-<form [formGroup]="operationForm">
-  <div class="flex space-x-2">
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'Group' | translate }}</mat-label>
-      <mat-select formControlName="groupId">
-        <mat-option *ngFor="let group of groups" [value]="group.id"
-          >{{ group.name }}
-        </mat-option>
-        <mat-option (click)="onCreateGroup()">
-          <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-blue-500">{{ 'Create group' | translate }}</div>
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="hasErrorIn('groupId')">{{
-        'Select group' | translate
-      }}</mat-error>
-    </mat-form-field>
+  <div class="content" [class.loading]="isOperationProcessing">
+    <h1 class="mb-4">{{ headerTitle | translate }}</h1>
 
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'Category' | translate }}</mat-label>
-      <mat-select formControlName="categoryId">
-        <mat-option *ngFor="let category of categories" [value]="category.id">
-          {{ category.name }}
-        </mat-option>
-        <mat-option (click)="onCreateCategory()">
-          <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-blue-500">{{ 'Create category' | translate }}</div>
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="hasErrorIn('categoryId')">{{
-        'Select category' | translate
-      }}</mat-error>
-    </mat-form-field>
-  </div>
+    <form [formGroup]="operationForm">
+      <div class="flex space-x-2">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ 'Group' | translate }}</mat-label>
+          <mat-select formControlName="groupId">
+            <mat-option *ngFor="let group of groups" [value]="group.id"
+              >{{ group.name }}
+            </mat-option>
+            <mat-option (click)="onCreateGroup()">
+              <mat-icon color="primary">add_circle</mat-icon>
+              <div class="text-blue-500">{{ 'Create group' | translate }}</div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasErrorIn('groupId')">{{
+            'Select group' | translate
+          }}</mat-error>
+        </mat-form-field>
 
-  <div class="flex space-x-2">
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'Amount' | translate }}</mat-label>
-      <input formControlName="amount" matInput mask="separator.2" />
-      <mat-error *ngIf="hasErrorIn('amount')">{{
-        'Enter amount' | translate
-      }}</mat-error>
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ 'Category' | translate }}</mat-label>
+          <mat-select formControlName="categoryId">
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.id"
+            >
+              {{ category.name }}
+            </mat-option>
+            <mat-option (click)="onCreateCategory()">
+              <mat-icon color="primary">add_circle</mat-icon>
+              <div class="text-blue-500">
+                {{ 'Create category' | translate }}
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasErrorIn('categoryId')">{{
+            'Select category' | translate
+          }}</mat-error>
+        </mat-form-field>
+      </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'Currency' | translate }}</mat-label>
-      <mat-select formControlName="currencyId">
-        <mat-option *ngFor="let currency of currencies" [value]="currency.id"
-          >{{ currency.name }}
-        </mat-option>
-        <mat-option (click)="onCreateCurrency()">
-          <mat-icon color="primary">add_circle</mat-icon>
-          <div class="text-blue-500">{{ 'Create currency' | translate }}</div>
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="hasErrorIn('currencyId')">{{
-        'Select currency' | translate
-      }}</mat-error>
-    </mat-form-field>
-  </div>
+      <div class="flex space-x-2">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ 'Amount' | translate }}</mat-label>
+          <input formControlName="amount" matInput mask="separator.2" />
+          <mat-error *ngIf="hasErrorIn('amount')">{{
+            'Enter amount' | translate
+          }}</mat-error>
+        </mat-form-field>
 
-  <mat-form-field appearance="fill" style="width: 50%">
-    <mat-label>{{ 'Date' | translate }}</mat-label>
-    <input matInput readonly formControlName="date" [matDatepicker]="picker" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-    <mat-error *ngIf="hasErrorIn('date')">{{
-      'Select date' | translate
-    }}</mat-error>
-  </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ 'Currency' | translate }}</mat-label>
+          <mat-select formControlName="currencyId">
+            <mat-option
+              *ngFor="let currency of currencies"
+              [value]="currency.id"
+              >{{ currency.name }}
+            </mat-option>
+            <mat-option (click)="onCreateCurrency()">
+              <mat-icon color="primary">add_circle</mat-icon>
+              <div class="text-blue-500">
+                {{ 'Create currency' | translate }}
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasErrorIn('currencyId')">{{
+            'Select currency' | translate
+          }}</mat-error>
+        </mat-form-field>
+      </div>
 
-  <mat-form-field appearance="fill" style="width: 100%">
-    <mat-label>{{ 'Comment' | translate }}</mat-label>
-    <input matInput [maxLength]="maxCommentLength" formControlName="comment" />
-    <mat-error *ngIf="hasErrorIn('comment')">{{
-      'Max Length is 128 chars' | translate
-    }}</mat-error>
-  </mat-form-field>
-
-  <mat-checkbox
-    color="primary"
-    class="mb-2"
-    formControlName="isOtherWithdrawalCurrency"
-    >{{ 'Other currency of withdrawal' | translate }}</mat-checkbox
-  >
-
-  <ng-container *ngIf="isOtherWithdrawalCurrency">
-    <ispent-rate [rate]="rate"></ispent-rate>
-
-    <div class="flex space-x-2">
-      <mat-form-field appearance="fill">
-        <mat-label>{{ 'Amount' | translate }}</mat-label>
-        <input matInput mask="separator.2" formControlName="withdrawalAmount" />
-        <mat-error *ngIf="hasErrorIn('withdrawalAmount')">{{
-          'Enter amount' | translate
+      <mat-form-field appearance="fill" style="width: 50%">
+        <mat-label>{{ 'Date' | translate }}</mat-label>
+        <input
+          matInput
+          readonly
+          formControlName="date"
+          [matDatepicker]="picker"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="hasErrorIn('date')">{{
+          'Select date' | translate
         }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>{{ 'Currency' | translate }}</mat-label>
-        <mat-select formControlName="withdrawalCurrencyId">
-          <mat-option
-            *ngFor="let currency of withdrawalCurrencies"
-            [value]="currency.id"
-          >
-            {{ currency.name }}</mat-option
-          >
-        </mat-select>
-        <mat-error *ngIf="hasErrorIn('withdrawalCurrencyId')">{{
-          'Select currency' | translate
+      <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label>{{ 'Comment' | translate }}</mat-label>
+        <input
+          matInput
+          [maxLength]="maxCommentLength"
+          formControlName="comment"
+        />
+        <mat-error *ngIf="hasErrorIn('comment')">{{
+          'Max Length is 128 chars' | translate
         }}</mat-error>
       </mat-form-field>
+
+      <mat-checkbox
+        color="primary"
+        class="mb-2"
+        formControlName="isOtherWithdrawalCurrency"
+        >{{ 'Other currency of withdrawal' | translate }}</mat-checkbox
+      >
+
+      <ng-container *ngIf="isOtherWithdrawalCurrency">
+        <ispent-rate [rate]="rate"></ispent-rate>
+
+        <div class="flex space-x-2">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'Amount' | translate }}</mat-label>
+            <input
+              matInput
+              mask="separator.2"
+              formControlName="withdrawalAmount"
+            />
+            <mat-error *ngIf="hasErrorIn('withdrawalAmount')">{{
+              'Enter amount' | translate
+            }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'Currency' | translate }}</mat-label>
+            <mat-select formControlName="withdrawalCurrencyId">
+              <mat-option
+                *ngFor="let currency of withdrawalCurrencies"
+                [value]="currency.id"
+              >
+                {{ currency.name }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="hasErrorIn('withdrawalCurrencyId')">{{
+              'Select currency' | translate
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+    </form>
+
+    <div class="flex justify-between mt-4">
+      <div class="space-x-2">
+        <button mat-button color="primary" (click)="clickCancel.emit()">
+          {{ 'Cancel' | translate }}
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="isOperationProcessing"
+          (click)="onClickSubmit()"
+        >
+          {{ submitButtonTitle | translate }}
+        </button>
+      </div>
+
+      <button
+        *ngIf="isEdit"
+        mat-button
+        color="warn"
+        (click)="clickDelete.emit(id!)"
+      >
+        {{ 'Delete' | translate }}
+      </button>
     </div>
-  </ng-container>
-</form>
-
-<div class="flex justify-between mt-4">
-  <div class="space-x-2">
-    <button mat-button color="primary" (click)="clickCancel.emit()">
-      {{ 'Cancel' | translate }}
-    </button>
-    <button mat-flat-button color="primary" (click)="onClickSubmit()">
-      {{ submitButtonTitle | translate }}
-    </button>
   </div>
-
-  <button
-    *ngIf="isEdit"
-    mat-button
-    color="warn"
-    (click)="clickDelete.emit(id!)"
-  >
-    {{ 'Delete' | translate }}
-  </button>
 </div>
