@@ -16,6 +16,11 @@ import firebase from 'firebase/compat/app';
         justify-content: center;
         height: 100vh;
       }
+
+      .logo {
+        height: 64px;
+        width: 64px;
+      }
     `,
   ],
 })
@@ -29,6 +34,10 @@ export class SignInPageComponent {
     iconRegistry.addSvgIcon(
       'google-logo',
       sanitizer.bypassSecurityTrustResourceUrl('assets/images/google_logo.svg')
+    );
+    iconRegistry.addSvgIcon(
+      'logo',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/images/logo.svg')
     );
   }
 

@@ -1,3 +1,17 @@
 :host {
   @apply block h-16 border bg-white;
 }
+
+mat-icon {
+  height: 28px;
+  width: 28px;
+
+  @media (min-width: 620px) {
+    height: 40px;
+    width: 40px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
