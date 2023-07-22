@@ -1,7 +1,7 @@
 {
   "name": "ispent",
   "description": "The web app for spending accounting",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "MIT",
   "author": {
     "name": "Vasyl Yefimenko",
