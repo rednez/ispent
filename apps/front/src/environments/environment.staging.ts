@@ -12,7 +12,7 @@ export const environment = {
     appId: '1:26628203603:web:3966de5c057665d39b52a6',
   },
   apollo: {
-    uri: 'https://api-stage.ispent.online/graphql',
+    uri: 'https://api-stage.ispent.com.ua/graphql',
   },
   production: false,
 };
