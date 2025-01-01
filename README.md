@@ -2,7 +2,7 @@
 
 ## The web app for spending accounting
 
-See [ispent.com.ua](https://ispent.com.ua)
+See [ispent.pp.ua](https://ispent.pp.ua)
 
 ### Development
 
